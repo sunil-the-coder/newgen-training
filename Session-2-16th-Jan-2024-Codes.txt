@@ -1,0 +1,130 @@
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        System.out.println("Hello, Inside NumberOperator main method");
+    }
+}
+
+class Sunil {
+
+    public static void main(String[] args) {
+        System.out.println("Hello, Inside Sunil main method");
+    }
+
+}
+
+class NewGen {
+
+  public static void main(String[] args) {
+        System.out.println("Hello, Inside NewGen main method");
+    }
+}
+
+
+
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        int number1 = 100;
+        int number2 = 15;
+
+        int result = number1 % number2;  // modulus operator ( to take reminder out )
+
+        System.out.println(result);
+       
+    }
+}
+
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        double number1 = 10.5;
+        double number2 = 15.6;
+
+        double result = number1 + number2; 
+
+        System.out.println(result);
+       
+    }
+}
+
+
+
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        float number1 = 10.52f;
+        float number2 = 15.67f; // banking
+
+        float result = number1 + number2; 
+
+        System.out.println(result);
+       
+    }
+}
+
+
+
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        byte b = 10;
+        short s = 110;
+        int i = 100000;
+        long l = 27589278;
+
+        boolean bl = false;
+        char c = 'a';
+
+        System.out.println(b);
+        System.out.println(s);
+        System.out.println(i);
+        System.out.println(l);
+        System.out.println(bl);
+        System.out.println(c);
+       
+    }
+}
+
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        byte b = 128;
+        short s = 32768;
+        int i = 100000;
+        long l = 27589278;
+
+        boolean bl = false;
+        char c = 'a';
+
+        System.out.println(b);
+        System.out.println(s);
+        System.out.println(i);
+        System.out.println(l);
+        System.out.println(bl);
+        System.out.println(c);
+       
+    }
+}
+
+
+
+
+HW - Use different operators on diff data types. ( + ,-, * , /, %)
+
+
+
+
+
+
+
+
+
+
+
