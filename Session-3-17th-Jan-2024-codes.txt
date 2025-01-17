@@ -1,0 +1,375 @@
+class NumberOperator {
+
+    public static void main(String[] args) {
+
+        //Array - set of similar data types - Grouping of similar type
+
+        int[] arr = {10,20,30,40,50,60,70};
+        float[] farr = {10.5f, 5.6f, 6.8f};
+        String s1 = "Neha";
+        String s2 = "Mayur";
+        String s3 = "Sunil";
+
+        String[] sarr = { "Neha",  "Mayur", "Sunil" };
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+
+        //Index -> identifier to locate number in array
+
+
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
+        System.out.println(arr[2]);
+        System.out.println(arr[3]);
+
+        System.out.println(farr[2]); // 5.6f, 6.8f
+
+        System.out.println(sarr[1]);
+        System.out.println(sarr[2]);
+
+
+        //Sequential -> 10 -> 20 -> 30 -> 40
+        
+       
+    }
+}
+
+
+
+
+
+---
+
+
+        String s = "10";
+        s = s + 50;  // concatination -> 1050
+        System.out.println(s); // 20 -> 1050
+
+
+        int a  = 10;
+        a = a + 10;
+        System.out.println(a); // 20
+
+
+
+          String firstName = "Sunil";
+        String lastName = "Patil";
+
+        String fullName = firstName + lastName;
+
+        System.out.println(fullName);
+
+
+--------------------------------
+
+
+class NumberOperator {
+
+    //args - Arguments
+    public static void main(String[] args) {
+
+        //Array - set of similar data types - Grouping of similar type
+
+        int[] arr = {10,20,30,40,50,60,70};
+        float[] farr = {10.5f, 5.6f, 6.8f};
+        String s1 = "Neha";
+        String s2 = "Mayur";
+        String s3 = "Sunil";
+
+        String[] sarr = { "Neha",  "Mayur", "Sunil" };
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+
+        //Index -> identifier to locate number in array
+
+
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
+        System.out.println(arr[2]);
+        System.out.println(arr[3]);
+
+        System.out.println(farr[2]); // 5.6f, 6.8f
+
+        System.out.println(sarr[1]);
+        System.out.println(sarr[2]);
+
+
+        //Sequential -> 10 -> 20 -> 30 -> 40
+
+        String s = "10";
+        s = s + 50;  // concatination -> 1050
+        System.out.println(s); // 20 -> 1050
+
+
+    // "10" -> 10 ( int ) 
+    // String  -> int ( conversion ) - parsing
+
+        //int, float, double => Primitive ( )
+        //Integer, Float, Double => Wrapper data types 
+
+        String data = "10";
+
+        int idata = Integer.parseInt("10");
+        float fdata = Float.parseFloat("30.55f");
+        double ddata = Double.parseDouble("33.56");
+        
+        System.out.println("Converted int data:" + idata);
+        System.out.println("Converted float data:" + fdata);
+        System.out.println("Converted double data:" + ddata);
+
+
+
+        String firstName = "Sunil";
+        String lastName = "Patil";
+
+        String fullName = firstName + lastName;
+        System.out.println(fullName);
+        
+
+        int a  = 10;
+        a = a + 10;
+        System.out.println(a); // 20
+
+        
+       
+    }
+}
+
+
+
+class NumberOperator {
+
+    //args - Arguments
+    public static void main(String[] args) {
+
+        //Array - set of similar data types - Grouping of similar type
+
+        int[] arr = {10,20,30,40,50,60,70};
+        float[] farr = {10.5f, 5.6f, 6.8f};
+        String s1 = "Neha";
+        String s2 = "Mayur";
+        String s3 = "Sunil";
+
+        String[] sarr = { "Neha",  "Mayur", "Sunil" };
+
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+
+        //Index -> identifier to locate number in array
+
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
+        System.out.println(arr[2]);
+        System.out.println(arr[3]);
+
+        System.out.println(farr[2]); // 5.6f, 6.8f
+
+        System.out.println(sarr[1]);
+        System.out.println(sarr[2]);
+
+
+        //Sequential -> 10 -> 20 -> 30 -> 40
+
+        String s = "10";
+        s = s + 50;  // concatination -> 1050
+        System.out.println(s); // 20 -> 1050
+
+
+    // "10" -> 10 ( int ) 
+    // String  -> int ( conversion ) - parsing
+
+        //int, float, double => Primitive ( )
+        //Integer, Float, Double => Wrapper data types 
+
+        String data = "10";
+        
+        int idata = Integer.parseInt("10"); // static method - String to integer
+        float fdata = Float.parseFloat("30.55f"); // String to float
+        double ddata = Double.parseDouble("33.56"); // String to double 
+        
+        System.out.println( idata);
+        System.out.println(fdata);
+        System.out.println("Converted double data:" + ddata);
+
+
+        String firstName = "Sunil";
+        String lastName = "Patil";
+
+        String fullName = firstName + lastName;
+        System.out.println(fullName);
+        
+
+        int a  = 10;
+        a = a + 10;
+        System.out.println(a); // 20
+
+        
+       
+    }
+}
+
+
+
+---------------------------
+
+
+import java.util.*; // Referring the existing java utility classes
+
+public class CommandLineArgument {
+
+    public static void main(String[] args) {
+
+        //String[] args = {"100", "200", "300"};
+
+        // To print the output of primitive data types array into array format.
+        //toString() -> Represent object in String format.
+        
+        System.out.println(Arrays.toString(args));
+
+        String n1 = args[0]; // "10"
+        String n2 = args[1]; // "20"
+
+        int number1 = Integer.parseInt(n1); // user should provide ;
+        int number2 = Integer.parseInt(n2); //user provide provide ;
+
+        int result = number1 + number2; 
+
+        System.out.println("Result:" + result);
+
+
+
+    }
+}
+
+
+---------------------------------------
+
+
+public class TypeConversion
+{
+    public static void main(String[] args) {
+
+        byte b = 10;
+
+        //Implicit Casting ( Data conversion )
+        short s = b; // (byte to short assignment)
+        int a = s; // ( byte to int assignment ) - 4 byte
+        double d = 10.5; // ( 8 byte )
+
+        //Explicit Casting ( Explicit Type conversion )
+        b = (byte) s; // ( short to byte assignment )
+        a = (int) d; 
+
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(s);
+        System.out.println(d);
+
+           //Type promotion - 
+
+        // byte -> 127
+        byte b1 = 100;
+        byte b2 = 100;
+
+        int b3 = b1 + b2;
+
+         char c = '9'; 
+        System.out.println((int) c);
+
+        //Characters -> code ( ASCII code ) 
+        /*
+            a - z => 97 to 122
+            A - Z => 65 to 90
+            0 - 9 => 48 to 57
+        */
+
+    }
+}
+
+-----------------
+
+
+public class ArithmeticOperator {
+
+    public static void main(String[] args) {
+
+        // Arithmetic - Shorthand operators ( +=, -=, *=, /=)
+        // +, -, *, /, %
+
+        int num = 10;
+        num += 10; //=> num = num + 10
+        System.out.println(num);
+
+        num -= 10; // => num = num - 10
+        System.out.println(num);
+
+        num = num * 10; // num *= 10
+        System.out.println(num);
+
+        num /=  10; // num = num / 10
+        System.out.println(num);
+
+    }
+}
+
+
+--------------------
+
+
+public class ArithmeticSingleHandOperator {
+
+    public static void main(String[] args) {
+
+        //single hand operators
+
+        int a = 10;
+        a++;  // a = a + 1; ( post increment )
+        System.out.println(a);
+
+        a--;  // a = a - 1; ( post decrement )
+        System.out.println(a);
+
+        ++a;  // a = a + 1; ( pre increment )
+        System.out.println(a);
+
+        --a;  // a = a - 1; ( pre decrement )
+        System.out.println(a);
+
+        //post -> First assign the value & then increment/decrement
+        //pre -> First increment/decrement & then assign the value.
+
+        System.out.println("-------------------------");
+
+        // int b = 10;
+        // int res = ++b; //( res = 11, b = 11 )
+        // System.out.println(res); // 11
+        // System.out.println(b); // 11
+
+        int b = 10;
+        int res = b++ + b++;
+        System.out.println(res); // 21, 22
+        System.out.println(b); // 11, 12
+
+        //Negate -> Reverse the existing value - boolean expression.
+            // Use before the variable name only.
+
+        boolean bl = false;
+        System.out.println(!bl);
+
+    }
+}
+
+------------------
+
+
+
+
+
+
+
+
