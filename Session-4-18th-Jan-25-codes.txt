@@ -1,0 +1,482 @@
+public class RelationalOperator {
+
+    public static void main(String[] args) {
+
+        //Relational - always return true/false
+        int age = 45;
+
+        boolean result = age < 30; //false
+        System.out.println(result);
+
+        result = age > 20; // true
+        System.out.println(result);
+
+        result = age >= 45; // true 
+        System.out.println(result);
+
+        result = age <= 45; // true 
+        System.out.println(result);
+
+
+        // age less than 30
+        // age greater than 20
+        // age less than equal to 50
+        // age is greater than equal to 40
+
+    }
+
+}
+
+----------------
+
+
+public class LogicalOperator
+{
+    public static void main(String[] args) {
+
+        //Covid -> FluShot
+        // age > 18 and age < 60
+
+        //Movie -> A+ rated ( min age 3 years )
+        //age > 3 || 
+
+        //Whenerver you want multiple condition checks use logical operators.
+
+        //AND - &&
+        //OR - ||
+
+        int age = 17;
+        boolean result = age > 18 && age < 60;
+        System.out.println(result);
+
+        result = age > 18 || age < 60;
+        System.out.println(result);
+
+        /*
+            Truth table - &&
+                true true -> true
+                true false -> false
+                false true -> false
+                false false -> false
+
+            Truth table - ||
+                true true -> true
+                true false -> true
+                false true -> true
+                false false -> false
+        */
+
+    }
+}
+
+
+---------------------------------
+
+
+public class RelationalOperator {
+
+    public static void main(String[] args) {
+
+        //Relational - always return true/false
+        int age = 45;
+
+        boolean result = age == 45; //true  => 45 == 45
+        System.out.println(result);
+       
+
+        result = age != 45; // 45 != 45
+        System.out.println(result);
+
+        int year = 2025;
+        System.out.println(year != 2024);
+
+        int day = 1;
+        System.out.println("Is Tuesday ? "+ (day == 2));
+
+
+        /*
+       
+        Operator: ==
+            firstValue and secondValue are same => true
+            firstValue and secondValue are different => false
+
+        Operator: !=
+            firstValue and secondValue are same => false
+            firstValue and secondValue are different => true   
+       
+        */
+
+    }
+
+}
+
+-----------------------------------
+
+
+public class LogicalOperator
+{
+    public static void main(String[] args) {
+
+        //Covid -> FluShot
+        // age > 18 and age < 60
+
+        //Movie -> A+ rated ( min age 3 years )
+        //age > 3 || 
+
+        //Whenerver you want multiple condition checks use logical operators.
+
+        //AND - &&
+        //OR - ||
+
+        int age = 17;
+        boolean result = age > 18 && age < 60;
+        System.out.println(result);
+
+        result = age > 15 || age < 60; // smart check => Short Circuit Evaluation.
+        System.out.println(result);
+
+        /*
+            Truth table - &&
+                true true -> true
+                true false -> false
+                false true -> false
+                false false -> false
+
+                If first condition is true then only it executes 2nd case.
+
+            Truth table - ||
+                true true -> true
+                true false -> true
+                false true -> true
+                false false -> false
+
+                If first condition is false then only it executes 2nd case.
+        */
+
+    }
+}
+
+---------------------------------
+
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        int day = 3;
+
+        if (day == 1) 
+            System.out.println("Monday");            
+
+        if(day == 2)
+          System.out.println("Tuesday");            
+        
+        if(day == 3)
+          System.out.println("Wednesday");    
+    }
+}
+
+
+-------------------
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        int age = 10;
+
+        if (age > 18)  // true - Execute if block
+            System.out.println("Applicable for flu shot");            
+        else  // false -> Execute else block
+            System.out.println("You are not applicable for flu shot");            
+    }
+}
+
+-------------------------------------
+
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        
+        System.out.println("Entry Main");
+        
+        int day = Integer.parseInt(args[0]); // 3
+
+        if(day == 1) // 3 == 1
+            System.out.println("Monday");
+        else if(day == 2) // 3 == 2
+           System.out.println("Tuesday");
+        else if(day == 3) // 3 == 3
+           System.out.println("Wed");   
+        else if(day == 4) // 3 == 4
+           System.out.println("Thursday");
+        else if(day == 5) // 3 == 5
+           System.out.println("Friday");
+        else if(day == 6)
+           System.out.println("Saturday");
+        else if(day == 7)
+           System.out.println("Sunday");
+
+        System.out.println("Exit Main");
+    
+    }
+}
+
+--------------------------------
+
+-- Additional else checks added
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        
+        System.out.println("Entry Main");
+
+        int day = Integer.parseInt(args[0]); // 4
+
+        if(day == 1) // 4 == 1 -> false
+            System.out.println("Monday");
+        else if(day == 2) // 4 == 2 -> false
+           System.out.println("Tuesday");
+        else if(day == 3) // 4 == 3 -> false
+           System.out.println("Wed");   
+        else if(day == 4) // 4 == 4  -> true
+           System.out.println("Thursday");
+        else if(day == 5) // 3 == 5
+           System.out.println("Friday");
+        else if(day == 6)
+           System.out.println("Saturday");
+        else if(day == 7)
+           System.out.println("Sunday");
+        else
+            System.out.println("Invalid Day");
+
+        System.out.println("Exit Main");
+    
+    }
+}
+
+---------------------------------------
+
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        System.out.println("Entry Main");
+
+        int day = Integer.parseInt(args[0]);
+
+        //switch -> Replacement for multiple if-else blocks. ( faster than multiple if-else blocks )
+
+        switch(day) {
+
+        case 1: 
+            System.out.println("Monday");
+            break;
+        case 2: 
+           System.out.println("Tuesday");
+           break;
+        case 3: 
+           System.out.println("Wed");   
+        case 4: 
+           System.out.println("Thursday");
+        case 5: 
+           System.out.println("Friday");
+           break;
+        case 6:
+           System.out.println("Saturday");
+        case 7:
+           System.out.println("Sunday");
+        default:
+            System.out.println("Invalid Day");
+    
+        }
+
+        System.out.println("Exit Main");
+   
+    }
+}
+
+
+--------------------------------------------
+
+
+
+-- Ternary operator
+
+class ConditionalStatements {
+
+    public static void main(String[] args) {
+
+        // conditional decisions -> conditional statements
+        System.out.println("Entry Main");
+
+
+        //Ternary Operator - expresssion/condition ?  true  : false
+
+        int age = 15;
+
+        // String result = "";
+
+        // if(age < 18)
+        //     result = "Hi";
+        // else 
+        //     result = "Bye";
+
+        // System.out.println(result);
+
+
+        String result = age < 18 ? "Hi" : "Bye";
+        System.out.println(result);
+
+   
+    }
+}
+
+------------
+
+
+public class Looping
+{
+    public static void main(String[] args) {
+
+        //Loop - Repeated stuff
+
+        System.out.println("Hi");
+        System.out.println("Hi");
+        System.out.println("Hi");
+        System.out.println("Hi");
+        System.out.println("Hi");
+
+        /*
+            1. while -> 
+            2. for
+        */
+
+
+       // end condition - until 5
+
+       while ( true )  //Infinite Loop - finite steps - infinite
+        System.out.println("Hello Java");
+
+    }
+}
+
+-------
+
+
+public class Looping
+{
+    public static void main(String[] args) {
+        /*
+            1. while -> 
+            2. for
+        */
+
+
+       // end condition - until 5
+    
+        //Print Hi for 5 times.
+
+        int i = 1; // iteration
+       
+       while ( i <= 5 )  {  // i = 1, 2 <= 5, 3 <= 5 -> true, 4 <= 5 -> true, 5 <= 5 -> true, 6 <= 5 -> false
+        System.out.println("Hi");
+        i++;  // i = i + 1 => 4 => 5 => 6
+       }
+       
+
+    }
+
+    // Hi
+    // Hi
+    // Hi
+    // Hi
+    // Hi
+}
+
+-----------------------------------
+
+
+public class Looping
+{
+    public static void main(String[] args) {
+        /*
+            1. while -> 
+            2. for
+        */
+
+
+       // end condition - until 5
+    
+        //Print Hi for 5 times.
+
+        int i = 1; // iteration
+       
+       while ( i <= 5 )  {  // i = 1, 2 <= 5, 3 <= 5 -> true, 4 <= 5 -> true, 5 <= 5 -> true, 6 <= 5 -> false
+        System.out.println("Hi");
+        i++;  // i = i + 1 => 4 => 5 => 6
+       }
+       
+
+    }
+
+    // Hi  
+    // Hi
+    // Hi
+    // Hi
+    // Hi
+}
+
+// Comment Line
+
+/*
+
+HW - 
+    1. Print * on screen 10 times.
+    2. Monday to Friday - 9am to 5pm => 
+        Monday
+            9 - 10
+            10 - 11
+            11 - 12
+            12 - 13
+            13 - 14
+            14 - 15
+            15 - 16
+            16 - 17
+         Tuesday
+            9 - 10
+            10 - 11
+            11 - 12
+            12 - 13
+            13 - 14
+            14 - 15
+            15 - 16
+            16 - 17
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
