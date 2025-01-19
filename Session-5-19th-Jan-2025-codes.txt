@@ -1,0 +1,246 @@
+public class Looping
+{
+    public static void main(String[] args) {
+        
+        int i = 1; 
+       
+       int totalJumps = 0;
+        
+       while ( i <= 100 )  {  // 
+       
+        System.out.println("Jump "+i);
+       
+        i = i + 2;  // 1 jump -> 1 meter // 100 times ( 100 jumps )
+
+        totalJumps++;
+       }
+
+       System.out.println("Total jumps: "+ totalJumps);
+       
+    }
+
+    // Hi  
+    // Hi
+    // Hi
+    // Hi
+    // Hi
+}
+
+
+-----------------------
+
+
+public class Looping
+{
+    public static void main(String[] args) {
+        
+       // Week days -> 7 days - Working days - 5 ( monday to friday )
+
+       int day = Integer.parseInt(args[0]);  // 4
+
+       switch(day) { // 4
+
+            case 1: 
+                System.out.println("Monday");
+                break;
+            case 2: 
+                System.out.println("Tuesday");
+                break;
+            case 3: 
+                System.out.println("Wednesday");
+                break;
+            case 4: 
+                System.out.println("Thursday");
+                break;
+            case 5: 
+                System.out.println("Friday");
+                break;
+       }
+
+       // 12am to 11am and 12pm to 11pm  -> 12 hours
+       // 1 to 23 -> 24 (12) -> 9
+       
+       int startTime = 9; 
+       while( startTime < 18) { // 9 <= 17,  10 <= 17, 11 <= 17, 12 <= 17, 13 <=17, 14 <= 17, 15 <= 17, 16 <= 17, 17 <= 17, 18 <= 17
+        int endTime = startTime + 1; // 9+1 => 10, 10 + 1 => 11, 11 + 1 = 12
+        System.out.println(startTime + "-" + endTime ); // 9 - 10, 10 - 11, 11-12
+        startTime = startTime + 1; // 10, 11, 12
+       }
+
+    }
+}
+
+-----------------------------------------------
+
+
+// Nested while loops - to print day and their working timing.
+
+
+
+public class Looping
+{
+    public static void main(String[] args) {
+        
+       // Week days -> 7 days - Working days - 5 ( monday to friday )
+
+    int day = 1;
+    while ( day <= 5) // 1 <= 5, 2 <= 5, 3 <= 5, 4 <= 5 , 5 <= 5 , 6 <= 5
+    {
+       switch(day) { // 1, 2, 3, 4, 5
+            case 1: 
+                System.out.println("Monday");
+                break;
+            case 2: 
+                System.out.println("Tuesday");
+                break;
+            case 3: 
+                System.out.println("Wednesday");
+                break;
+            case 4: 
+                System.out.println("Thursday");
+                break;
+            case 5: 
+                System.out.println("Friday");
+                break;
+       }
+
+       int startTime = 9; 
+       while( startTime < 18) { // 9 <= 17,  10 <= 17, 11 <= 17, 12 <= 17, 13 <=17, 14 <= 17, 15 <= 17, 16 <= 17, 17 <= 17, 18 <= 17
+        int endTime = startTime + 1; // 9+1 => 10, 10 + 1 => 11, 11 + 1 = 12
+        System.out.println(startTime + "-" + endTime ); // 9 - 10, 10 - 11, 11-12
+        startTime = startTime + 1; // 10, 11, 12
+       }
+
+       day = day + 1; // day - 2, day - 3, day - 4, day - 5 , day - 6
+
+    }
+
+    System.out.println("Final Day value: "+ day); //
+
+    }
+}
+
+// Comment Line
+
+/*
+
+HW - 
+    1. Print * on screen 10 times.
+    2. Monday to Friday - 9am to 5pm => 
+        Monday
+            9 - 10
+            10 - 11
+            11 - 12
+            12 - 13
+            13 - 14
+            14 - 15
+            15 - 16
+            16 - 17
+         Tuesday
+            9 - 10
+            10 - 11
+            11 - 12
+            12 - 13
+            13 - 14
+            14 - 15
+            15 - 16
+            16 - 17
+
+
+*/
+
+
+/* 
+
+while ( condition ) { // day tracking ( 1 to 5)
+
+    //code
+
+        //nested while loop
+        while(condition) { // time tracking ( 9am to 6pm )
+            //code
+
+            //nested while loop
+            while(condition) {
+                //code
+            }
+
+        }
+
+        while( condition ){
+
+        }
+
+    //code
+
+}
+*/
+
+-------------------------------------------------------------------
+
+
+public class ForLoop {
+
+    public static void main(String[] args) {
+
+        // Initialization 
+        // Condition ( end condition )
+        // Increment/Decrement
+
+        for(int i = 0; i < 5; i++) { 
+            System.out.println("*");          
+        }
+   
+    }
+}
+
+/*
+    for -> If you know the end condition 
+    while -> If you don't know the end condition - Ex - File reading,
+
+*/
+
+----------------------------------------------------
+
+
+// Printing star pattern
+
+class StarPattern {
+
+    public static void main(String[] args) {
+
+        /*
+            *
+            * *
+            * * *
+            * * * *
+            * * * * *
+            * * * * * *
+            * * * * * * *
+            * * * * * * * *
+        */
+
+
+        for(int i = 1; i <= 5; i++) { // i = 1, 1 <=5, 2 <= 5, 3 <= 5, 4<= 5, 5<=5, 6 <= 5
+            
+            for(int j = 1; j <= i; j++) { // j = 1, 1 <= 5, 2 <= 5, 3 <= 5, 4 <= 5, 5 <= 5, 6 <= 5
+                System.out.print("* ");
+            }
+
+            System.out.println(); // just print newline
+        }
+    }
+}
+
+
+--------------------------------------------
+
+Homework - 
+            * * * * * *
+            * * * * *
+            * * *
+            * *
+            *
+
+
+
