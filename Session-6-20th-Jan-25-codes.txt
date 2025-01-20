@@ -1,0 +1,203 @@
+//Calculator -> structure of your real calculator
+class Calculator {
+
+    //1. Properties
+    
+    //2. Behaviour - functions/method
+    void add() {
+        System.out.println("in add function");
+    }
+}
+
+
+class ClassExample {
+
+    public static void main(String[] args) {
+
+        //Build real time calculator - Object
+        Calculator calc = new Calculator();
+        calc.add(); // make a function call / invoke the behaviour
+
+    }
+}
+
+--------------------------------------
+
+
+//Calculator -> structure of your real calculator
+class Calculator {
+
+    //1. Properties
+    
+    //2. Behaviour - functions/method
+    int add() {
+        System.out.println("in add function");
+
+        int res = 5 + 10;
+        return res;
+    }
+}
+
+
+class ClassExample {
+
+    public static void main(String[] args) {
+
+        //Build real time calculator - Object
+
+        System.out.println("In main");
+
+        Calculator calc = new Calculator();
+        int result = calc.add(); // make a function call / invoke the behaviour
+
+        System.out.println("Call success and got result");
+
+        System.out.println(result);
+
+        System.out.println("Main Exit");
+
+    }
+}
+
+-----------------------------------------------------
+
+
+//Calculator -> structure of your real calculator
+class Calculator {
+
+    //1. Properties
+    
+    //2. Behaviour - functions/method
+    int add(int number1, int number2) { // number1 & number2 -> method/function arguments
+        System.out.println("in add function");
+        int res = number1 + number2;
+        return res;
+    }
+}
+
+
+class ClassExample {
+
+    public static void main(String[] args) {
+
+        //Build real time calculator - Object
+
+        System.out.println("In main");
+
+        Calculator calc = new Calculator();
+        int result = calc.add(20, 40); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+        result = calc.add(100, 200); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+        result = calc.add(500, 500); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+        System.out.println("Main Exit");
+
+    }
+}
+
+---------------------------------------
+
+
+
+//Calculator -> structure of your real calculator
+class Calculator {
+
+    //1. Properties
+    
+    //2. Behaviour - functions/method
+    int add(int number1, int number2) { // number1 & number2 -> method/function arguments
+        System.out.println("in add function");
+        int res = number1 + number2;
+        return res;
+    }
+
+    int substract(int number1, int number2) {
+        System.out.println("in substract function");
+        int res = number1 - number2;
+        return res;
+    }
+}
+
+
+class ClassExample {
+
+    public static void main(String[] args) {
+
+        //Build real time calculator - Object
+
+        System.out.println("In main");
+
+        Calculator calc = new Calculator();
+        int result = calc.add(20, 40); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+        result = calc.add(100, 200); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+        result = calc.add(500, 500); // make a function call / invoke the behaviour
+        System.out.println(result);
+
+
+        result = calc.substract(50, 30);
+        System.out.println(result);
+
+
+        System.out.println("Main Exit");
+
+    }
+}
+--------
+
+HW -> add 2 features -> multiplication, division
+
+
+----------------
+
+
+
+class Laptop {
+
+    //1. properties
+
+    //2. behaviour
+
+    void code() {
+        System.out.println("Coding in java.....");
+    }
+
+    void playMusic(String musicName) {
+        System.out.println("Playing music - "+musicName);
+    }
+
+    void drawPicture() {
+        for(int i = 0; i < 5; i++)
+            System.out.print("* ");
+    }
+}
+
+public class LaptopExample {
+
+    public static void main(String[] args) {
+
+        Laptop laptop = new Laptop(); // physical object created in memory - real building
+       
+        laptop.code();
+        laptop.playMusic("Pushpa Pushpa");
+        laptop.playMusic("Music2");
+
+        laptop.drawPicture();
+
+    }
+}
+
+
+--------------
+
+
+
+
+
