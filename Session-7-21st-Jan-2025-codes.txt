@@ -1,0 +1,189 @@
+//Structure -> properties & behaviours
+
+class Car {
+
+    //Properties -> instance variables
+    String carName = "Brezza";
+    int yearOfManufacturing = 2025;
+    String color = "RED";
+
+    //Behaviours -> functions/methods - instance methods
+    void startEngine() {
+        System.out.println("Engine started...");
+    }
+
+    void stopEngine() {
+        System.out.println("Engine stopped...");
+    }
+
+    void drive() {
+        System.out.println("Car driving...");
+    }
+
+    void playMusic() {
+        System.out.println("Music playing...");
+    }
+
+    void display() {
+        //Print all car information on console.
+
+        System.out.println("Car Name:"+ carName);
+        System.out.println("Year of Manufacturing:"+ yearOfManufacturing);
+        System.out.println("Color:"+ color);
+    }
+}
+
+public class CarExample {
+
+    public static void main(String[] args) {
+
+        int day = 21; // instance variable - THIS IS NOT - local variable
+
+        Car car = new Car();  // car - reference variable
+        
+        car.startEngine();
+        car.drive();
+        car.stopEngine();
+
+        car.display();
+
+        System.out.println(car.carName);
+
+    }
+}
+
+------------------------------------------
+
+-- change properties of class with iinstance variables.
+
+//Structure -> properties & behaviours
+
+class Car {
+
+    //Properties -> instance variables
+    String carName = "Brezza";
+    int yearOfManufacturing = 2025;
+    String color = "RED";
+
+    //Behaviours -> functions/methods - instance methods
+    void startEngine() {
+        System.out.println("Engine started...");
+    }
+
+    void stopEngine() {
+        System.out.println("Engine stopped...");
+    }
+
+    void drive() {
+        System.out.println("Car driving...");
+    }
+
+    void playMusic() {
+        System.out.println("Music playing...");
+    }
+
+    void display() {
+     
+        //Print all car information on console.
+
+        System.out.println("Car Name:"+ carName);
+        System.out.println("Year of Manufacturing:"+ yearOfManufacturing);
+        System.out.println("Color:"+ color);
+    }
+}
+
+public class CarExample {
+
+    public static void main(String[] args) {
+
+        Car car1 = new Car();  
+        System.out.println(car1.color); // RED
+
+        Car car2 = new Car();  
+        car2.color = "WHITE";
+        System.out.println(car2.color); // RED
+
+        Car car3 = new Car();  
+        car3.color = "YELLOW";
+        System.out.println(car3.color); // RED
+    }
+}
+-----------------------------------------
+
+
+//Structure -> properties & behaviours
+
+class Car {
+
+    //Properties -> instance variables
+    String carName = "Brezza";
+    int yearOfManufacturing = 2025;
+    String color = "RED";
+    String tyreManufacturer = "Apollo";
+
+    //default constructor
+    Car() {
+        System.out.println("default constructor")
+    }  
+
+    //parameterized constructor
+    Car(String newColor) {
+        color = newColor;
+        System.out.println("In parameterized constructor");
+    }
+
+    //Behaviours -> functions/methods - instance methods
+    void startEngine() {
+        System.out.println("Engine started...");
+    }
+
+    void stopEngine() {
+        System.out.println("Engine stopped...");
+    }
+
+    void drive() {
+        System.out.println("Car driving...");
+    }
+
+    void playMusic() {
+        System.out.println("Music playing...");
+    }
+
+    void display() {
+     
+        //Print all car information on console.
+
+        System.out.println("Car Name:"+ carName);
+        System.out.println("Year of Manufacturing:"+ yearOfManufacturing);
+        System.out.println("Color:"+ color);
+    }
+}
+
+public class CarExample {
+
+    public static void main(String[] args) {
+
+        Car car1 = new Car("GREEN");  
+        System.out.println(car1.color); // RED
+        System.out.println(car1.tyreManufacturer); // Apollo
+
+        Car car2 = new Car("WHITE"); // RED   
+        //car2.color = "WHITE";
+        car2.tyreManufacturer = "Bridgestone";
+        System.out.println(car2.color); // RED
+        System.out.println(car2.tyreManufacturer); // Apollo
+        car2.drive();
+
+
+        Car car3 = new Car("YELLOW");  
+        //car3.color = "YELLOW";
+        System.out.println(car3.color); // RED
+    }
+}
+
+--------------------------------------------
+
+
+
+
+
