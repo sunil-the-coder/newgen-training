@@ -1,0 +1,131 @@
+------ Basic fundamentals - loops, conditional statements assignments - 
+
+1. Program to print a table of any number.
+2. Program to reverse a given number
+3. Program to check whether number is prime or not
+
+4.Calculate sum of first 20 integers. ( input -> 20, output -> total sum of 1 to 20 numbers )
+5.Print all prime numbers between two given numbers.
+ 
+
+------- OOPS Assignment:
+
+
+ 1. 
+ Create a class Math with following requirements
+- A class level data member called PI set to 3.14.
+- A class level public method called getCircleArea, which takes as input an integer parameter called radius. This function should return area of the circle as a double
+
+2. 
+Create a class Student with following requirements
+
+Two data members
+age : int
+name : String
+Four constructors
+Default constructor : Should set age to 0 and name to null
+Constructor with int parameter : Should set age to the passed parameter and name to null
+Constructor with String parameter : Should set name to the passed parameter and age to 0
+Constructor with two parameters - int and String : Should set the age to int parameter and name to String parameter
+The assignment code should only be in the 4th constructor. The top 3 constructors should use telescoping to invoke the 4th constructor.
+
+3. 
+
+Create a Node class with following requirements
+
+Two data members
+i. data : int
+ii. next : Node
+A constructor which takes an integer parameter. This constructor should set data property and leave the next set to null.
+A constructor which takes a Node parameter. This constructor should make a deep copy of the passed node
+
+
+4. 
+
+Create a set of classes to meet the following requirements:
+
+a. Class Point
+It should have 2 data-members: x and y.
+Add a constructor with two parameters: x and y.
+Add a copy constructor.
+b. Class Rectangle
+It should have 2 data-members:
+
+	topLeft (Point)
+	bottomRight (Point)
+
+Add a constructor with 4 parameters of type int: topLeftX, topLeftY, bottomRightX, bottomRightY.
+
+Add a constructor with 2 parameters of type Point: topLeft, bottomRight.
+
+Add a constructor with 1 parameter of type Rectangle.
+
+Make sure that Rectangle constructors make deep copies.
+
+
+5. Create Student class with age and name. Create 2 objects with dynamic input values.
+	Write a static swap function which takes 2 student object parameters and swap the values between object attributes and then display output with swapped value.
+
+6. 
+
+Create a class to calculate Area of circle with one data member to store the radius.
+	a. constructor - Initialize radius from user
+	b. calculateArea - to calculate area
+	3. display- to display area
+
+7. Create a class Employee with(empNo ,salary and totalSalary) with following features.
+ a.Only parameterized constructor;
+ b.totalSalary always represent total of all the salaries of all employees created
+ c.empNo should be auto incremented.
+ d.Write dispaly method to display each employee details along with total salary of all employees.
+ 
+
+ 8.Create class Product (pid, price, quantity) with parameterized constructor.
+ Create a main function in different class (say ProductClient) and perform following task:
+ a.Accept five product information from user and store in an array
+ b.Find Pid of product with highest price.
+ c.Create method (with array of product’s object as argument) in ProductClient class to calculate and return total amount spent on all products. (amount spent on single product = price of product * quantity of product)
+
+ 9.Make list of Students having name,rollno.,age,score.
+ Write a program to accept 10 students record and arrange the Students based on the score group [0-50],[50-65],[65-80],[80-100].
+
+ Display student details in for each score group.
+
+ 10. Create class Tile to store the edge length of a square tile , and create another class Floor to store length and width of a rectangular floor.
+ Add methods: 
+totalTiles(Tile t) in Floor class with Tile as argument to calculate the whole number of tiles needed to cover the floor completely.
+
+
+
+
+
+
+
+
+
+--------- Array:
+
+ 1.Program to show sum and average of 10 element array. Accept array elements from user.
+ 2.Sort a ten element array in descending order.
+ 3.Create a array of 17 elements in 5 rows. And calculate sum of all elements.
+ 4.Program to find multiplication of two 3X3 matrices.
+ 5. Program to print transpose of a matrix.
+
+
+
+
+----- Inheritance , Runtime Polymorphism 
+
+1. Create class OneBHK
+ with instance variable roomArea , hallArea and price 
+ a.Create default and parameterized constructor;
+ b.Method show(): to print OneBHK data member information;
+ c. Create another class TwoBHK which has all the properties and behaviour of OneBHK
+ and a new instance variable room2Area.
+ a.Create default and parameterized constructor;
+ b.Method show(): to print all data member information;
+ Write main function in another class(Say XYZ) and store three TwoBHK
+ flat’s information and print information using show method.
+ Also print total amount of allflats.
+
+
