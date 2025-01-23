@@ -1,0 +1,109 @@
+class Student {
+
+    //instance variable
+    String name; 
+    int age; 
+    
+    Student(String n, int a) { // formal parameters
+        name = n;
+        age = a;       
+    }
+
+    public void setName(String n) {
+        name = n;
+    }   
+}
+
+class StudentExample {
+
+    public static void main(String[] args) {
+
+        //actual parameters
+        Student student1 = new Student("Sarika", 25); 
+        student1.setName("Test");
+
+        //s1 -> 100
+        Student student2 = new Student("Ganesh", 28);
+
+        //s2 -> 200
+        Student student3 = new Student("Gaurav", 24);
+
+        //s3 -> 230
+        Student student4 = new Student("Eknath", 23);
+
+        // System.out.println(student1.name +" - " + student1.age);
+        // System.out.println(student2.name +" - " + student2.age);
+        // System.out.println(student3.name +" - " + student3.age);
+        // System.out.println(student4.name +" - " + student4.age);
+
+        Student student5 = student3; // Another name given to same memory location.
+        System.out.println(student5.name +" - " + student5.age); // Gaurav, 24
+
+        test(student1); // 
+        // Student ref = student4; // internally
+    }
+
+    public static void test(Student ref) {
+        System.out.println(ref.name); // Eknath
+    }
+}
+
+------------------------------------
+
+
+
+class Student {
+
+    //instance variable
+    private String name; 
+    private int age; 
+    
+    Student(String n, int a) { // formal parameters
+        name = n;
+        age = a;       
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int a) {
+        if( a > 0 && a < 100)
+            age = a;
+        else 
+            System.out.println("Invalid Age");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String n) {
+        name = n;
+    }
+
+}
+
+class StudentExample {
+
+    public static void main(String[] args) {
+        
+        Student student = new Student("Eknath", 23);
+
+        //student.age = 1000;
+        student.setAge(25);
+        student.setName("Gaurav");
+
+        System.out.println(student.getAge()); // protect your confidential information.
+        System.out.println(student.getName());
+    }
+}
+
+// Access Specifiers -> private, public, protected, package level private
+// Encapsulation => Capsule
+
+
+-----------------------------------------------------
+
+
+
