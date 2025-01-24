@@ -1,0 +1,484 @@
+// using this keyword - 
+
+
+class Student {
+
+    //instance variable
+    private String name; 
+    private int age; 
+    
+    Student(String n, int a) { // formal parameters
+        name = n;
+        age = a;       
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) { // a = 25
+        
+        if( age > 0 && age < 100)
+            this.age = age; // name collision - name hiding
+        else 
+            System.out.println("Invalid Age");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class StudentExample {
+
+    public static void main(String[] args) {
+        
+        Student student = new Student("Eknath", 23);
+
+        //student.age = 1000;
+        student.setAge( 25);
+        student.setName("Gaurav");
+
+        System.out.println(student.getAge()); // protect your confidential information.
+        System.out.println(student.getName());
+
+    }
+}
+
+// Access Specifiers -> private, public, protected, package level private
+// Encapsulation => Capsule
+
+-------------------------------
+
+// Anonymous object creation
+
+
+class Student {
+
+    //instance variable
+    private String name; 
+    private int age; 
+    
+    Student(String n, int a) { // formal parameters
+        System.out.println("param constructor called");
+        name = n;
+        age = a;       
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) { // a = 25
+        
+        if( age > 0 && age < 100)
+            this.age = age; // name collision - name hiding
+        else 
+            System.out.println("Invalid Age");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class StudentExample {
+
+    public static Student getStudent() {
+        return new Student("A", 44);
+    }
+
+    public static void main(String[] args) {
+        
+        // object reference = actual real object in heap
+        new Student("Eknath", 23); // only object created in heap without ref - Anonymous object
+
+        Student ref = getStudent();
+        ref.getAge();
+    }
+}
+
+
+--------------------------
+
+class Calculator {
+
+    public int add(int n1, int n2) {
+        return n1 + n2;
+    }
+
+    public int addThreeIntegers(int n1, int n2, int n3) {
+        return n1 + n2 + n3;
+    }
+
+    public double addDoubles(double d1, double d2) {
+        return d1 + d2;
+    }
+
+    public float addFloat(float d1, float d2) {
+        return d1 + d2;
+    }
+
+    public int substract(int n1, int n2) {
+        return n1 - n2;
+    }
+
+}
+
+class CalculatorTest {
+
+    public static void main(String[] args) {
+
+        Calculator calculator = new Calculator();
+        int result = calculator.add(10, 20);
+        System.out.println("Result of 2 integers:"+result);
+
+        result = calculator.addThreeIntegers(10, 20, 30);
+        System.out.println("Result of 3 integers:"+result);
+
+        double dResult = calculator.addDoubles(100.55, 20.25);
+        System.out.println("Result:"+dResult);
+
+        float fResult = calculator.addFloat(50.51f, 20.25f);
+        System.out.println("Result:"+fResult);
+
+    }
+}
+
+
+--------------------------------
+
+- Methods & Method overloading
+        -> Same function name but different types of arguments or number of arguments 
+    
+
+
+class Calculator {
+
+    public int add(int n1, int n2) {
+        return n1 + n2;
+    }
+
+    public int add(int n1, int n2, int n3) {
+        return n1 + n2 + n3;
+    }
+
+    public double add(double d1, double d2) {
+        return d1 + d2;
+    }
+
+    public float add(float d1, float d2) {
+        return d1 + d2;
+    }
+
+    public int substract(int n1, int n2) {
+        return n1 - n2;
+    }
+
+}
+
+class CalculatorTest {
+
+    public static void main(String[] args) {
+
+        Calculator calculator = new Calculator();
+        int result = calculator.add(10, 20);
+        System.out.println("Result of 2 integers:"+result);
+
+        result = calculator.add(10, 20, 30);
+        System.out.println("Result of 3 integers:"+result);
+
+        double dResult = calculator.add(100.55, 20.25);
+        System.out.println("Result:"+dResult);
+
+        float fResult = calculator.add(50.51f, 20.25f);
+        System.out.println("Result:"+fResult);
+
+    }
+}
+
+------------------------
+
+
+// constructor overloading
+
+class Calculator {
+
+    public Calculator() {
+        System.out.println("default constructor");
+    }
+
+    public Calculator(int n1) {
+        System.out.println("one int argument constructor: "+n1);
+    }
+
+    public Calculator(float n1) {
+        System.out.println("one float argument constructor: "+n1);
+    }
+
+    public Calculator(int n1, int n2) {
+        System.out.println("two int argument default constructor: "+ n1 + " - "+ n2);
+    }
+
+    public int add(int n1, int n2) {
+        return n1 + n2;
+    }
+
+    public int add(int n1, int n2, int n3) {
+        return n1 + n2 + n3;
+    }
+
+    public double add(double d1, double d2) {
+        return d1 + d2;
+    }
+
+    public float add(float d1, float d2) {
+        return d1 + d2;
+    }
+
+    public int substract(int n1, int n2) {
+        return n1 - n2;
+    }
+
+}
+
+class CalculatorTest {
+
+    public static void main(String[] args) {
+
+        Calculator calculator = new Calculator();
+        int result = calculator.add(10, 20);
+        System.out.println("Result of 2 integers:"+result);
+
+        result = calculator.add(10, 20, 30);
+        System.out.println("Result of 3 integers:"+result);
+
+        double dResult = calculator.add(100.55, 20.25);
+        System.out.println("Result:"+dResult);
+
+        float fResult = calculator.add(50.51f, 20.25f);
+        System.out.println("Result:"+fResult);
+
+        new Calculator(10);
+        new Calculator(10.5f);
+        new Calculator(10, 20);
+
+
+    }
+}
+
+Constructor - It is special function which will get call on object creation to initialize the object attributes.
+
+-------------------------
+
+
+
+
+Object Composition -> HAS-A relatioship 
+
+
+
+class Engine {
+    //instance variable - attributes
+
+    private int number;
+    private int rpmSpeed;
+    
+    public void startEngine() {}
+
+    public void stopEngine() {}
+}
+
+class Tyre {
+
+     //attributes
+    private int totalRunning;
+    private int life;
+    private int maxRunSpeed;
+    
+    public void move() {
+
+    }
+
+    public void stop() {
+
+    }
+}
+
+class Car {
+
+    private String name;
+    private String numberPlate;
+    private String color;
+    private int manfacturingYear;
+   
+    private Engine engine;
+    private Tyre tyre;
+
+
+    public Car(String name, String numberPlate, String color, int manfacturingYear, Engine engine, Tyre tyre) {
+        this.name = name;
+        this.numberPlate = numberPlate;
+        this.color = color;
+        this.manfacturingYear = manfacturingYear;
+        this.engine = engine;
+        this.tyre = tyre;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void drive() {
+
+    }
+
+    public void startCar() {
+
+    }
+
+    public void stopCar() {
+
+    }
+
+    public void display() {
+        System.out.println("Car [name=" + name + ", numberPlate=" + numberPlate + ", color=" + color + ", manfacturingYear="
+                + manfacturingYear + ", engine=" + engine + ", tyre=" + tyre + "]");
+    }
+
+}
+
+
+public class ManufacturingPlant {
+    
+    public static void main(String[] args) {
+
+        Engine engine  = new Engine(); // 
+        Tyre tyre = new Tyre(); // 
+        
+        Car car1 = new Car("BMW", "MH12CJ5434", "RED", 2025, engine, tyre);
+        car1.setEngine(engine); // method injection
+        car1.display();
+    }
+}
+
+//Spring -> Constructor Injection
+
+// Constructor, Method and Field
+
+
+-------------------------------
+
+
+class Keyboard {
+    //
+}
+
+class LCDScreen {
+
+}
+
+class HardDisk {
+
+}
+
+class Processor {
+
+}
+
+// HAS-A relationship => Composition ( type of association )
+
+class Laptop {
+
+    private int number;
+    private String company;
+    private int liecenseValidYear;
+
+    private Keyboard keyboard;
+    private LCDScreen lcdScreen;
+    private Processor processor;
+    private HardDisk hardDisk;
+
+}
+
+public class LaptopAssemblyTest {
+    
+    public static void main(String[] args) {
+        
+        Keyboard and LCDScreen, processor, RAM , Harddisk
+        Laptop laptop = new Laptop();
+    }
+}
+
+---------------
+
+
+
+class Keyboard {
+    //
+}
+
+class LCDScreen {
+
+}
+
+class HardDisk {
+
+}
+
+class Processor {
+
+}
+
+// HAS-A relationship => Composition ( type of association )
+
+class Laptop {
+
+    private int number;
+    private String company;
+    private int liecenseValidYear;
+
+    private Keyboard keyboard;
+    private LCDScreen lcdScreen; // reference variable
+    private Processor processor;
+    private HardDisk hardDisk;
+
+    public Laptop(Keyboard keyboard, LCDScreen lcdScreen, Processor processor, HardDisk hardDisk) {
+        this.keyboard = keyboard;
+        this.lcdScreen = lcdScreen;
+        this.processor = processor;
+        this.hardDisk = hardDisk;
+    }
+
+
+
+}
+
+public class LaptopAssemblyTest {
+    
+    public static void main(String[] args) {
+        
+        Keyboard keyboard = new Keyboard();
+        LCDScreen lcdScreen = new LCDScreen();
+        Processor processor = new Processor();
+        HardDisk hardDisk = new HardDisk();
+
+        Laptop laptop = new Laptop(keyboard, lcdScreen, processor, hardDisk);
+
+    }
+}
+
+
+--------------------------
+
+
+
+
