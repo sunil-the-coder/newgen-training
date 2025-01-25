@@ -1,0 +1,550 @@
+
+public class ArrayExample {
+    
+    public static void main(String[] args) {
+        
+        // marks - 5 students
+        int s1Marks = 85;
+        int s2Marks = 87;
+        int s3Marks = 67;
+        int s4Marks = 78;
+
+        int[] marks = {85, 87, 67, 78}; // 0, 1, 2, ....
+        float[] fmarks = {56.43f, 78.2f};
+        char[] carr = {'A', 'B', 'C','D','E','F'};
+        String[] snames = {"Kiran", "Shreyas", "Jay", "Dhiraj"};
+
+        // System.out.println(marks[0]);
+        // System.out.println(marks[1]);
+        // System.out.println(marks[2]);
+        // System.out.println(marks[3]);
+
+        for(int i = 0; i < 4; i++) {
+            System.out.println(marks[i]);
+        }
+
+        for(int i = 0; i < 2; i++) {
+            System.out.println(fmarks[i]);
+        }
+
+        for(int i = 0; i < 6; i++) {
+            System.out.println(carr[i]);
+        }
+
+        for(int i = 0; i < 4; i++) {
+            System.out.println(snames[i]);
+        }
+
+        int i = 0;
+        while( i < 4) {
+            System.out.println(snames[i]);
+            i++;
+        }
+       
+
+    }
+}
+
+---------------------------------
+
+
+class Student {
+    private int rollNumber;
+    private String name;
+    
+    public Student(int rollNumber, String name) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+}
+
+public class ArrayExample {
+    
+    public static void main(String[] args) {
+        
+       
+        int[] marks = {85, 87, 67, 78}; // 0, 1, 2, ....
+        float[] fmarks = {56.43f, 78.2f};
+        char[] carr = {'A', 'B', 'C','D','E','F'};
+
+        int[] rollNumbers = {100, 101, 102, 103};
+        String[] snames = {"Kiran", "Shreyas", "Jay", "Dhiraj"};
+        
+        // 5 student information.
+
+        Student s1 = new Student(100, "Kiran");
+        Student s2 = new Student(101, "Shreyas");
+        Student s3 = new Student(102, "Jay");
+        Student s4 = new Student(103, "Dhiraj");
+
+        System.out.println(s1.getRollNumber() + " - "+ s1.getName());
+        System.out.println(s2.getRollNumber() + " - "+ s2.getName());
+        System.out.println(s3.getRollNumber() + " - "+ s3.getName());
+        System.out.println(s4.getRollNumber() + " - "+ s4.getName());
+
+        System.out.println();
+
+        Student[] sarr = {s1, s2, s3, s4};
+
+        System.out.println(sarr[0].getRollNumber() + " - "+ sarr[0].getName());
+        System.out.println(sarr[1].getRollNumber() + " - "+ sarr[1].getName());
+        System.out.println(sarr[2].getRollNumber() + " - "+ sarr[2].getName());
+        System.out.println(sarr[3].getRollNumber() + " - "+ sarr[3].getName());
+
+        System.out.println();
+
+        for(int i = 0; i < 4; i++) {
+            System.out.println(sarr[i].getRollNumber() + " - "+ sarr[i].getName());
+        }       
+
+    }
+}
+
+
+---------------------------------------
+
+- Directly creating anonymous object & storing into array -
+
+
+   Student[] sarr = { new Student(100, "Kiran"), new Student(101, "Shreyas"), 
+                        new Student(102, "Jay"),  new Student(103, "Dhiraj")};
+
+        System.out.println(sarr[0].getRollNumber() + " - "+ sarr[0].getName());
+        System.out.println(sarr[1].getRollNumber() + " - "+ sarr[1].getName());
+        System.out.println(sarr[2].getRollNumber() + " - "+ sarr[2].getName());
+        System.out.println(sarr[3].getRollNumber() + " - "+ sarr[3].getName());
+
+        System.out.println();
+
+        for(int i = 0; i < 4; i++) {
+            System.out.println(sarr[i].getRollNumber() + " - "+ sarr[i].getName());
+        }       
+
+------------------------ 
+
+
+import java.util.Scanner;
+
+public class UserInput {
+    
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter input:");
+
+        String input1 = scanner.nextLine();
+//        String input2 = scanner.next();
+
+        System.out.println("Input given by user:" + input1);
+
+        int idata = scanner.nextInt();
+        System.out.println("Input given by user:" + idata);
+        
+        float fdata = scanner.nextFloat();
+        System.out.println("Input given by user:" + fdata);
+
+        scanner.close();
+
+        // out -> output stream
+        // in -> input stream
+        // err -> error stream
+    }
+}
+
+
+-------------------------------------
+
+
+
+import java.util.Scanner;
+
+class Student {
+
+    //instance variable
+    private String name; 
+    private int age; 
+    
+    Student(String n, int a) { // formal parameters
+        System.out.println("param constructor called");
+        name = n;
+        age = a;       
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) { // a = 25
+        
+        if( age > 0 && age < 100)
+            this.age = age; // name collision - name hiding
+        else 
+            System.out.println("Invalid Age");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class StudentExample {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your name and age:");
+        String name = scanner.nextLine();
+        int age  = scanner.nextInt();
+    
+        Student s1 = new Student(name, age); 
+        System.out.println(s1.getName() +" - "+ s1.getAge());
+
+        scanner.close();
+        
+    }
+}
+
+
+----------------------------------------------
+
+--- Dynamic array memory allocation and then initialization
+
+import java.util.Scanner;
+
+public class UserInput {
+    
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+
+        //static array allocation
+        //int[] arr = {};
+
+        // dynamic array allocation 
+        //1. Declaratation of array with no of elements
+        //2. Dynamically add values into array.
+
+        int[] arr = new int[5]; // Just allocate memory with default value of data type.
+       
+        arr[0] = 10;
+        arr[1] = 20;
+        arr[2] = 30;
+        arr[3] = 40;
+        arr[4] = 50;
+
+        for(int i = 0; i < 5; i++) {
+            System.out.print(arr[i] +" ");
+        }
+
+        System.out.println();
+
+        scanner.close();
+
+      
+    }
+}
+
+-----------------------------
+
+
+
+import java.util.Scanner;
+
+public class UserInput {
+    
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+
+        //static array allocation
+        //int[] arr = {};
+
+        // dynamic array allocation 
+        //1. Declaratation of array with no of elements
+        //2. Dynamically add values into array.
+
+        int[] arr = new int[5]; // Just allocate memory with default value of data type.
+    
+        //Loop to iterate over array, take a input from user and modify the array value
+        for(int i = 0; i < 5; i++) {
+            System.out.println("Enter number:");
+            int data = scanner.nextInt();
+            arr[i] = data;    // arr[0] = 10, arr[1] = 200, arr[2] = 300        
+        }
+
+        //Loop to iterate over array to read the array value.
+        for(int i = 0; i < 5; i++) {
+            System.out.print(arr[i] +" ");
+        }
+
+        System.out.println();
+
+        scanner.close();
+
+      
+    }
+}
+
+
+------------------------------------
+
+
+-- Dynamic number of elements in array
+
+
+import java.util.Scanner;
+
+public class UserInput {
+    
+    public static void main(String[] args) {
+        
+        Scanner scanner = new Scanner(System.in);
+
+        //static array allocation
+        //int[] arr = {};
+
+        // dynamic array allocation 
+        //1. Declaratation of array with no of elements
+        //2. Dynamically add values into array.
+
+        System.out.println("How many elements you want to store ?");
+        int N = scanner.nextInt();
+
+        int[] arr = new int[N]; // Just allocate memory with default value of data type.
+    
+        //Loop to iterate over array, take a input from user and modify the array value
+        for(int i = 0; i < N; i++) {
+            System.out.println("Enter number:");
+            int data = scanner.nextInt();
+            arr[i] = data;    // arr[0] = 10, arr[1] = 200, arr[2] = 300        
+        }
+
+        //Loop to iterate over array to read the array value.
+        for(int i = 0; i < N; i++) {
+            System.out.print(arr[i] +" ");
+        }
+
+        System.out.println();
+
+        scanner.close();
+
+      
+    }
+}
+
+----------------------------------------
+
+
+- Dynamic student inputs using scanner
+
+import java.util.Scanner;
+
+class Student {
+    private int rollNumber;
+    private String name;
+    
+    public Student(int rollNumber, String name) {
+        this.rollNumber = rollNumber;
+        this.name = name;
+    }
+
+    public int getRollNumber() {
+        return rollNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+}
+
+public class ArrayExample {
+    
+    public static void main(String[] args) {
+    
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter how many student information you want to be stored ?");
+        int noOfStudents = scanner.nextInt();
+
+        //int[] arr = new int[N];
+        Student[] sarr = new Student[noOfStudents]; // [ null, null, null, null ,null ]
+        
+        for(int i = 0; i < noOfStudents; i++) {
+            System.out.println("Enter rollNumber and Name for student "+(i+1));
+            int rollNumber = scanner.nextInt();
+            String name = scanner.next();
+            sarr[i] = new Student(rollNumber, name);
+        }
+
+        for(int i = 0; i < noOfStudents; i++) {
+            System.out.println(sarr[i].getRollNumber() + " - "+ sarr[i].getName());
+        }       
+
+        scanner.close();
+    }
+}
+
+
+/*
+ * 
+ *   
+ *      Tyre[] tyres =  new Tyre[4];
+        tyres[0] = new Tyre();
+
+        Car[] cars = new Car[4];
+        car[0] = new Car();
+
+        Laptop[] laptops = new Laptop[4];
+        laptops[0] = new Laptop(null, null, null, null);
+
+ */
+ -------------------------------------
+
+
+packages - 
+
+
+
+package p1;
+
+public class Bag {
+
+    public Bag() {
+        System.out.println("Bag constructor is called.");
+    }
+    
+}
+
+
+import p1.Bag;
+import p2.Door;
+
+public class BagUser {
+    
+    public static void main(String[] args) {
+        
+      Bag bag = new Bag();
+    
+      Door door = new Door();
+
+    }
+}
+
+
+package p2;
+
+public class Door {
+    public Door() {
+        System.out.println("Door constructor called..");
+    }
+}
+
+
+import p1.Bag;
+import p2.Door;
+import p1.Chair;
+
+import java.util.Scanner;
+import p1.p3.Table;
+
+public class BagUser {
+    
+    public static void main(String[] args) {
+        
+      Bag bag = new Bag();
+    
+      Door door = new Door();
+
+      Chair chair = new Chair();
+
+      Scanner scanner = new Scanner(System.in);
+
+      Table table = new Table();
+
+    }
+}
+
+
+-------------------------------------
+
+
+
+
+
+Standard Structure for organizing the packages in java - 
+
+    Google -> google.com
+
+        Products -> drive, gmail, photos
+
+
+google.com -> com.google
+
+Standard => <reverse-domain-name>.<product-name>.<app specific layers>
+
+google.com -> com.google
+
+com.google.drive -> unique product name
+        utils
+        service
+        db
+        cache
+        controller
+        repository
+
+Persistent System limited -> 
+
+    psl.com -> learning
+
+    com.psl.learning -> base package 
+        -> repo
+        -> controller
+
+
+    infosys.com -> irctc
+
+        com.infosys.irctc -> base package 
+
+
+spatil.com -> 
+    ems
+
+    com.spatil.ems -> base package employee management system
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
