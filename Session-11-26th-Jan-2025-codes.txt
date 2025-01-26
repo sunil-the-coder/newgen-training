@@ -1,0 +1,141 @@
+----- String object equality comparisons
+
+public class StringExample {
+    
+    public static void main(String[] args) {
+        
+      
+        // int a = 10;
+        // int b = 20;
+
+       // == -> comparing values stored in variables.
+
+//       boolean result = a == b;
+
+
+        String s1 = "Sunil"; // ['s','u','n','i','l'] -> 100
+        String s2 = "Sunil";  // 100
+
+        if(s1 == s2)
+            System.out.println("s1 & s2 are equals");
+        else
+            System.out.println("s1 & s2 are not equal");
+
+        
+        String s3 = new String("Sunil"); // 200
+
+        if(s1 == s3) // 100 == 200
+            System.out.println("s1 & s3 are equals");
+        else
+            System.out.println("s1 & s3 are not equal");
+
+        String s4 = new String("Sunil"); // 300
+
+
+        if(s3 == s4) // 200 == 300
+            System.out.println("s3 & s4 are equals");
+        else
+            System.out.println("s3 & s4 are not equal");
+
+        //equals() method in java -> It is used for comparing contents of the object
+
+        if(s3.equals(s4))
+         System.out.println("s3 & s4 are equals by content");
+        else
+            System.out.println("s3 & s4 are not equal content");        
+
+    }
+}
+
+
+------------------------------------
+
+
+public class StringMethodsExample {
+    
+    public static void main(String[] args) {
+        
+        //What are the method in String class ? - 
+
+        String s = "SunIl PaTil"; // ['s', 'u', 'n']
+        s = s.toUpperCase(); // SUNIL PATIL
+        System.out.println("toUpperCase() : " + s);
+
+        s = s.toLowerCase(); // sunil patil 
+        System.out.println("toLowerCase() : " + s);
+
+        char ch = s.charAt(6);
+        System.out.println("charAt(6) : " + ch);
+
+        int length = s.length(); // total number of characters including any special characters
+        System.out.println("length() : " + length); // 11
+
+       // s = "";
+        boolean isEmpty = s.isEmpty(); // String s = "";
+        System.out.println("isEmpty() : " + isEmpty); 
+
+        boolean result = s.contains("patil"); // sunil patil
+        System.out.println("contains(patil) : " + result); 
+
+        int index = s.indexOf("l"); // If string found, return index otherwise return -1 ( left to right search)
+        System.out.println("indexOf() : " + index); 
+
+        index = s.lastIndexOf("l"); // right to left search
+        System.out.println("lastIndexOf() : " + index); 
+
+        boolean isStartWith = s.startsWith("pat");
+        System.out.println("startsWith() : " + isStartWith); 
+
+        boolean isEndWith = s.endsWith("til");
+        System.out.println("endsWith() : " + isEndWith); 
+
+        //sunil patil -> sunil ( string -> substring )
+
+        String s1 = s.substring(6);
+        System.out.println("substring(beginIndex) : " + s1); 
+    
+        String s2 = s.substring(6, 9); // beginIndex - Inclusive, endIndex - Exclusive
+        System.out.println("substring(beginIndex, endIndex) : " + s2); 
+
+        s2 = s.substring(1, 4); // beginIndex - Inclusive, endIndex - Exclusive
+        System.out.println("substring(beginIndex, endIndex) : " + s2); // uni
+
+    }
+}
+
+
+-------------------------------------------
+
+
+//import java.lang.String;
+
+
+public class StringImmutabilityExample {
+    
+    public static void main(String[] args) {
+        
+        //Immutable - Can't modify original string - Every modification, results into new string
+        String s = "sunil";
+        
+        s.toUpperCase();
+        System.out.println(s);
+
+
+        //Mutable class - We can modify original string
+        StringBuilder sb = new StringBuilder("sunil"); // enup litap linus
+        sb.append(" patil");
+        sb.append(" pune");
+        sb.deleteCharAt(3);
+        sb.insert(3, 'A');
+
+      //  sb.reverse();
+
+        System.out.println(sb);
+    }
+}
+
+-------------------------------
+
+
+
+
