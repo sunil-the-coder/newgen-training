@@ -1,0 +1,232 @@
+public class ArrayIteration {
+    
+    public static void main(String[] args) {
+        
+        int[] arr = {10,20,30,40,50,60};
+
+        for(int i = 0; i < arr.length; i++){
+            System.out.print(arr[i] +" ");
+        }
+
+        System.out.println();
+
+        //Enhanced for each loop
+
+        for(int element : arr){
+            System.out.print(element +" ");
+        }
+
+        System.out.println();
+
+
+        float[] farr = {10.5f,5.6f};
+        for(float element : farr){
+            System.out.print(element +" ");
+        }
+
+        Student[] students = new Student[5];
+        for(Student student : students) {
+            System.out.println(student.getName());
+        }
+
+    }
+}
+
+
+-----------------------------------
+
+Using static variables - 
+
+
+class Mobile {
+
+    private String brand;
+    private int price;
+    static String name  = "Smartphone"; // shared property between multiple object of the class which belong to class.
+
+    public Mobile(String brand, int price) {
+        this.brand = brand;
+        this.price = price;        
+    }
+
+    public void display() {
+        System.out.println("Mobile [brand=" + brand + ", price=" + price + ", name=" + name + "]");
+    }
+    
+}
+
+public class MobileExample {
+    
+    public static void main(String[] args) {
+
+        Mobile mob1 = new Mobile("Samsung", 80000);
+       
+        Mobile mob2 = new Mobile("Apple", 100000);
+        Mobile mob3 = new Mobile("Vivo", 2000);
+
+
+        Mobile.name = "sagasg";
+
+        mob1.display();
+        mob2.display();
+        mob3.display();
+        
+    }
+}
+
+
+------------------------------------------
+
+
+class Mobile {
+
+    private String brand;
+    private int price;
+    static String name  = "Smartphone"; // shared property between multiple object of the class which belong to class.
+
+    public Mobile(String brand, int price) {
+        this.brand = brand;
+        this.price = price;        
+    }
+
+    public static void show(Mobile mob) {
+        System.out.println("static method is called.");
+
+        System.out.println("Brand:" + mob.brand);
+    }
+
+    public void display() {
+        System.out.println("Mobile [brand=" + brand + ", price=" + price + ", name=" + name + "]");
+    }
+    
+}
+
+public class MobileExample {
+    
+    public static void main(String[] args) {
+
+        System.out.println(Mobile.name);
+        //Mobile.name = "sagasg";
+        
+
+         Mobile mob1 = new Mobile("Samsung", 80000);
+         Mobile.show(mob1);
+        // Mobile mob2 = new Mobile("Apple", 100000);
+        // Mobile mob3 = new Mobile("Vivo", 2000);
+
+   
+        // mob1.display();
+        // mob2.display();
+        // mob3.display();
+        
+    }
+}
+
+
+----------------------------------------------
+
+
+
+class Mobile {
+
+    private String brand;
+    private int price;
+    static String name  = "Smartphone"; // shared property between multiple object of the class which belong to class.
+
+    public Mobile(String brand, int price) {
+        this.brand = brand;
+        this.price = price;        
+    }
+
+    public static void show(Mobile mob) {
+        System.out.println("static method is called.");
+
+        System.out.println("Brand:" + mob.brand);
+    }
+
+    public void display() {
+        System.out.println("Mobile [brand=" + brand + ", price=" + price + ", name=" + name + "]");
+    }
+    
+}
+
+public class MobileExample {
+    
+    public static void main(String[] args) {
+
+        System.out.println(Mobile.name);
+        //Mobile.name = "sagasg";
+        
+
+         Mobile mob1 = new Mobile("Samsung", 80000);
+         Mobile.show(mob1);
+        Mobile mob2 = new Mobile("Apple", 100000);
+        Mobile mob3 = new Mobile("Vivo", 2000);
+
+   
+        mob1.display();
+        mob2.display();
+        mob3.display();
+
+
+
+        System.out.println(Math.PI);
+
+        //pure static functions
+        int result = Math.max(10,20);
+        System.out.println(result);
+        
+        double dresult = Math.max(10.5,20.5);
+        System.out.println(dresult);
+
+        int min = Math.min(1500, 200);
+        System.out.println(min);
+    }
+}
+
+
+
+-------------------------------------------------
+
+
+
+class Mobile {
+
+    private String brand;
+    private int price;
+    static String name; // shared property between multiple object of the class which belong to class.
+
+    static {
+        System.out.println("static block is called.");
+        name  = "Smartphone";
+    }
+
+    public Mobile(String brand, int price) {
+        this.brand = brand;
+        this.price = price;         
+    }
+
+    public static void show(Mobile mob) {
+        System.out.println("static method is called.");
+
+        System.out.println("Brand:" + mob.brand);
+    }
+
+    public void display() {
+        System.out.println("Mobile [brand=" + brand + ", price=" + price + ", name=" + name + "]");
+    }
+}
+
+public class MobileExample {
+    
+    public static void main(String[] args) {
+
+        System.out.println(Mobile.name);
+        System.out.println(Mobile.name);
+       
+    }
+}
+
+
+
+
