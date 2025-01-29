@@ -1,0 +1,320 @@
+------ Constructor chaining --------
+
+class A {
+    public A() {
+        super();
+        System.out.println("A class constructor called.");
+    }
+    public A(int a) {
+        super();
+        System.out.println("A class int param constructor called.");
+    }
+}
+
+class B extends A {
+    public B() {
+        super();
+        System.out.println("B class constructor called.");
+    }
+    public B(int a) {
+        super();
+        System.out.println("B class int param constructor called.");
+    }
+}
+
+class C extends B {
+    public C() {
+        super();
+        System.out.println("C class constructor called.");
+    }
+    public C(int a) {
+        super();
+        System.out.println("C class int param constructor called.");
+    }
+}
+
+
+public class ConstructorInheritanceTest {
+    
+    public static void main(String[] args) {
+        
+       // A obj = new A(10);
+
+        C obj = new C(10);
+
+    }
+}
+
+
+--------------
+
+
+
+// Customizing the default behaviour of constructr chaining calls to have param constructor to be called.
+
+
+
+class A {
+    public A() {
+        super();
+        System.out.println("A class constructor called.");
+    }
+    public A(int a) {
+        super();
+        System.out.println("A class int param constructor called.");
+    }
+}
+
+class B extends A {
+    public B() {
+        super();
+        System.out.println("B class constructor called.");
+    }
+    public B(int a) {
+        super(10);
+        System.out.println("B class int param constructor called.");
+    }
+}
+
+class C extends B {
+    public C() {
+        super();
+        System.out.println("C class constructor called.");
+    }
+    public C(int a) {
+        super(a); // call to superclass param constructor
+        System.out.println("C class int param constructor called.");
+    }
+}
+
+
+public class ConstructorInheritanceTest {
+    
+    public static void main(String[] args) {
+        
+       // A obj = new A(10);
+
+        C obj = new C(10);
+
+    }
+}
+
+
+-------------------------------
+
+sunil@OUT-KWQ2K214Y7 codes % java ConstructorInheritanceTest      
+A class constructor called.
+B class constructor called.
+C class int param constructor called.
+
+sunil@OUT-KWQ2K214Y7 codes % javac ConstructorInheritanceTest.java
+sunil@OUT-KWQ2K214Y7 codes % java ConstructorInheritanceTest      
+A class constructor called.
+B class int param constructor called.
+C class int param constructor called.
+
+sunil@OUT-KWQ2K214Y7 codes % javac ConstructorInheritanceTest.java
+sunil@OUT-KWQ2K214Y7 codes % java ConstructorInheritanceTest      
+A class int param constructor called.
+B class int param constructor called.
+C class int param constructor called.
+sunil@OUT-KWQ2K214Y7 codes % 
+
+
+
+---------------------------------
+
+
+this keyword to call current class different constructor ---
+
+
+
+
+class A {
+    public A() {
+        super();
+        System.out.println("A class constructor called.");
+    }
+    public A(int a) {
+        super();
+        System.out.println("A class int param constructor called.");
+    }
+}
+
+class B extends A {
+    public B() {
+        super();
+        System.out.println("B class constructor called.");
+    }
+    public B(int a) {
+        super(10);
+        System.out.println("B class int param constructor called.");
+    }
+}
+
+class C extends B {
+    public C() {
+        this(10);
+        System.out.println("C class constructor called.");
+    }
+    public C(int a) {
+        super(a); // call to superclass param constructor
+        System.out.println("C class int param constructor called.");
+    }
+}
+
+
+public class ConstructorInheritanceTest {
+    
+    public static void main(String[] args) {
+        
+       // A obj = new A(10);
+        C obj = new C();
+
+    }
+}
+
+
+------------------------------
+
+
+class A extends Object {
+    public A() {
+        super();
+        System.out.println("A class constructor called.");
+    }
+    public A(int a) {
+        super();
+        System.out.println("A class int param constructor called.");
+    }
+}
+
+
+---------------
+
+
+Object equality ->
+
+
+class Point {
+
+    private int x;
+    private int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+public class ObjectClassMethods {
+    
+    public static void main(String[] args) {
+
+        Point p1 = new Point(5, 5); // 1000
+        Point p2 = new Point(5, 5); // 2000
+        Point p3 = p2; // 2000
+
+
+        if(p1 == p2)
+            System.out.println("p1 & p2 are equal by == ");
+        else 
+            System.out.println("p1 & p2 are not equal by ==");
+
+        
+        if(p1.equals(p2)) 
+            System.out.println("p1 & p2 are equal by equals() method ");
+        else 
+            System.out.println("p1 & p2 are not equal by equals() method");
+
+      
+        if(p2.equals(p3)) 
+            System.out.println("p1 & p2 are equal by equals() method ");
+        else 
+            System.out.println("p1 & p2 are not equal by equals() method");
+    
+    }
+}
+
+
+----------------------------------------------------
+
+
+
+///////// NOTES /////////////
+
+
+
+2. Inheritance - 
+            Ex - Calculator(add, sub) and AdvanceCalculator(mult, div, sin) = Without repeating same behaviour into diff object, reuse existing behaviour to provide more features.  => how to sell different features to client.
+
+            Diff words refer to classes in java - 
+            
+            Super class -> Sub class
+            Parent class -> Child class
+            Base class -> Derived class
+
+
+            Inheritance -> Defines the IS-A relationship. 
+
+            HAS-A => Object Composition ( Car -> Engine, Laptop -> keyboard etc. )
+
+            Interview:
+                1. Diff between IS-A & HAS-A relationship ?
+                2. When should use among this two ?
+
+                Computer is abstract thing in real world but in reality it can be Mobile, Laptop etc..
+
+
+            Types of inheritance - 
+                1. Single level
+                2. Multilevel inheritance
+                3. Multiple Inheritance - Why java not supported multiple inheritance ?
+                4. 
+
+                Hybrid Inheritance - Not supported
+
+             D
+            A B
+             C
+
+    Hierarchical -> This is supported.
+
+      A
+
+    B C D E F
+
+
+    3. this & super keyword
+
+        super keyword - 
+            - with constructors 
+            - Constructor chaining concept - Every constructor default has call to parent super() default constructor in each explicit constructor defined by method.
+            - Object class in java +> 
+                    Every class in java is by default extends from Object class. ( java.lang package )
+
+
+            Interview - 
+                1. Object class methods - 
+                            equals() => It is used to compare object contents but default behaviour is to compare address.
+                            hashCode() => This is an identifier to uniquely identify each object in java.
+                            toString() => Returns the string representation of an object states.
+
+                            getClass(); -> To get class name from current object
+                            finalize(); -> Garbage collector 
+
+
+                        Multithreading - Inter-Thread communication 
+                            wait()
+                            notify()
+                            notifyAll()
+
+
+
+
+
+
+
+
+
+
