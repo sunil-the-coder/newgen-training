@@ -1,0 +1,359 @@
+-------- Method overriding --------
+
+class A {
+    public void show(int a) {
+        System.out.println("A show() method");      
+    }
+}
+
+class B extends A {
+   
+    //Method Overrding
+    public void show(int a) {
+        System.out.println("B show() method");      
+    }
+   
+}
+
+public class MethodOverriding {
+    
+    public static void main(String[] args) {
+        
+        //Student -> At home, office, college
+
+        A obj1 = new A();
+        obj1.show(10);
+
+        B obj2 = new B();
+        obj2.show(10);
+     
+    }
+}
+
+
+---------------
+
+Polymorphism => Multiple forms of the object.
+
+   1. Method Overloading - 
+
+        Generally achieved within single class but can be possible with parent-child classes as well.
+
+   2. Method Overriding - 
+
+        You can only achieve with inheritance - parent & child classes.
+
+
+A base class reference can point to any derived type object which is extended from same base class.
+
+
+
+Object a = new A();
+
+
+
+
+------------------
+
+
+class A {
+    public void show(int a) {
+        System.out.println("A show() method");      
+    }
+}
+
+class B extends A {
+   
+    //Method Overriding
+    public void show(int a) {
+        System.out.println("B show() method");      
+    }
+   
+}
+
+class C extends B {
+   
+    //Method Overriding
+    public void show(int a) {
+        System.out.println("C show() method");      
+    }
+   
+}
+
+public class MethodOverriding {
+    
+    public static void main(String[] args) {
+        
+        int choice = Integer.parseInt(args[0]);
+        
+        A obj = null;
+
+        switch(choice) {
+            case 1:
+                obj = new A();
+                break;
+            case 2:
+                obj = new B();
+                break;
+            case 3:
+                obj = new C();
+                break;
+        }
+
+        obj.show(10);
+       
+    }
+}
+
+
+-------------------------------
+
+toString() method overriding from Object class - 
+
+
+
+class Student {
+   
+    private String name;
+    private String phone;
+
+    public Student(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
+
+    public String toString() {
+        return name + " : " + phone;
+    }
+
+}
+
+
+public class MethodOverriding {
+    
+    public static void main(String[] args) {
+        
+       Student obj = new Student("Akshay", "278592896");
+       Student obj2 = new Student("Rutuja", "2528900");
+
+       String str = new String("Sunil");
+       System.out.println(str.toString());
+
+       System.out.println(obj);
+       System.out.println(obj2.toString());
+       
+    }
+}
+
+--------------------------
+
+
+overriding equals() method from object
+
+
+
+class Point {
+
+    private int x;
+    private int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+
+        // super.x; //base class property
+        // super.baseMethod(); // base class
+    }
+
+    public boolean equals(Point that) {
+        //this -> current object on which method is called.
+        //that -> refer to the object which is passed to the method.
+
+        System.out.println("Point class equals method called.");
+
+        boolean result = this.x == that.x && this.y == that.y;
+        return result;
+    }
+}
+
+public class ObjectClassMethods {
+    
+    public static void main(String[] args) {
+
+        Point p1 = new Point(5, 5); // 1000
+        Point p2 = new Point(5, 5); // 2000
+        Point p3 = p2; // 2000
+
+
+        if(p1 == p2)
+            System.out.println("p1 & p2 are equal by == ");
+        else 
+            System.out.println("p1 & p2 are not equal by ==");
+
+        
+        //this -> p1, that -> p2
+        if(p1.equals(p2)) 
+            System.out.println("p1 & p2 are equal by equals() method ");
+        else 
+            System.out.println("p1 & p2 are not equal by equals() method");
+
+            
+        if(p3.equals(p2)) 
+            System.out.println("p1 & p2 are equal by equals() method ");
+        else 
+            System.out.println("p1 & p2 are not equal by equals() method");
+    
+    }
+}
+-------------------------------------------------------
+
+
+// toString(), hashCode(), equals() method overriding in student class.
+
+
+
+class Student {
+   
+    private String name;
+    private String phone;
+
+    public Student(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "Student [name=" + name + ", phone=" + phone + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+       
+        Student other = (Student) obj;
+        if (phone == null) {
+            if (other.phone != null)
+                return false;
+        } else if (!phone.equals(other.phone))
+            return false;
+        return true;
+    }
+
+}
+
+
+public class MethodOverriding {
+    
+    public static void main(String[] args) {
+        
+       Student obj1 = new Student("Akshay", "278592896"); // 1000
+       Student obj2 = new Student("Rutuja", "278592896"); // 2000
+
+       System.out.println(obj2.toString());
+
+
+       if(obj1.equals(obj2))
+            System.out.println("Same object");
+        else
+            System.out.println("Not same object");
+
+    }
+}
+------------------------------------
+
+----- Upcasting & Downcasting --------
+
+class A {
+    public void show() {}
+}
+
+class B extends A {
+
+    public void show() {}
+
+    public void disp() {}
+
+}
+
+
+public class UpcastingDowncastingExample {
+    
+    public static void main(String[] args) {
+    
+        A obj = new B(); // Upcasting - Going towards parent type
+        obj.show();
+
+      //  obj.disp(); -> You can't access it usiing base type
+
+
+        B obj2 = (B) obj; // Downcasting - Going towards to child type
+        obj2.disp();  // You can access the properties of child class using child class reference.
+
+    }
+}
+
+----------------------------------------
+
+final keyword - 
+
+class A {
+    public final void show() {} // derived types can't override this method.
+}
+
+class B extends A {
+
+    public void show() {}
+
+    public void disp() {}
+
+}
+
+
+-------
+
+final int data = 10;
+        data++; // not allowe
+        data = 100; // not allowed
+
+
+----------
+
+
+final class A { // you can't subclass this class ( extends not possible )
+
+    public void show() {} 
+}
+
+class B extends A {
+
+    public void show() {}
+
+    public void disp() {}
+
+}
+
+--------
+
+Interview:
+    1. final keyword usage
+    2. final vs finally vs finalize
+
+
+
+
+
+
