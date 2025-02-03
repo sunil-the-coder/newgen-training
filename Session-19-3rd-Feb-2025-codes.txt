@@ -1,0 +1,343 @@
+package com.example.advjava;
+
+class Vechicle {
+  public void applyBreaks() {
+    System.out.println("Vehicle is applying breaks");
+  }
+
+  public void applyHorns() {
+    System.out.println("Vehicle is applying horns");
+  }
+}
+
+class Car extends Vechicle {
+
+}
+
+class Bike extends Vechicle {
+
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    //Car, Bike, etc...
+
+    Car car = new Car();
+    car.applyBreaks();
+    car.applyHorns();
+
+    Bike bike = new Bike();
+    bike.applyBreaks();
+    bike.applyHorns();
+  }
+
+}
+
+
+-----------------
+
+
+package com.example.advjava;
+
+abstract class Vechicle {
+  public abstract void applyBreaks();
+
+  public void applyHorns() {
+    System.out.println("Vehicle is applying horns");
+  }
+}
+
+class Car extends Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Car is applying breaks");
+  }
+}
+
+class Bike extends Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Bike is applying breaks");
+  }
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    //Object create => Concrete class
+    //Object can not be created => Abstract class
+
+
+    //Car, Bike, etc...
+
+    Vechicle vehicle = null;
+
+    Car car = new Car();
+    car.applyBreaks();
+    car.applyHorns();
+
+    Bike bike = new Bike();
+    bike.applyBreaks();
+    bike.applyHorns();
+  }
+
+}
+
+
+--------------------------
+
+
+
+package com.example.advjava;
+
+abstract class Vechicle {
+  public abstract void applyBreaks();
+
+  public abstract void applyHorns();
+}
+
+class Car extends Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Car is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Car is applying horns");
+  }
+
+}
+
+class Bike extends Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Bike is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Bike is applying horns");
+  }
+}
+
+class Truck extends Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Truck is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Truck is applying horns");
+  }
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    //Object create => Concrete class
+    //Object can not be created => Abstract class
+
+
+    //Car, Bike, etc...
+
+    Vechicle vehicle = new Car();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Bike();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Truck();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+
+  }
+
+}
+
+
+-----------------------------------
+
+//pure abstract class
+abstract class Vechicle {
+  public abstract void applyBreaks();
+  public abstract void applyHorns();
+}
+
+--------------------------------
+
+
+Using interfaces in java - 
+
+
+package com.example.advjava;
+
+//pure abstract class
+interface Vechicle {
+  void applyBreaks();
+  void applyHorns();
+}
+
+class Car implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Car is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Car is applying horns");
+  }
+
+}
+
+class Bike implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Bike is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Bike is applying horns");
+  }
+}
+
+class Truck implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Truck is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Truck is applying horns");
+  }
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    //Object create => Concrete class
+    //Object can not be created => Abstract class
+
+
+    //Car, Bike, etc...
+
+    Vechicle vehicle = new Car();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Bike();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Truck();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+
+  }
+
+}
+
+
+------------------------------------------------
+
+
+package com.example.advjava;
+
+//pure abstract class
+interface Vechicle {
+  void applyBreaks();
+  void applyHorns();
+}
+
+class Car implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Car is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Car is applying horns");
+  }
+
+}
+
+class Bike implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Bike is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Bike is applying horns");
+  }
+}
+
+class Truck implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Truck is applying breaks");
+  }
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Truck is applying horns");
+  }
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    //Object create => Concrete class
+    //Object can not be created => Abstract class
+
+    //Car, Bike, etc...
+
+    Vechicle vehicle = new Car();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Bike();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+    vehicle = new Truck();
+    vehicle.applyBreaks();
+    vehicle.applyHorns();
+
+  }
+
+}
+
+
+--------------------------------------
+
+
+
+
