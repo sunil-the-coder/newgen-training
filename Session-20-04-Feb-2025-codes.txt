@@ -1,0 +1,184 @@
+interface Vechicle {
+  void applyBreaks();
+  void applyHorns();
+}
+
+abstract class Car implements Vechicle {
+
+  @Override
+  public void applyBreaks() {
+    System.out.println("Car is applying breaks");
+  }
+
+}
+
+class SportsCar extends Car {
+
+  @Override
+  public void applyHorns() {
+    System.out.println("Sports car is applying horns");
+  }
+}
+
+
+----------------------------
+
+interface inheritance -- 
+
+
+interface A {
+  void m1();
+  void m2();
+}
+
+interface B extends A {
+  void m3();
+  void m4();
+}
+
+class C implements B {
+
+  @Override
+  public void m1() {
+    System.out.println("C m1");
+  }
+
+  @Override
+  public void m2() {
+    System.out.println("C m2");
+  }
+
+
+  @Override
+  public void m3() {
+    System.out.println("C m3");
+  }
+
+  @Override
+  public void m4() {
+    System.out.println("C m4");
+  }
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+    C obj = new C();
+    obj.m1();
+    obj.m2();
+    obj.m3();
+    obj.m4();
+
+    List<String> list = List.of("A", "B", "C");
+
+
+    }
+    }
+
+    -------------
+
+
+
+----------- Inner classes
+
+
+
+
+@FunctionalInterface
+interface RemoteControllable {
+  void controlUsingRemote();
+}
+
+class Outer {
+
+  int data = 100;
+
+  public void show() {
+    System.out.println("Outer show method called");
+  }
+
+  class Inner {
+    public void display() {
+      System.out.println("Inner display method called");
+    }
+  }
+
+
+}
+
+public class Entry {
+
+  public static void main(String[] args) {
+    
+    Outer outer = new Outer();
+    outer.show();
+    System.out.println(outer.data);
+
+    Outer.Inner inner = outer.new Inner();
+    inner.display();
+
+}}
+
+
+ ----------------------
+
+
+
+class Outer {
+
+  int data = 100;
+
+  public Outer() {
+    System.out.println("Outer ctr called.");
+  }
+
+ // public static void showcase() {}
+
+  public void show() {
+    System.out.println("Outer show method called");
+  }
+
+   static class Inner {
+
+    public Inner() {
+      System.out.println("Inner ctr called.");
+    }
+
+    public void display() {
+      System.out.println("Inner display method called");
+    }
+
+  }
+
+}
+
+
+
+public class Entry {
+
+  public static void main(String[] args) {
+
+  //  Outer.showcase();
+
+//    Outer outer = new Outer();
+//    outer.show();
+//    System.out.println(outer.data);
+//
+//    Outer.Inner inner = outer.new Inner();
+//    inner.display();
+
+    Outer.Inner innerObj = new Outer.Inner();
+    innerObj.display();
+
+
+}
+}
+
+------------------------------------------ 
+
+
+
+
+
+
