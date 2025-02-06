@@ -1,0 +1,135 @@
+
+
+Tightly coupled design 
+
+
+package com.example.advjava.interfaces;
+
+public class DeveloperTest {
+
+  public static void main(String[] args) {
+
+    Developer sunil = new Developer(); // by default it uses default object ( computer or desktop )
+    sunil.developApplication();
+
+    Developer kiran = new Developer(); // by default it uses default object ( computer or desktop )
+    kiran.developApplication();
+  }
+
+}
+
+package com.example.advjava.interfaces;
+
+
+class Laptop {
+  public void code() {
+      System.out.println("Coding on laptop");
+  }
+}
+
+class Desktop {
+  public void code() {
+      System.out.println("Coding on desktop");
+  }
+}
+
+public class Developer {
+
+  private Desktop desktop = new Desktop();   // Tightly coupled design ( Desktop is hardcoded )
+
+  public void developApplication() {
+      System.out.println("Developing application");
+      desktop.code();
+  }
+}
+
+
+----------------------------------------------------
+
+
+
+// Loosly Coupled Design
+
+
+package com.example.advjava.interfaces;
+
+interface Computer {
+  void code();
+}
+
+class Laptop implements Computer {
+  public void code() {
+      System.out.println("Coding on laptop");
+  }
+}
+
+class Desktop implements Computer {
+  public void code() {
+      System.out.println("Coding on desktop");
+  }
+}
+
+class Tablet implements Computer {
+  public void code() {
+      System.out.println("Coding on tablet");
+  }
+}
+
+class Androino implements Computer {
+  public void code() {
+    System.out.println("Coding on androido");
+  }
+}
+
+public class Developer {
+
+  private Computer computer;   // Loosly coupled design
+
+  public Developer(Computer computer) {
+    this.computer = computer;
+  }
+
+  public void developApplication() {
+      System.out.println("Developing application");
+      computer.code();
+  }
+}
+
+
+
+package com.example.advjava.interfaces;
+
+public class DeveloperTest {
+
+  public static void main(String[] args) {
+
+//    Computer computer = new Desktop();
+//    computer.code();
+//
+//    computer = new Tablet();
+//    computer.code();
+//
+//    computer = new Laptop();
+//    computer.code();
+//
+
+
+    Developer sunil = new Developer(new Laptop()); // sunil can work with laptop
+    sunil.developApplication();
+
+    Developer kiran = new Developer(new Tablet()); // kiran can work with tablet
+    kiran.developApplication();
+
+    Developer shreyas = new Developer(new Desktop()); // shreyas can work with desktop
+    shreyas.developApplication();
+
+    Developer rutuja = new Developer(new Androino()); // shreyas can work with desktop
+    rutuja.developApplication();
+  }
+
+}
+
+
+--------------------------------------
+
+
