@@ -1,0 +1,685 @@
+------ Anonymous classess
+
+package test;
+
+class A {
+    public void show() {
+        System.out.println("A show method called.");
+    }
+}
+
+// class B extends A {
+//     public void show() {
+//         System.out.println("B show method called.");
+//     }
+// }
+
+
+public class ClassTest {
+    
+    public static void main(String[] args) {
+        
+        A a = new A() {
+            public void show() {
+                System.out.println("Overriden method from A - ananymous class");
+            }
+        };
+        a.show();
+
+        // a = new B();
+        // a.show();
+    }
+}
+
+
+----------------
+
+-- abstract classes with anonymous classes defination
+
+
+
+package test;
+
+abstract class A {
+    public abstract void show(); 
+}
+
+// class B extends A {
+//     public void show() {
+//         System.out.println("B show method called.");
+//     }
+// }
+
+
+public class ClassTest {
+    
+    public static void main(String[] args) {
+
+       // A obj = new A();
+        
+        A a = new A() {  // It will create the object of newly created class internally by compiler
+            public void show() {
+                System.out.println("Anonymous class show method called.");
+            }
+        };
+        a.show();
+
+        // a = new B();
+        // a.show();
+    }
+}
+
+
+
+--------------------------------------
+
+
+
+package test;
+
+interface A {
+    void show(); 
+}
+
+// class B extends A {
+//     public void show() {
+//         System.out.println("B show method called.");
+//     }
+// }
+
+
+public class ClassTest {
+    
+    public static void main(String[] args) {
+
+       // A obj = new A();
+        
+        A a = new A() {  // It will create the object of newly created class internally by compiler
+            public void show() {
+                System.out.println("Anonymous class show method called.");
+            }
+        };
+        a.show();
+
+        // a = new B();
+        // a.show();
+    }
+}
+
+
+---------------------
+
+Workign with functional interfaces using Lambda Expressions
+
+
+@FunctionalInterface
+interface A {
+    void show(); 
+}
+
+public class ClassTest {
+    
+    public static void main(String[] args) {
+
+        //Functional Programming Syntax
+        A a = () -> {
+                 System.out.println("Anonymous class show method called.");
+            };
+        a.show();
+    }
+}
+
+----------------------------------
+
+
+package com.example.advjava.lambda;
+
+@FunctionalInterface
+interface Person {
+  void display(int id, String name);
+}
+
+//class Student implements  Person {
+//  public void display(int id, String name) {
+//    System.out.println("Student Id: " + id + " Name: " + name);
+//  }
+//}
+
+public class PersonTest {
+
+  public static void main(String[] args) {
+
+    Person person = (int id, String name) -> {
+        System.out.println("Student Id: " + id + " Name: " + name);
+    };
+    person.display(1, "John");
+  }
+}
+
+------------------------------
+
+
+//Compact syntax
+
+
+package com.example.advjava.lambda;
+
+@FunctionalInterface
+interface Person {
+  void display(int id, String name);
+}
+
+//class Student implements  Person {
+//  public void display(int id, String name) {
+//    System.out.println("Student Id: " + id + " Name: " + name);
+//  }
+//}
+
+public class PersonTest {
+
+  public static void main(String[] args) {
+
+    Person person = (id, name) -> System.out.println("Student Id: " + id + " Name: " + name);
+    person.display(1, "John");
+  }
+}
+
+
+---------------------------
+
+
+
+package com.example.advjava.lambda;
+
+@FunctionalInterface
+interface Person {
+  void display(int id, String name);
+}
+
+interface Calculator {
+  int add(int a, int b);
+}
+
+class SimpleCalculator implements  Calculator {
+  public int add(int a, int b) {
+    System.out.println("SimpleCalculator add method is called.");
+    return a + b;
+  }
+}
+
+interface CheckCondition {
+  boolean check(int number);
+}
+
+class PositiveNumberChecker implements  CheckCondition {
+  public boolean check(int number) {
+    return number > 0;
+  }
+}
+
+public class PersonTest {
+
+  public static void main(String[] args) {
+
+    Person person = (id, name) -> System.out.println("Student Id: " + id + " Name: " + name);
+    person.display(1, "John");
+
+
+    Calculator calculator = new SimpleCalculator();
+    int result = calculator.add(10, 20);
+    System.out.println("Addition: " + result);
+
+
+    Calculator calcObj = ( a,  b) -> a + b;
+    result = calcObj.add(100, 200);
+    System.out.println("Addition: " + result);
+
+    CheckCondition checkCondition = new PositiveNumberChecker();
+
+    boolean status = checkCondition.check(-10);
+    System.out.println(status);
+
+    CheckCondition checkObj = (number) -> number > 0;
+
+    status = checkObj.check(100);
+    System.out.println(status);
+
+  }
+}
+
+
+-----------------------------------------
+
+// Lambda with multiple statements
+
+
+  Calculator calcObj2 = ( a,  b) -> {
+                        int sum;
+                        sum = a + b;
+                        return sum;
+                      };
+    result = calcObj2.add(500, 200);
+    System.out.println("Addition: " + result);
+
+-----------------------------------
+
+
+//Refactoring of the Developer application using lambda expression
+
+
+package com.example.advjava.interfaces;
+
+public class DeveloperTest {
+
+  public static void main(String[] args) {
+
+    Computer computer = () -> System.out.println("Coding on desktop");
+    computer.code();
+
+    computer = () -> System.out.println("Coding on tablet");
+    computer.code();
+
+    computer = () -> System.out.println("Coding on laptop");
+    computer.code();
+
+
+    //At Run time, you would like to know which of the object is stored into the base class reference variable.
+
+    //instanceof operator - to check the type of object at runtime
+
+
+    Computer computer1 = () -> System.out.println("Coding on laptop");
+    Developer sunil = new Developer(computer1); // sunil can work with laptop
+    sunil.developApplication();
+
+    computer1 = () -> System.out.println("Coding on tablet");
+    Developer kiran = new Developer(computer1); // kiran can work with tablet
+    kiran.developApplication();
+
+    computer1 = () -> System.out.println("Coding on desktop");
+    Developer shreyas = new Developer(computer1); // shreyas can work with desktop
+    shreyas.developApplication();
+
+    computer1 = () -> System.out.println("Coding on androino");
+    Developer rutuja = new Developer(computer1); // rutuja can work with desktop
+    rutuja.developApplication();
+  }
+
+}
+
+------------------------------------------------------------
+
+
+Enum data types in java - 
+
+
+
+package com.example.advjava.enums;
+
+enum Color {
+  BLUE, RED, GREEN
+}
+
+public class EnumTest {
+
+  public static void main(String[] args) {
+
+      // Diff states of perticular types - JobStatus, OrderStatus, PaymentStatus
+     // Colors - Red, Green, Blue, Yellow
+
+
+    Color color = Color.RED;
+    System.out.println(color + ":"+ color.ordinal());
+
+    color = Color.GREEN;
+    System.out.println(color + ":"+ color.ordinal());
+
+    color = Color.BLUE;
+    System.out.println(color + ":"+ color.ordinal());
+
+
+//    int color = Integer.parseInt(args[0]);
+//
+//    switch(color) {
+//      case RED:
+//        System.out.println("Red color");
+//        break;
+//      case BLUE:
+//        System.out.println("Blue color");
+//        break;
+//      case GREEN:
+//        System.out.println("Green color");
+//        break;
+//        //
+//       //
+//       //.........
+//    }
+
+    //Enum - Named constants
+
+
+    //1 - RED
+    //2 - YELLOW
+
+
+    // Enum - Enum is a special "class" that represents a group of constants (unchangeable variables, like final variables).
+
+  }
+}
+
+
+------------------------------------------
+
+
+package com.example.advjava.enums;
+
+enum Color {
+  BLUE("This is blue color"), RED("This is red color");
+
+  private String value;
+
+  Color(String value) {
+    this.value = value;
+    System.out.println("Enum object created.");
+  }
+
+  public String getValue() {
+    return value;
+  }
+}
+
+public class EnumTest {
+
+  public static void main(String[] args) {
+
+      // Diff states of perticular types - JobStatus, OrderStatus, PaymentStatus
+     // Colors - Red, Green, Blue, Yellow
+
+    Color color = Color.RED;
+    System.out.println(color + " : "+ color.ordinal() + " : "+ color.getValue());
+
+
+//    switch(color) {
+//      case RED:
+//        System.out.println("Red color");
+//        break;
+//      case BLUE:
+//        System.out.println("Blue color");
+//        break;
+//      case GREEN:
+//        System.out.println("Green color");
+//        break;
+//        //
+//       //
+//       //.........
+//    }
+
+    //Enum - Named constants
+
+
+    //1 - RED
+    //2 - YELLOW
+
+
+    // Enum - Enum is a special "class" that represents a group of constants (unchangeable variables, like final variables).
+
+  }
+}
+
+-------------------------------------------------
+
+
+Iterating over enums using values() method
+
+
+Color[] colors = Color.values();
+    for(Color c : colors) {
+      System.out.println(c + " : "+ c.ordinal() + " : "+ c.getValue() + " : "+c.getNumber());
+    }
+
+
+------------------------------------------------
+
+
+
+
+enum PaymentStatus {
+  PENDING, SUCCESS, FAILED
+}
+
+enum JobStatus {
+  PENDING, INPROGRESS, COMPLETED, STOPPED
+}
+
+enum Roles {
+  ADMIN, USER, MANAGER, HR, DEVELOPER
+}
+
+enum OrderStatus {
+  PLACED, PREPARING, COMPLETED, SHIPPED, DELIVERED
+}
+
+
+----------------------------------------------------
+
+
+    ============== Exception Handling ===============
+
+
+
+package com.example.advjava.exceptions;
+
+class Calculator {
+  public int add(int a, int b) {
+    return a - b;
+  }
+}
+public class ExceptionTest {
+
+  public static void main(String[] args) {
+
+    System.out.println("Hi");
+
+    Calculator calculator = new Calculator();
+    System.out.println(calculator.add(10, 20));
+
+    int a = 10;
+    int b = 2;
+
+    try {
+
+      int result = a / b;
+      System.out.println("Result:"+ result);
+
+    }catch (ArithmeticException e) {
+      System.out.println("Kindly provide valid input for divider");
+    }
+
+    System.out.println("Bye");
+
+  }
+}
+
+----------------------
+
+
+package com.example.advjava.exceptions;
+
+public class ExceptionTest {
+
+  public static void main(String[] args) {
+
+    System.out.println("Hi");
+
+    try {
+      int a = 10;
+      int b = Integer.parseInt(args[0]);
+
+      int result = a / b;
+      System.out.println("Result:" + result);
+
+    } catch (ArithmeticException e) {
+      System.out.println("Kindly provide valid input for divider");
+    } catch (ArrayIndexOutOfBoundsException e) {
+      System.out.println("Kindly provide valid input for index number");
+    } catch(NumberFormatException e) {
+      System.out.println("Kindly provide valid input for integer number.");
+    }
+
+    System.out.println("Bye");
+
+  }
+}
+
+------------------------------------------
+
+
+
+// Stack overflow Error Example
+
+
+package com.example.advjava.exceptions;
+
+public class ExceptionTest {
+
+  public static void main(String[] args) {
+    f1();
+  }
+
+  private static void f1() {
+    f2();
+  }
+
+  private static void f2() {
+    f1();
+  }
+}
+
+
+------------------------------------------
+
+// Working with checked exception
+
+package com.example.advjava.exceptions;
+
+public class ExceptionTest {
+
+  public static void main(String[] args) {
+    f1();
+  }
+
+  private static void f1() {
+    f2();
+  }
+
+  private static void f2() {
+
+    try {
+      System.out.println("In f2()");
+      Thread.sleep(1000);
+      System.out.println("Out f2()");
+    }catch(InterruptedException e) {
+      System.out.println("Thread interrupted.. Please take care of it");
+    }
+
+  }
+}
+
+
+
+------------------------------------------------------- 
+
+
+//Exception Propogation ( Exception Bubbling )
+
+package com.example.advjava.exceptions;
+
+public class ExceptionTest {
+
+  public static void main(String[] args) throws InterruptedException {
+    f1();
+  }
+
+  private static void f1() throws InterruptedException {
+      f2();
+  }
+
+  private static void f2() throws InterruptedException {
+      System.out.println("In f2()");
+      Thread.sleep(1000);
+      System.out.println("Out f2()");
+  }
+}
+
+
+
+  System.out.println("Generic exception handler block: " + e.getMessage());
+      System.out.println(Arrays.toString(e.getStackTrace()));
+------------------------------------------------
+
+//Rethrowing exception to caller to provide more customized message handling based on the client requirement.
+
+   throw new ArithmeticException("Can't divide by zero");
+
+
+----------------------------------------------- 
+
+
+
+Real practical world - 
+
+   User -> REST -> Service -> Repository -> DB
+
+            401 - status code
+                - Employee details not found.
+
+
+                SQLException - index is out of bound exception 
+
+
+
+
+package com.example.advjava.exceptions;
+
+
+//How to create a custom exception for an application.
+class BankException extends Exception {
+  public BankException(String msg) {
+    super(msg);
+  }
+}
+
+public class ExceptionTest {
+
+  public static void main(String[] args) throws BankException {
+
+    System.out.println("Hi");
+
+    try {
+      int a = 10;
+      int b = Integer.parseInt(args[0]);
+
+      int result = a / b;
+      System.out.println("Result:" + result);
+
+    }
+    catch(ArithmeticException e) {
+      System.out.println("Generic exception handler block: " + e.getMessage());
+      throw new BankException("Can't divide by zero");
+    }
+
+    System.out.println("Bye");
+  }
+
+}
+
+
+------------------------------------------------------------ 
+
+
+
+
+
+
+
+
