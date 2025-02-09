@@ -1,0 +1,444 @@
+package com.example.advjava.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@FunctionalInterface
+interface Person {
+  void show();
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@interface Sunil {}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@interface Autowired {}
+
+@Autowired
+class AnnotationTest {
+
+  @Autowired
+  private String name;
+
+  @Autowired
+  public void disp(String name) {
+  }
+}
+
+class A {
+  public void displayOutputUsingTheProvidedInput() {
+    System.out.println("A: Displaying output using the provided input");
+  }
+}
+class B extends A {
+
+  @Override
+  public void displayOutputUsingTheProvidedInput() {
+    System.out.println("B: Displaying output using the provided input");
+  }
+}
+
+
+public class AnnotationExample {
+
+  public static void main(String[] args) {
+
+    A obj = new B();
+    obj.displayOutputUsingTheProvidedInput();
+
+  }
+}
+
+
+-------------------------------------------------------
+
+
+
+// Working with directories and files in java
+
+
+package com.example.advjava.files;
+
+import java.io.File;
+
+class Question {
+
+}
+
+public class FileExample {
+
+  public static void main(String[] args) {
+
+    Question[] questions = new Question[5];
+
+    String path = "/Users/sunil/Documents/java-training";
+    
+    File file = new File(path);
+
+    System.out.println("canExecute:"+file.canExecute());
+    System.out.println("canWrite:"+file.canWrite());
+    System.out.println("canRead:"+file.canRead());
+    System.out.println("isDirectory:"+ file.isDirectory());
+    System.out.println("isFile:"+ file.isFile());
+    System.out.println("Length:"+ file.length());
+
+    System.out.println("All files in given directory:"+path);
+
+    String[] fileNames = file.list();
+    for(String fileName: fileNames) {
+      System.out.println(fileName);
+    }
+
+  }
+}
+
+-----------------------------------
+
+
+
+
+    File fileToBeDeleted = new File(path + "/data copy.txt");
+    boolean isDeleted = fileToBeDeleted.delete();
+    if (isDeleted) {
+      System.out.println("File deleted successfully");
+    } else {
+      System.out.println("Failed to delete the file");
+    }
+
+    -----------------------
+
+
+String path = "/Users/sunil/Documents/java-training/java/advjava/collections";
+
+    File file = new File(path);
+    file.mkdirs();
+    System.out.println("Directory is created..");
+
+
+-----------------------------------------------------
+
+
+file reading char by char 
+
+
+package com.example.advjava.files;
+
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  public static void readFromFile(String fileName) {
+
+    try {
+      FileReader fr = new FileReader(fileName);
+
+      int ch = fr.read();
+      //-1 = EOF
+      while(ch != -1) {
+        System.out.print((char) ch);
+        ch = fr.read();
+      }
+
+      System.out.println();
+
+      fr.close();
+
+    } catch (FileNotFoundException e) {
+      //e.printStackTrace();
+      System.out.println("The file name provided is not valid. Please provide correct path / file name.");
+    }catch(IOException e) {
+      System.out.println("Something went wrong while reading file");
+    }
+
+  }
+
+  public static void main(String[] args) {
+
+    readFromFile("/Users/sunil/Documents/java-training/data.txt");
+  }
+}
+
+
+-----------------
+
+
+//Reading from file line by line
+
+package com.example.advjava.files;
+
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  public static void readFromFile(String fileName) {
+
+    try {
+      FileReader fr = new FileReader(fileName);
+      BufferedReader br = new BufferedReader(fr);
+
+      String line = br.readLine();
+      while(line != null) {
+        System.out.println(line);
+        line = br.readLine();
+      }
+
+//      int ch = fr.read();
+//      //-1 = EOF
+//      while(ch != -1) {
+//        System.out.print((char) ch);
+//        ch = fr.read();
+//      }
+
+      System.out.println();
+
+      fr.close();
+
+    } catch (FileNotFoundException e) {
+      //e.printStackTrace();
+      System.out.println("The file name provided is not valid. Please provide correct path / file name.");
+    }catch(IOException e) {
+      System.out.println("Something went wrong while reading file");
+    }
+
+  }
+
+  public static void main(String[] args) {
+
+    readFromFile("/Users/sunil/Documents/java-training/data.txt");
+  }
+}
+
+-----------------------------
+
+
+// Using finally block to close the resources (file)
+
+
+package com.example.advjava.files;
+
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  public static void readFromFile(String fileName) {
+
+    BufferedReader br = null;
+
+    try {
+
+     br = new BufferedReader(new FileReader(fileName));
+
+      String line = br.readLine();
+      while(line != null) {
+        System.out.println(line);
+        line = br.readLine();
+      }
+
+    } catch (FileNotFoundException e) {
+      //e.printStackTrace();
+      System.out.println("The file name provided is not valid. Please provide correct path / file name.");
+    }catch(IOException e) {
+      System.out.println("Something went wrong while reading file");
+    } finally {
+      try {
+        if(br != null) {
+          System.out.println("Closing file resource");
+          br.close(); // null.close() -> NPE
+        }
+      }catch(IOException e) {
+        System.out.println("Something went wrong while closing the file.");
+      }
+    }
+
+
+
+  }
+
+  public static void main(String[] args) {
+
+    readFromFile("/Users/sunil/Documents/java-training/data.txt");
+  }
+}
+
+
+----------------------------------------
+
+
+---- Auto closeable Resources
+
+
+package com.example.advjava.files;
+
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  public static void readFromFile(String fileName) {
+
+    try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+      String line = br.readLine();
+      while (line != null) {
+        System.out.println(line);
+        line = br.readLine();
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println(
+          "The file name provided is not valid. Please provide correct path / file name.");
+    } catch (IOException e) {
+      System.out.println("Something went wrong while reading file");
+    }
+
+  }
+
+  public static void main(String[] args) {
+
+    readFromFile("/Users/sunil/Documents/java-training/data.txt");
+  }
+}
+
+
+--------------------------------
+
+
+----- Reading line by line and returning that data as string array to the caller.
+
+
+package com.example.advjava.files;
+
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  public static String[] readFromFile(String fileName) {
+    String[] lines = new String[4];
+    try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+      String line = br.readLine();
+      int i = 0;
+      lines[i++] = line;
+      while (line != null) {
+        line = br.readLine();
+        lines[i++] = line;
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println(
+          "The file name provided is not valid. Please provide correct path / file name.");
+    } catch (IOException e) {
+      System.out.println("Something went wrong while reading file");
+    }
+    return lines;
+  }
+
+  public static void main(String[] args) {
+
+    String[] lines = readFromFile("/Users/sunil/Documents/java-training/data.txt");
+
+    for (String line : lines) {
+      System.out.println(line);
+    }
+  }
+}
+
+-------------------------------
+
+
+File reading/writing into java.
+
+
+
+package com.example.advjava.files;
+
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileReaderExample {
+
+  //SRP - Single Responsibility Principle = SOLID
+  public static String[] readFromFile(String fileName) {
+    String[] lines = new String[4];
+    try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+      String line = br.readLine();
+      int i = 0;
+      lines[i++] = line;
+      while (line != null) {
+        line = br.readLine();
+        lines[i++] = line;
+      }
+    } catch (FileNotFoundException e) {
+      System.out.println(
+          "The file name provided is not valid. Please provide correct path / file name.");
+    } catch (IOException e) {
+      System.out.println("Something went wrong while reading file");
+    }
+    return lines;
+  }
+
+  public static void writeToFile(String path, String content) {
+    try(FileWriter fw = new FileWriter(path, true)) {
+      fw.write(content+"\n");
+    }catch(Exception e) {
+      System.out.println("Something went wrong while writing to file");
+    }
+  }
+
+  public static void main(String[] args) {
+
+//    String[] lines = readFromFile("/Users/sunil/Documents/java-training/data.txt");
+//    for (String line : lines) {
+//      System.out.println(line);
+//    }
+
+    String filePath = "/Users/sunil/Documents/java-training/data_java.txt";
+
+    writeToFile(filePath, "This is first line from Java");
+    writeToFile(filePath, "This is second line from Java");
+     writeToFile(filePath, "This is third line from Java");
+//    writeToFile(filePath, "This is forth line from Java");
+    System.out.println("File has been written successfully");
+  }
+}
+
+--------------------------------------------------------- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
