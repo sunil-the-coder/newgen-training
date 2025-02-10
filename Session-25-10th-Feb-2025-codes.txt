@@ -1,0 +1,187 @@
+package com.example.advjava.collections;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ListExample {
+
+  public static void main(String[] args) {
+
+    //Collection - interface
+    //Collections - class
+
+    List nums = new ArrayList();
+
+    nums.add(10);
+    nums.add(20);
+    nums.add(50);
+    nums.add(30);
+    nums.add(40);
+    nums.add(50);
+
+    for(Object num: nums) {
+      System.out.println(num);
+    }
+
+    System.out.println(nums);
+
+    nums.remove(2);
+    System.out.println(nums);
+
+    Object data = nums.get(1);
+    System.out.println(data);
+
+    nums.add(2, 100);
+    System.out.println(nums);
+
+
+    List num2 = new ArrayList();
+    num2.add(100);
+    num2.add(200);
+
+    nums.addAll(num2);
+
+    System.out.println(nums);
+
+    nums.removeAll(num2);
+    System.out.println(nums);
+
+    nums.addFirst(1000);
+    System.out.println(nums);
+
+    nums.addLast(2000);
+    System.out.println(nums);
+
+    //nums.clear(); // delete all elements from collection
+    //System.out.println(nums);
+
+    boolean result = nums.contains(205);
+    System.out.println(result);
+
+    nums = nums.reversed();
+    System.out.println(nums);
+
+    //nums = nums.subList(0, 2);
+    //System.out.println(nums);
+
+    int index = nums.indexOf(400);
+    System.out.println(index);
+
+    //nums.clear();
+    boolean isEmpty = nums.isEmpty();
+    System.out.println(isEmpty);
+
+    int size = nums.size();
+    System.out.println("Size:" +size);
+
+    Object[] arr  = nums.toArray();
+    System.out.println(arr[0]);
+
+
+    //arr[0]
+  }
+}
+
+
+---------------------------------------
+
+
+
+package com.example.advjava.collections;
+
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+
+public class ListExample {
+
+  public static void main(String[] args) {
+
+    //Collection - interface
+    //Collections - class
+
+    //Generics =  Type safety at compile time.
+          // 1. Type casting is not required
+      // 2. Type mismatch errors are caught at compile time
+    // 3. Generic way of working with data structure rather than creating multiple collections for different data types
+    
+    List<Integer> nums = new ArrayList<>();
+
+    nums.add(10);
+    nums.add(20);
+    nums.add(50);
+    nums.add(30);
+    nums.add(40);
+    nums.add(50);
+
+    for(Integer num: nums) {
+      System.out.println( num);
+    }
+
+    System.out.println(nums);
+
+    nums.remove(2);
+    System.out.println(nums);
+
+    Object data = nums.get(1);
+    System.out.println(data);
+
+    nums.add(2, 100);
+    System.out.println(nums);
+
+
+    List num2 = new ArrayList();
+    num2.add(100);
+    num2.add(200);
+
+    nums.addAll(num2);
+
+    System.out.println(nums);
+
+    nums.removeAll(num2);
+    System.out.println(nums);
+
+    nums.addFirst(1000);
+    System.out.println(nums);
+
+    nums.addLast(2000);
+    System.out.println(nums);
+
+    //nums.clear(); // delete all elements from collection
+    //System.out.println(nums);
+
+    boolean result = nums.contains(205);
+    System.out.println(result);
+
+    nums = nums.reversed();
+    System.out.println(nums);
+
+    //nums = nums.subList(0, 2);
+    //System.out.println(nums);
+
+    int index = nums.indexOf(400);
+    System.out.println(index);
+
+    //nums.clear();
+    boolean isEmpty = nums.isEmpty();
+    System.out.println(isEmpty);
+
+    int size = nums.size();
+    System.out.println("Size:" +size);
+
+    Object[] arr  = nums.toArray();
+    System.out.println(arr[0]);
+
+
+    //arr[0]
+  }
+}
+
+
+
+------------------------------------------------------------
+
+
+
