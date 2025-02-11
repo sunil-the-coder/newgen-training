@@ -1,0 +1,279 @@
+
+
+
+---------- Collections ------------
+
+
+Ordered collection - preserve the insertion orders while retrieving the element from the collection.
+
+  10 20 30 40 50 -> insert
+
+  10 20 30 40 50 -> output
+
+
+Sorted collection - 
+    All the elements are sorted in the one of the two format - ascending or descending order.
+
+
+    10 20 5 3 25 17   -> 3 5 10 17 20 25 - ascending
+
+                      ->  25 20 17 10 5 3 - descending
+
+
+
+List -> 
+    ArrayList
+    LinkedList
+    Vector
+    Stack
+
+Set -> 
+  Unique elements - no duplicates are allowed.
+
+  HashSet -> Not sorted but non-ordered.
+  LinkedHashSet -> 
+  TreeSet  -> Sorts the data into ascending or descending order.
+            -> data will be ordered based on user comparator.
+
+
+
+Queue -> FIFO
+    
+    10 20 30 40 50  -> 10 20 30 40 50  ( FIFO ) => Queue ()
+
+    10 20 30 40 50 -> 50 40 30 40 10  ( LIFO or FILO  ) => Stack ( function execution, compiler syntax trees )
+
+Use cases - 
+    1. Printer - 10 orders to prints - 
+            First come first serve -> printing ( sunil, ganesh, kiran )
+    2. Job Schedulling - 
+
+    AWS SQS - Simple Queue Service - Asynchronous communication - 
+
+
+  PriorityQueue -> priority based queue - job processing will happen based on higher priority.
+
+
+  ArrayBlockingQueue -> ArrayList
+  LinkedBlockingQueue -> linkedlist
+
+        => Both are thread safe collections ( synchronized ) 
+
+
+List, Set, Queue
+
+Map ->
+    
+      Hashing -> 
+
+
+==============================================================
+
+
+
+
+package com.example.advjava.collections.sets;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class SetExample {
+
+  public static void main(String[] args) {
+
+    //ordered based on sorting natural ordering(ascending) or descending if custom comparator provided.
+
+    Set<Integer> numbers = new TreeSet<>(Comparator.reverseOrder());
+    numbers.add(10);
+    numbers.add(20);
+    numbers.add(30);
+    numbers.add(5);
+    numbers.add(3);
+    numbers.add(100);
+
+
+//    for(int i = 10; i < 500; i++) {
+//      numbers.add(i + 1);
+//    }
+
+    for(Integer num: numbers) {
+      System.out.print(num +" ");
+    }
+  }
+}
+
+
+
+----------------------------------------------- 
+
+hashset -> non-ordered & non-sorted
+
+
+package com.example.advjava.collections.sets;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class SetExample {
+
+  public static void main(String[] args) {
+
+    Set<Integer> numbers = new HashSet<>();
+    numbers.add(10);
+    numbers.add(20);
+    numbers.add(30);
+    numbers.add(5);
+    numbers.add(3);
+    numbers.add(100);
+    numbers.add(200);
+    numbers.add(20);
+
+//    for(int i = 10; i < 500; i++) {
+//      numbers.add(i + 1);
+//    }
+
+    for(Integer num: numbers) {
+      System.out.print(num +" ");
+    }
+  }
+}
+
+
+------------------------------------------------------
+
+
+ ----- LinkedHashSet - not sorted but ordered collection based on insertion order.
+
+
+
+ package com.example.advjava.collections.sets;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class SetExample {
+
+  public static void main(String[] args) {
+
+    Set<Integer> numbers = new LinkedHashSet<>();
+    numbers.add(10);
+    numbers.add(20);
+    numbers.add(30);
+    numbers.add(5);
+    numbers.add(3);
+    numbers.add(100);
+    numbers.add(200);
+    numbers.add(20);
+
+    //3 20 100 5 200 10 30 -> non ordered retrieval of elements  -> HashSet
+    //10 20 30 5 3 100 200 -> ordered retrieval of elements  -> LinkedHashSet
+
+
+//    for(int i = 10; i < 500; i++) {
+//      numbers.add(i + 1);
+//    }
+
+    for(Integer num: numbers) {
+      System.out.print(num +" ");
+    }
+  }
+}
+
+
+-----------------------
+
+
+
+Queue -> LinkedList ( FIFO )
+
+
+
+package com.example.advjava.collections.queue;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class QueueExample {
+
+  public static void main(String[] args) {
+
+    //Queue ->
+
+    Queue<Integer> queue = new LinkedList<>();
+    queue.offer(10);
+    queue.offer(20);
+    queue.offer(30);
+    queue.offer(40);
+
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+    
+    System.out.println(queue.poll());
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+  }
+}
+
+
+-----------------
+
+
+// Priority based retrieval of element from queue
+
+
+package com.example.advjava.collections.queue;
+
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public class QueueExample {
+
+  public static void main(String[] args) {
+
+    //Queue ->
+    
+    //Priority queue -> Heap data structure -> Heap Binary tree
+    Queue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
+    queue.offer(10);
+    queue.offer(2);
+    queue.offer(5);
+    queue.offer(1);
+    queue.offer(40);
+
+    //1 -> Highest priority  ( ascending order )
+    //40 -> Lowest priority
+
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+
+    System.out.println(queue.poll());
+    System.out.println(queue);
+  }
+}
+
+
+-------------------------------------------------
+
+
+
+
+
