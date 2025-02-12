@@ -1,0 +1,152 @@
+
+------------------ 12th Feb ---------------------
+
+			Hashing -> 
+
+			hash function -> 
+					Generate unique number from given value/key. => hashcode/hashindex
+
+			Why hashing ? - Time complexicity - O(1) = Constant time
+				- fastest search 
+				- faster retrieval of data
+				- insertion is faster
+
+
+			Array -> 10 crore
+					N = 10 crore (N)  - O(N) -> Linear time 
+
+				Binary Search algorithm - 
+						[  |  |    ]  - N -> N/2 -> N/4 -> N/8 ===== Logarithmic complexicity === N -> O( logN )
+
+							Prerequisite -> Data must be in sorted order.
+
+				Hashing -> O(1) => constant time
+
+
+					int hash(String input) {
+						//logic
+							return unique_no;
+					}
+
+
+					List/Set/Queue -> Only works on direct values.
+					Map -> We have to provide key & value pair.
+
+
+					Id | Name
+					1  -> Sunil
+					2  -> Anil
+					3  -> Swapnil
+
+
+					College Admission -> 
+							ID Card -> Uniquely identify - Number
+
+						Bank -> 
+								Wallet/Lockers  - 10000 ( sequential ) 
+								Unique identificaiton with the help of locker number.
+
+								Data -> Key should be unique.  => hash function  => hashCode() in Object
+
+								number % size =>  index of internal array
+
+						=> read arr[index]
+						=> write arr[index]
+
+
+-------------------------------------------
+
+
+package com.example.advjava.collections.list;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+public class ListExample {
+
+  public static void main(String[] args) {
+
+    //Collection - interface
+    //Collections - class
+
+    //Generics =  Type safety at compile time.
+          // 1. Type casting is not required
+      // 2. Type mismatch errors are caught at compile time
+    // 3. Generic way of working with data structure rather than creating multiple collections for different data types
+
+    //Upcasting & Downcasting
+    List<Integer> nums = new LinkedList<>();
+    nums.add(10);
+    nums.add(20);
+    nums.add(50);
+    nums.add(30);
+    nums.add(40);
+    nums.add(50);
+
+
+    for(Integer num: nums) {
+      System.out.println( num);
+    }
+
+    System.out.println(nums);
+
+    nums.remove(2);
+    System.out.println(nums);
+
+    Object data = nums.get(1);
+    System.out.println(data);
+
+    nums.add(2, 100);
+    System.out.println(nums);
+
+
+    List num2 = new ArrayList();
+    num2.add(100);
+    num2.add(200);
+
+    nums.addAll(num2);
+
+    System.out.println(nums);
+
+    nums.removeAll(num2);
+    System.out.println(nums);
+
+    nums.addFirst(1000);
+    System.out.println(nums);
+
+    nums.addLast(2000);
+    System.out.println(nums);
+
+    //nums.clear(); // delete all elements from collection
+    //System.out.println(nums);
+
+    boolean result = nums.contains(205);
+    System.out.println(result);
+
+    nums = nums.reversed();
+    System.out.println(nums);
+
+    //nums = nums.subList(0, 2);
+    //System.out.println(nums);
+
+    int index = nums.indexOf(400);
+    System.out.println(index);
+
+    //nums.clear();
+    boolean isEmpty = nums.isEmpty();
+    System.out.println(isEmpty);
+
+    int size = nums.size();
+    System.out.println("Size:" +size);
+
+    Object[] arr  = nums.toArray();
+    System.out.println(arr[0]);
+
+
+    //arr[0]
+  }
+}
+
+
+
