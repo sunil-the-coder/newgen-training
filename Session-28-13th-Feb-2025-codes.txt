@@ -1,0 +1,91 @@
+
+Map -> ( non-ordered )
+    Key | Value  
+
+    1. It's non-ordered collection
+    2. Keys are unique but values can be duplicated.
+
+      HashMap -> HashSet  => Non ordered
+      LinkedHashMap  -> LinkedHashSet  => Ordered
+      TreeMap -> TreeSet  => Data will be sorted based on key
+
+
+      Hashtable -> Thread safety -> Data will be consistent state if you share your map with multiple threads.
+              -> synchronization technique
+
+      HashMap -> It's not thread safe.
+      ConcurrentHashMap -> Thread safe - This is faster than hashtable.
+
+      Properties class -> key & value
+
+        - Mostly used for retrieving properties file where your system level/app level configuration.
+
+
+application.properties
+
+server.port=8080
+
+
+db.url=jdbc:
+db.port=3306
+db.username=sunil
+db.password=sunil
+
+
+classes: ( Utilities on collection )
+  Collections - sorting, reverse, shuffle
+  Arrays - Creating list dynamically
+
+
+----------------------------------------------------
+
+
+package com.example.advjava.collections.list;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class IteratorExample {
+
+  public static void main(String[] args) {
+
+    List<String> students = new ArrayList<>();
+    students.add("Sunil");
+    students.add("Anil");
+    students.add("Swapnil");
+    students .add("Kiran");
+
+
+    System.out.println("------ Using Advanced for loop pattern------");
+  //Iterating using advacned for loop
+    for(String name: students) {
+      System.out.print(name + " ");
+    }
+    System.out.println();
+
+
+    //students.remove("Swapnil");
+
+    System.out.println("------ Using Iterator pattern------");
+    //2. Iterator Pattern
+    Iterator<String> itr = students.iterator();
+    while(itr.hasNext()){
+      String value = itr.next(); //retrieve actual value
+      if(value.equals("Swapnil"))
+          itr.remove();
+    }
+
+    System.out.println(students);
+
+    System.out.println("------ Using forEach loop pattern (1.8) ------");
+
+    //3. Functional interface - If
+    students.forEach( name -> System.out.print(name +" "));
+
+  }
+}
+
+
+---------------------------------
+
