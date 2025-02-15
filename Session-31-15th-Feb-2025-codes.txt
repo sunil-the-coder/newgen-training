@@ -1,0 +1,273 @@
+///Banking System - Mini Project
+
+
+
+
+
+package com.devgen.banking.model;
+
+public abstract class Account {
+  private long accountNumber;
+  private double balance;
+  private AccountType accountType; // "Saving", "Current"
+
+  public Account(long accountNumber, double balance, AccountType accountType) {
+    this.accountNumber = accountNumber;
+    this.balance = balance;
+    this.accountType = accountType;
+  }
+
+  public long getAccountNumber() {
+    return accountNumber;
+  }
+
+  public double getBalance() {
+    return balance;
+  }
+
+  public AccountType getAccountType() {
+    return accountType;
+  }
+
+  public void updateBalance(double newBalance) {
+    this.balance = newBalance;
+  }
+}
+
+
+-------------------------
+
+
+package com.devgen.banking.model;
+
+public enum AccountType {
+  SAVING, CURRENT, LOAN
+}
+
+-----------------------
+
+
+package com.devgen.banking.model;
+
+public class CurrentAccount extends Account {
+
+  private final double overdraftLimit = 500;
+
+  public CurrentAccount(long accountNumber, double balance) {
+    super(accountNumber, balance, AccountType.CURRENT);
+  }
+
+  public double getOverdraftLimit() {
+    return overdraftLimit;
+  }
+}
+
+// Is CurrentAccount is type of Account ? - YES
+// Is SavingAccount is type of Account ? - YES
+
+// IS-A relationship
+----------------
+
+
+package com.devgen.banking.model;
+
+public class LoanAccount extends Account {
+
+  private final double interestRate = 0.1;
+
+  public LoanAccount(long accountNumber, double balance) {
+    super(accountNumber, balance, AccountType.LOAN);
+  }
+
+  public double getInterestRate() {
+    return interestRate;
+  }
+}
+
+
+---------
+
+
+package com.devgen.banking.model;
+
+public class SavingAccount extends Account {
+
+  public SavingAccount(long accountNumber, double balance) {
+    super(accountNumber, balance, AccountType.SAVING);
+  }
+
+}
+
+------------
+
+package com.devgen.banking.service;
+
+import com.devgen.banking.model.Account;
+import com.devgen.banking.model.AccountType;
+import com.devgen.banking.model.CurrentAccount;
+import com.devgen.banking.model.SavingAccount;
+import java.util.HashMap;
+import java.util.Map;
+
+public class AccountService {
+
+  //pattern of reading account informatinon -- lookup based on account number
+
+  private Map<Long, Account> accountMap;
+  private long accountNumber;
+
+  public AccountService () {
+    accountMap = new HashMap<>();
+    accountNumber = 1L;
+  }
+
+  public Long createAccount(double balance, AccountType accountType) {
+    Account account = null;
+
+    if(accountType == AccountType.SAVING) {
+      account = new SavingAccount(accountNumber, balance);
+    }else if(accountType == AccountType.CURRENT) {
+      account = new CurrentAccount(accountNumber, balance);
+    }
+
+    accountMap.put(accountNumber, account);
+
+    //System.out.println("Account created successfully..");
+
+    accountNumber++;
+    return accountNumber - 1;
+  }
+
+  public Account getAccount(Long accountNumber) {
+    return accountMap.get(accountNumber);
+  }
+
+}
+
+----------------------------------------
+
+
+package com.devgen.banking.service;
+
+import com.devgen.banking.model.Account;
+import com.devgen.banking.model.AccountType;
+import com.devgen.banking.model.CurrentAccount;
+
+public class TransactionService {
+
+  private AccountService accountService;
+
+  public TransactionService(AccountService accountService) {
+    this.accountService = accountService;
+  }
+
+  public void deposit(Long accountNumber, double amount) {
+    // Deposit the amount
+    Account account = accountService.getAccount(accountNumber);
+    double newBalance = account.getBalance() + amount;
+    account.updateBalance(newBalance);
+  }
+
+  public boolean withdraw(Long accountNumber, double amount) {
+    // Withdraw the amount
+
+    Account account = accountService.getAccount(accountNumber);
+    double newBalance = 0;
+
+    if(account.getAccountType() == AccountType.SAVING) {
+      newBalance = account.getBalance() - amount;
+    }else if(account.getAccountType() == AccountType.CURRENT) {
+      CurrentAccount currentAccount = (CurrentAccount) account;
+      newBalance = currentAccount.getBalance() + currentAccount.getOverdraftLimit() - amount;
+    }
+
+    if(newBalance < 0) {
+      System.out.println("Insufficient balance");
+      return false;
+    }
+
+    account.updateBalance(newBalance);
+    return true;
+  }
+
+}
+
+
+----------------
+
+
+package com.devgen.banking;
+
+import com.devgen.banking.model.Account;
+import com.devgen.banking.model.AccountType;
+import com.devgen.banking.service.AccountService;
+import com.devgen.banking.service.TransactionService;
+
+public class BankingCustomerClient {
+
+  public static void main(String[] args) {
+
+    AccountService accountService = new AccountService();
+    //Long accountNumber = accountService.createAccount(3000.0, AccountType.SAVING);
+    Long accountNumber = accountService.createAccount(3000.0, AccountType.CURRENT);
+
+    Account account = accountService.getAccount(accountNumber);
+    System.out.println("Account Number:" +account.getAccountNumber() +", Balance:" + account.getBalance()+", Type:"+account.getAccountType());
+
+    TransactionService transactionService = new TransactionService(accountService);
+    transactionService.deposit(accountNumber, 500.0);
+
+    account = accountService.getAccount(accountNumber);
+    System.out.println("Account Number:" +account.getAccountNumber() +", Balance:" + account.getBalance()+", Type:"+account.getAccountType());
+
+
+    transactionService.withdraw(accountNumber, 4000.0);
+    
+    account = accountService.getAccount(accountNumber);
+    System.out.println("Account Number:" +account.getAccountNumber() +", Balance:" + account.getBalance()+", Type:"+account.getAccountType());
+  }
+}
+
+--------------------------------
+
+
+
+
+
+
+package com.devgen.banking;
+
+import com.devgen.banking.model.Account;
+import com.devgen.banking.model.AccountType;
+import com.devgen.banking.model.CurrentAccount;
+import com.devgen.banking.service.AccountService;
+
+public class BankingCustomerClient {
+
+  public static void main(String[] args) {
+
+    AccountService accountService = new AccountService();
+    Long accountNumber = accountService.createAccount(3000.0, AccountType.SAVING);
+
+    Account account = accountService.getAccount(accountNumber);
+    System.out.println("Account Number:" +account.getAccountNumber() +", Balance:" + account.getBalance()+", Type:"+account.getAccountType());
+
+
+    accountNumber = accountService.createAccount(5000.0, AccountType.SAVING);
+    account = accountService.getAccount(accountNumber);
+    System.out.println("Account Number:" +account.getAccountNumber() +", Balance:" + account.getBalance() +", Type:"+account.getAccountType());
+
+
+    accountNumber = accountService.createAccount(10000.0, AccountType.CURRENT);
+    account = accountService.getAccount(accountNumber);
+    CurrentAccount currentAccount = (CurrentAccount) account; // Downcasting to derived type to access properties specific to CurrentAccount
+    System.out.println("Account Number:" +account.getAccountNumber()
+        +", Balance:" + account.getBalance()+
+        ", Type:"+account.getAccountType() + ", Overdraft Limit:"+currentAccount.getOverdraftLimit());
+
+  }
+}
+
+------------------------------------
+
+
