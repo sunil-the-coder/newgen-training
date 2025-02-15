@@ -1,0 +1,148 @@
+package com.example.advjava.collections.utils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentMap;
+
+
+class Product {
+  private int id;
+  private String name;
+  private double price;
+  private double rating; // 1-5, 1,1.6,2,2.6,3,3.6,4,4.6,5
+  private String brand;
+}
+
+class Student implements Comparable<Student>{
+  private int id;
+  private int age;
+  private String name;
+  private String mobile;
+
+  public Student(int id, int age, String name) {
+    this.id = id;
+    this.age = age;
+    this.name = name;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return "Student{" +
+        "id=" + id +
+        ", age=" + age +
+        ", name='" + name + '\'' +
+        '}';
+  }
+
+  @Override
+  public int compareTo(Student other) {
+    //this -> current object
+    //other -> other object
+    return this.id - other.id;
+  }
+}
+
+
+public class CollectionUtils {
+
+  public static void main(String[] args) {
+
+    final List<String> students = new ArrayList<>();
+    students.add("Sunil");
+    students.add("Anil");
+    students.add("Swapnil");
+    students .add("Kiran");
+    students.add("Satish");
+    students.add("Sunil");
+    students.add("Satish");
+
+    //studentList = new ArrayList<>();
+
+    //Collection -> Interface which actually holds the data
+    //Collections -> Utility class to perform operations on Collection
+
+    System.out.println(students);
+    Collections.sort(students);
+    System.out.println(students);
+
+    int index = Collections.binarySearch(students, "Swapnil");
+    System.out.println(index);
+
+    int count = Collections.frequency(students, "Sunil");
+    System.out.println(count);
+
+//    Collections.shuffle(studentList);
+//    System.out.println(studentList);
+
+    Collections.reverse(students);
+    System.out.println(students);
+
+
+    List<Student> studentList = new ArrayList<>();
+    studentList.add(new Student(100, 20, "Sunil"));
+    studentList.add(new Student(200, 25, "Anil"));
+    studentList.add(new Student(150, 22, "Swapnil"));
+    studentList.add(new Student(120, 15, "Kiran"));
+
+    //15,20,22,25
+
+    System.out.println(studentList);
+    Collections.sort(studentList);
+    System.out.println(studentList);
+
+    Scanner scan = new Scanner(System.in);
+    System.out.println("Enter sorting order column name:");
+    String name = scan.nextLine();
+
+    if(name.equals("age")) {
+      Collections.sort(studentList, (Student s1, Student s2) ->  s1.getAge() - s2.getAge());
+    }else if(name.equals("name")) {
+      Collections.sort(studentList, (Student s1, Student s2) -> s1.getName().compareTo(s2.getName()));
+    }
+
+    System.out.println(studentList);
+
+  }
+}
+
+
+//
+//class SortStudentByAge implements Comparator<Student> {
+//
+//  @Override
+//  public int compare(Student s1, Student s2) {
+//    return s1.getAge() - s2.getAge();
+//  }
+//}
+
+
+//class SortStudentByName implements Comparator<Student> {
+//
+//  @Override
+//  public int compare(Student s1, Student s2) {
+//    return s1.getName().compareTo(s2.getName());
+//  }
+//}
+//
+//class SortProductsByRating implements Comparator<Product> {
+//
+//  @Override
+//  public int compare(Product p1, Product p2) {
+//    return p1.getRating() - p2.getRating(); //
+//  }
+//}
