@@ -1,0 +1,355 @@
+
+------- Core Movie Service API ----------------
+
+
+
+package com.devgen.imdb.model;
+
+public class Movie {
+  private long id;
+  private String name;
+  private Genre genre; // Action, Sci-Fi, Drama, etc.
+  private int year; // 2025, 2020, 2015, etc.
+
+  public Movie(long id, String name, Genre genre, int year) {
+    this.id = id;
+    this.name = name;
+    this.genre = genre;
+    this.year = year;
+  }
+
+  public long getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Genre getGenre() {
+    return genre;
+  }
+
+  public int getYear() {
+    return year;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setGenre(Genre genre) {
+    this.genre = genre;
+  }
+
+  public void setYear(int year) {
+    this.year = year;
+  }
+
+  @Override
+  public String toString() {
+    return "{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", genre='" + genre + '\'' +
+        ", year=" + year +
+        '}';
+  }
+}
+
+-------------------------------
+
+package com.devgen.imdb.model;
+
+public enum Genre {
+  ACTION, SCI_FI, DRAMA, COMEDY, HORROR, ROMANCE, THRILLER, FANTASY, ANIMATION, DOCUMENTARY, HISTORY
+}
+
+--------------------------
+
+
+package com.devgen.imdb.service;
+
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+//Service Layer - Write Business Logic by using Inputs and Generate Output in Object format
+public class MovieService {
+
+  private Map<Long, Movie> movieMap;
+  private long idCounter;
+
+  public MovieService() {
+    movieMap = new HashMap<>();
+    idCounter = 1;
+    
+    initializeMovies();
+  }
+
+  private void initializeMovies() {
+   addMovie("Inception", Genre.SCI_FI, 2010);
+   addMovie("The Dark Knight", Genre.ACTION, 2008);
+   addMovie("Interstellar", Genre.SCI_FI, 2014);
+   addMovie("The Prestige", Genre.DRAMA, 2006);
+   addMovie("Memento", Genre.THRILLER, 2000);
+   addMovie("Chhava", Genre.HISTORY, 2025);
+   addMovie("Tanhaji", Genre.HISTORY, 2025);
+   addMovie("Marco", Genre.ACTION, 2025);
+  }
+
+  public Movie addMovie(String name, Genre genre, int year) {
+    Movie movie = new Movie(idCounter, name, genre, year);
+    movieMap.put(idCounter, movie);
+    idCounter++;
+    return movie;
+  }
+
+  public Movie getMovieById(long id) {
+    return movieMap.get(id);
+  }
+
+  public List<Movie> getAllMovies() {
+    //List<Movie> movies = new ArrayList<>(movieMap.values());
+    //movieMap.forEach((k, v) -> movies.add(v));
+    return new ArrayList<>(movieMap.values());
+  }
+
+  public boolean deleteMovie(long id) {
+    Movie movie = movieMap.remove(id);
+
+    if(movie == null) // Not found
+      return false;
+    else
+      return true; // Found
+  }
+
+  //1, Inception, Sci-Fi, 2010  - Original
+  //1, Inception, Drama, 2009  - New change
+  public boolean updateMovie(long id, String name, Genre genre, int year) {
+    Movie movie = movieMap.get(id);
+    if(movie == null) {
+      return false;
+    }
+    movie.setName(name);
+    movie.setGenre(genre);
+    movie.setYear(year);
+
+    return true;
+  }
+
+  public List<Movie> searchMovieByGenre(String genre) {
+    // Movie object with String genre
+    List<Movie> matchingMovies = movieMap.values().stream()
+        .filter(movie -> movie.getGenre().equals(genre))
+        .collect(Collectors.toList());
+
+//    for(Movie movie : movieMap.values()) {
+//      if(movie.getGenre().equals(genre)) {
+//        matchingMovies.add(movie);
+//      }
+//    }
+
+    Collections.sort(matchingMovies, (m1, m2) -> m2.getYear() - m1.getYear());
+
+    return matchingMovies;
+  }
+
+  public List<Movie> searchMovieByYear(int year) {
+    // Movie object with String genre
+    List<Movie> matchingMovies = new ArrayList<>();
+    for(Movie movie : movieMap.values()) {
+      if(movie.getYear() == year) {
+        matchingMovies.add(movie);
+      }
+    }
+
+    Collections.sort(matchingMovies, (m1, m2) -> m1.getName().compareTo(m2.getName()));
+
+    return matchingMovies;
+  }
+
+
+}
+
+----------------------------------------
+
+
+package com.devgen.imdb;
+
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import com.devgen.imdb.service.MovieService;
+import java.util.List;
+
+public class MovieServiceClient {
+
+  public static void main(String[] args) {
+
+    MovieService movieService = new MovieService();
+    movieService.addMovie("Pushpa", Genre.ACTION, 2024);
+
+    Movie movie = movieService.getMovieById(6);
+    System.out.println(movie);
+
+    List<Movie> movies = movieService.getAllMovies();
+    System.out.println(movies); // Netflix - Website
+
+
+    boolean isDeleted = movieService.deleteMovie(2);
+    if(isDeleted) {
+      System.out.println("Movie Deleted Successfully");
+    } else {
+      System.out.println("Movie Not Found");
+    }
+
+    movies = movieService.getAllMovies();
+    System.out.println(movies);
+
+
+    boolean isUpdated = movieService.updateMovie(1, "Inception", Genre.DRAMA, 2009);
+    if(isUpdated) {
+      System.out.println("Movie Updated Successfully");
+    } else {
+      System.out.println("Movie Not Found");
+    }
+
+    //movie = movieService.getMovieById(1);
+    //System.out.println(movie); // 2009
+
+    System.out.println("-------- Movies by Genre -------");
+    movies = movieService.searchMovieByGenre("Action");
+    System.out.println(movies);
+
+    System.out.println("-------- Movies by Year -------");
+    movies = movieService.searchMovieByYear(2025);
+    System.out.println(movies);
+
+  }
+}
+
+-----------------------------------
+
+
+
+
+===== REST API Designing for Movie Service API =======
+
+
+pom.xml
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.devgen</groupId>
+	<artifactId>movie-service-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>movie-service-api</name>
+	<description>Movie Service API application</description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+-----------------------------------------------
+
+
+
+package com.devgen.msapi.controller;
+
+import com.devgen.msapi.model.Movie;
+import com.devgen.msapi.service.MovieService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+///search/title/?genres=history
+@RestController
+@RequestMapping("/api/v1/movies")
+@CrossOrigin(origins = "http://localhost:3000")
+public class MovieController {
+
+  private MovieService movieService;
+
+  @Autowired
+  MovieController(MovieService movieService) {
+    this.movieService = movieService;
+  }
+
+  @GetMapping
+  public List<Movie> getAllMovies() {
+    System.out.println("In getAllMovies()");
+    return movieService.getAllMovies();
+  }
+
+  @GetMapping("/{id}")
+  public Movie getMovieById(@PathVariable(name="id") Long id) {
+    return movieService.getMovieById(id);
+  }
+
+  @GetMapping("/search/genre/{genre}")
+  public List<Movie> getMovieById(@PathVariable(name="genre") String genre) {
+    return movieService.searchMovieByGenre(genre);
+  }
+}
+
+// Prootocol
+// Host : Port
+// Endpoint
+
+// http://localhost:8282/api/v1/movies
+
+------------------------------------------
+
