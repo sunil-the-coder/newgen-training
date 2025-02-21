@@ -1,0 +1,117 @@
+package main.java.com.example.advjava.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DatabaseConnector {
+
+  public static void main(String[] args) {
+
+    // Steps - JDBC 4.0
+
+    //1. Load the driver
+    //2. Register the driver with DriverManager
+    //3. Establish the connection
+    //4. Create a statement to write query
+    //5. Execute the query
+    //6. Process the results
+    //7. Close the connection/statement/resultset
+
+    //Class.forName("com.mysql.cj.jdbc.Driver");
+
+    //BMR = Basic Madhe Rada
+
+    try {
+
+      //jdbc:mysql://localhost:3306/devgen, root, root
+      Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/devgen",
+          "postgres", "postgres");
+      Statement statement = connection.createStatement();
+      ResultSet rs = statement.executeQuery("select * from students"); // table
+
+      while (rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        int age = rs.getInt("age");
+        System.out.println("Id:" + id +",Name:" + name + ",Age:" + age);
+      }
+
+      rs.close();
+      statement.close();
+      connection.close();
+      
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+}
+
+
+------------------------------------------------- 
+
+
+// Auto closing resources with try with resource feature
+
+
+
+package main.java.com.example.advjava.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DatabaseConnector {
+
+  public static void main(String[] args) {
+
+    // Steps - JDBC 4.0
+
+    //1. Load the driver
+    //2. Register the driver with DriverManager
+    //3. Establish the connection
+    //4. Create a statement to write query
+    //5. Execute the query
+    //6. Process the results
+    //7. Close the connection/statement/resultset
+
+    //Class.forName("com.mysql.cj.jdbc.Driver");
+
+    //BMR = Basic Madhe Rada
+
+    final String url = "jdbc:postgresql://localhost:5432/devgen";
+    final String username = "root";
+    final String password = "root";
+    final String query  = "select * from students";
+
+    connectToDBAndRetrieveResult(url, username, password, query);
+
+  }
+
+  private static void connectToDBAndRetrieveResult(String url, String username, String password, String query) {
+    //try with resources
+    try(Connection connection = DriverManager.getConnection(url,
+        username, password);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query)) {
+
+      //jdbc:mysql://localhost:3306/devgen, root, root
+
+      while (rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        int age = rs.getInt("age");
+        System.out.println("Id:" + id +",Name:" + name + ",Age:" + age);
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+
+------------------------------------------------
+
