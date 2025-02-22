@@ -1,0 +1,824 @@
+package main.java.com.example.advjava.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DatabaseConnector {
+
+  final static String URL = "jdbc:postgresql://localhost:5432/devgen";
+  final static String USERNAME = "postgres";
+  final static String PASSWORD = "postgres";
+
+  public static void main(String[] args) {
+
+    // Steps - JDBC 4.0
+
+    //1. Load the driver
+    //2. Register the driver with DriverManager
+    //3. Establish the connection
+    //4. Create a statement to write query
+    //5. Execute the query
+    //6. Process the results
+    //7. Close the connection/statement/resultset
+
+    //Class.forName("com.mysql.cj.jdbc.Driver");
+
+
+    connectToDBAndRetrieveResult();
+    addStudent(6, "Romil", 26);
+  }
+
+  private static void addStudent(int id, String name, int age) {
+    //try with resources
+
+    final String query = "insert into students(id,name,age) values("+id+", '"+name+"', "+age+")";
+    System.out.println("Insert Query:" +query);
+
+    try(Connection connection = DriverManager.getConnection(URL,
+        USERNAME, PASSWORD);
+        Statement statement = connection.createStatement()) {
+
+      int count = statement.executeUpdate(query);
+      if(count > 0) {
+        System.out.println("Student record is inserted");
+      }else {
+        System.out.println("Student record is not inserted");
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static void connectToDBAndRetrieveResult() {
+    final String SELECT_QUERY = "select * from students";
+    //try with resources
+    try(Connection connection = DriverManager.getConnection(URL,
+        USERNAME, PASSWORD);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(SELECT_QUERY)) {
+
+      //jdbc:mysql://localhost:3306/devgen, root, root
+
+      while (rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        int age = rs.getInt("age");
+        System.out.println("Id:" + id +",Name:" + name + ",Age:" + age);
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+
+
+------------------------------------
+
+
+Using preparedStatement
+
+
+
+
+private static void addStudent(int id, String name, int age) {
+    //try with resources
+
+    //Statement => 1. SQL Injection Attack 2. It's slow 3. Syntax is complex
+    //PreparedStatement => 1. No SQL Injection Attack 2. It's fast 3. Syntax is simple
+
+    final String query = "insert into students(id,name,age) values(?, ?, ?)";
+    System.out.println("Insert Query:" +query);
+
+    try(Connection connection = DriverManager.getConnection(URL,
+        USERNAME, PASSWORD);
+        PreparedStatement statement = connection.prepareStatement(query)) {
+
+      statement.setInt(1, id);
+      statement.setString(2, name);
+      statement.setInt(3, age);
+
+      int count = statement.executeUpdate();
+      if(count > 0) {
+        System.out.println("Student record is inserted");
+      }else {
+        System.out.println("Student record is not inserted");
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  ---------------------------------
+
+
+  // Updating records
+
+   private static void updateStudent(int id, String name, int age) {
+    //try with resources
+
+    final String query = "update students  set age = ?, name = ? where id = ?;";
+    System.out.println("Update Query:" +query);
+
+    try(Connection connection = DriverManager.getConnection(URL,
+        USERNAME, PASSWORD);
+        PreparedStatement statement = connection.prepareStatement(query)) {
+
+      statement.setInt(1, age);
+      statement.setString(2, name);
+      statement.setInt(3, id);
+
+      int count = statement.executeUpdate();
+      if(count > 0) {
+        System.out.println("Student record is updated");
+      }else {
+        System.out.println("Student record is not updated");
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+------------------------------- 
+
+
+// Deleting the records
+
+
+private static void deleteStudent(int id) {
+    //try with resources
+
+    final String query = "delete from students where id = ?;;";
+    System.out.println("Update Query:" +query);
+
+    try(Connection connection = DriverManager.getConnection(URL,
+        USERNAME, PASSWORD);
+        PreparedStatement statement = connection.prepareStatement(query)) {
+
+      statement.setInt(1, id);
+
+      int count = statement.executeUpdate();
+      if(count > 0) {
+        System.out.println("Student record is delete");
+      }else {
+        System.out.println("Student record is not delete");
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  --------------------------------- 
+
+
+  // Singleton Design Pattern
+
+
+  package main.java.com.example.advjava.singleobject;
+
+
+class SingleObject {
+
+  static SingleObject instance = null;
+
+  private SingleObject() {
+    System.out.println("SingleObject constructor called");
+  }
+
+  public static SingleObject getInstance() {
+    if(instance == null)
+      instance = new SingleObject();
+
+    return instance;
+  }
+
+}
+
+public class SingleObjectExample {
+
+  public static void main(String[] args) {
+
+    // Singleton class - A class that can have only one object (an instance of the class) at a time
+
+    SingleObject s1 = SingleObject.getInstance();
+    System.out.println(s1);
+
+    SingleObject s2 = SingleObject.getInstance();
+    System.out.println(s2);
+
+    SingleObject s3 = SingleObject.getInstance();
+    System.out.println(s3);
+
+  }
+}
+
+-----------------------------------------
+
+
+----- Single Database Connection
+
+
+
+package main.java.com.example.advjava.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DBConnection {
+
+  private static Connection connection = null;
+
+  static final String URL = "jdbc:postgresql://localhost:5432/devgen";
+  static final String USERNAME = "postgres";
+  static final String PASSWORD = "postgres";
+
+  private DBConnection() {}
+
+  public static Connection getConnection() {
+    if(connection == null) {
+      try {
+        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return connection;
+  }
+}
+
+------------------------------------ 
+
+
+ Connection connection1 = DBConnection.getConnection();
+    System.out.println(connection1);
+
+    Connection connection2 = DBConnection.getConnection();
+    System.out.println(connection2);
+
+    Connection connection3 = DBConnection.getConnection();
+    System.out.println(connection3);
+
+
+------------------------------
+
+
+// MovieService Refactoring using Factory, Singleton design pattern with JDBC and In memory separate implementation
+
+
+package com.devgen.imdb.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DBConnection {
+
+  private static Connection connection = null;
+
+  static final String URL = "jdbc:postgresql://localhost:5432/devgen";
+  static final String USERNAME = "postgres";
+  static final String PASSWORD = "postgres";
+
+  private DBConnection() {}
+
+  public static Connection getConnection() {
+    if(connection == null) {
+      try {
+        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+      } catch (SQLException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return connection;
+  }
+}
+
+
+------------------------------------------
+
+package com.devgen.imdb.service;
+
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import java.util.List;
+
+public interface IMovieService {
+  boolean addMovie(String name, Genre genre, int year);
+  Movie getMovieById(long id);
+  List<Movie> getAllMovies();
+  boolean updateMovie(long id, String name, Genre genre, int year);
+  boolean deleteMovie(long id);
+  List<Movie> searchMovieByGenre(Genre genre);
+  List<Movie> searchMovieByYear(int year);
+}
+
+---------------------------------
+
+package com.devgen.imdb.service;
+
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class InMemoryMovieServiceImpl implements  IMovieService {
+
+  private Map<Long, Movie> movieMap;
+  private long idCounter;
+
+  public InMemoryMovieServiceImpl() {
+    movieMap = new HashMap<>();
+    idCounter = 1;
+
+    initializeMovies();
+  }
+
+  private void initializeMovies() {
+    addMovie("Inception", Genre.SCI_FI, 2010);
+    addMovie("The Dark Knight", Genre.ACTION, 2008);
+    addMovie("Interstellar", Genre.SCI_FI, 2014);
+    addMovie("The Prestige", Genre.DRAMA, 2006);
+    addMovie("Memento", Genre.THRILLER, 2000);
+    addMovie("Chhava", Genre.HISTORY, 2025);
+    addMovie("Tanhaji", Genre.HISTORY, 2025);
+    addMovie("Marco", Genre.ACTION, 2025);
+  }
+
+  @Override
+  public boolean addMovie(String name, Genre genre, int year) {
+    Movie movie = new Movie(idCounter, name, genre, year);
+    movieMap.put(idCounter, movie);
+    idCounter++;
+    return true;
+  }
+
+  @Override
+  public Movie getMovieById(long id) {
+    return movieMap.get(id);
+  }
+
+  @Override
+  public List<Movie> getAllMovies() {
+    return new ArrayList<>(movieMap.values());
+  }
+
+  @Override
+  public boolean updateMovie(long id, String name, Genre genre, int year) {
+    Movie movie = movieMap.get(id);
+    if(movie == null) {
+      return false;
+    }
+    movie.setName(name);
+    movie.setGenre(genre);
+    movie.setYear(year);
+
+    return true;
+  }
+
+  @Override
+  public boolean deleteMovie(long id) {
+    Movie movie = movieMap.remove(id);
+
+    if(movie == null) // Not found
+      return false;
+    else
+      return true; // Found
+  }
+
+  @Override
+  public List<Movie> searchMovieByGenre(Genre genre) {
+    // Movie object with String genre
+    List<Movie> matchingMovies = movieMap.values().stream()
+        .filter(movie -> movie.getGenre().equals(genre))
+        .collect(Collectors.toList());
+
+    Collections.sort(matchingMovies, (m1, m2) -> m2.getYear() - m1.getYear());
+
+    return matchingMovies;
+  }
+
+  @Override
+  public List<Movie> searchMovieByYear(int year) {
+    // Movie object with String genre
+    List<Movie> matchingMovies = new ArrayList<>();
+    for(Movie movie : movieMap.values()) {
+      if(movie.getYear() == year) {
+        matchingMovies.add(movie);
+      }
+    }
+
+    Collections.sort(matchingMovies, (m1, m2) -> m1.getName().compareTo(m2.getName()));
+
+    return matchingMovies;
+  }
+}
+
+--------------------------------
+
+
+package com.devgen.imdb.service;
+
+import com.devgen.imdb.db.DBConnection;
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JdbcMovieServiceImpl implements  IMovieService {
+
+  private Connection connection = null;
+
+  public JdbcMovieServiceImpl() {
+    connection = DBConnection.getConnection();
+  }
+
+  @Override
+  public boolean addMovie(String name, Genre genre, int year) {
+
+    final String query = "insert into movies(name,genre, year) values(?, ?, ?)";
+    System.out.println("Insert Query:" +query);
+
+    try(PreparedStatement statement = connection.prepareStatement(query)) {
+      statement.setString(1, name);
+      statement.setString(2, genre.name());
+      statement.setInt(3, year);
+
+      int count = statement.executeUpdate();
+      return count > 0 ? true : false;
+
+    }catch(Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+
+  }
+
+  @Override
+  public Movie getMovieById(long id) {
+
+    final String SELECT_QUERY = "select * from movies where id=?";
+    //try with resources
+    try(PreparedStatement statement = connection.prepareStatement(SELECT_QUERY)) {
+      statement.setLong(1, id);
+      ResultSet rs = statement.executeQuery();
+      while (rs.next()) {
+        Movie movie = mapMovie(rs);
+        return movie;
+      }
+
+      rs.close();
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
+  private Movie mapMovie(ResultSet rs) {
+    try {
+      int id = rs.getInt("id");
+      String name = rs.getString("name");
+      String genre = rs.getString("genre");
+      int year = rs.getInt("year");
+      return new Movie(id, name, Genre.valueOf(genre), year);
+    }catch(SQLException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public List<Movie> getAllMovies() {
+    List<Movie> movies = new ArrayList<>();
+
+    final String SELECT_QUERY = "select * from movies";
+    //try with resources
+    try(PreparedStatement statement = connection.prepareStatement(SELECT_QUERY);
+        ResultSet rs = statement.executeQuery()) {
+
+      while (rs.next()) {
+        Movie movie = mapMovie(rs);
+        movies.add(movie);
+      }
+
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    return movies;
+  }
+
+  @Override
+  public boolean updateMovie(long id, String name, Genre genre, int year) {
+    return false;
+  }
+
+  @Override
+  public boolean deleteMovie(long id) {
+    return false;
+  }
+
+  @Override
+  public List<Movie> searchMovieByGenre(Genre genre) {
+    return List.of();
+  }
+
+  @Override
+  public List<Movie> searchMovieByYear(int year) {
+    return List.of();
+  }
+}
+
+----------------------------
+
+
+package com.devgen.imdb.service;
+
+public class MovieServiceFactory {
+
+  public static IMovieService getMovieService(String type) {
+    if(type.equals("JDBC")) {
+      return new JdbcMovieServiceImpl();
+    } else if(type.equals("IN_MEMORY")) {
+      return new InMemoryMovieServiceImpl();
+    } else {
+      throw new IllegalArgumentException("Invalid Movie Service Type");
+    }
+  }
+}
+
+
+------------------------------
+
+
+package com.devgen.imdb;
+
+import com.devgen.imdb.model.Genre;
+import com.devgen.imdb.model.Movie;
+import com.devgen.imdb.service.IMovieService;
+import com.devgen.imdb.service.MovieServiceFactory;
+import java.util.List;
+
+public class MovieServiceClient {
+
+  public static void main(String[] args) {
+
+    IMovieService movieService = MovieServiceFactory.getMovieService("JDBC");
+    movieService.addMovie("Pushpa", Genre.ACTION, 2024);
+    movieService.addMovie("Inception", Genre.SCI_FI, 2010);
+    movieService.addMovie("The Dark Knight", Genre.ACTION, 2008);
+    movieService.addMovie("Interstellar", Genre.SCI_FI, 2014);
+    movieService.addMovie("The Prestige", Genre.DRAMA, 2006);
+    movieService.addMovie("Memento", Genre.THRILLER, 2000);
+    movieService.addMovie("Chhava", Genre.HISTORY, 2025);
+    movieService.addMovie("Tanhaji", Genre.HISTORY, 2025);
+    movieService.addMovie("Marco", Genre.ACTION, 2025);
+
+    Movie movie = movieService.getMovieById(6);
+    System.out.println(movie);
+
+    List<Movie> movies = movieService.getAllMovies();
+    System.out.println(movies); // Netflix - Website
+
+//
+//    boolean isDeleted = movieService.deleteMovie(2);
+//    if(isDeleted) {
+//      System.out.println("Movie Deleted Successfully");
+//    } else {
+//      System.out.println("Movie Not Found");
+//    }
+//
+//    movies = movieService.getAllMovies();
+//    System.out.println(movies);
+//
+//
+//    boolean isUpdated = movieService.updateMovie(1, "Inception", Genre.DRAMA, 2009);
+//    if(isUpdated) {
+//      System.out.println("Movie Updated Successfully");
+//    } else {
+//      System.out.println("Movie Not Found");
+//    }
+//
+//    //movie = movieService.getMovieById(1);
+//    //System.out.println(movie); // 2009
+//
+//    System.out.println("-------- Movies by Genre -------");
+//    movies = movieService.searchMovieByGenre(Genre.ACTION);
+//    System.out.println(movies);
+//
+//    System.out.println("-------- Movies by Year -------");
+//    movies = movieService.searchMovieByYear(2025);
+//    System.out.println(movies);
+
+  }
+}
+
+
+------------------------------------
+
+
+/// Working with hibernate - Setup and Code
+
+File - /resources/hibernate.cfg.xml
+
+
+
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/devgen</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">postgres</property>
+    <property name="show_sql">true</property>
+    <property name="hbm2ddl.auto">create</property>
+    <mapping class="com.devgen.hibernate.entities.Student" />
+  </session-factory>
+</hibernate-configuration>
+
+--------------------
+
+package com.devgen.hibernate.utils;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
+public class HibernateUtil {
+
+  private static SessionFactory sessionFactory;
+  private static StandardServiceRegistry registry;
+
+  private HibernateUtil() {}
+
+  public static SessionFactory getSessionFactory() {
+    if (sessionFactory == null) {
+      try {
+        // Create registry
+        registry = new StandardServiceRegistryBuilder().configure().build();
+
+        // Create MetadataSources
+        MetadataSources sources = new MetadataSources(registry);
+
+        // Create Metadata ( hibernate.cfg.xml )
+        Metadata metadata = sources.getMetadataBuilder().build();
+
+        // Create SessionFactory
+        sessionFactory = metadata.getSessionFactoryBuilder().build();
+
+      } catch (Exception e) {
+        e.printStackTrace();
+        if (registry != null) {
+          StandardServiceRegistryBuilder.destroy(registry);
+        }
+      }
+    }
+    return sessionFactory;
+  }
+
+  public static void shutdown() {
+    if (registry != null) {
+      sessionFactory.close();
+      StandardServiceRegistryBuilder.destroy(registry);
+    }
+  }
+
+}
+
+---------------------------
+
+
+package com.devgen.hibernate.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+//XML based or Java based using annotations
+@Entity
+@Table(name="students")
+public class Student {
+
+  @Id // indicating primary key of table
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
+  private String name;
+  private int age;
+
+  public Student() {
+  }
+
+  public Student(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  @Override
+  public String toString() {
+    return "Student{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", age=" + age +
+        '}';
+  }
+}
+
+-------------------------
+
+
+
+package com.devgen.hibernate;
+
+import com.devgen.hibernate.entities.Student;
+import com.devgen.hibernate.utils.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class HibernateTest {
+
+  public static void main(String[] args) {
+
+    //ORM - Object relantional mapping - EhCache
+    Session session = HibernateUtil.getSessionFactory().openSession();
+    Transaction txn = session.beginTransaction();
+
+    Student s1 = new Student("Kiran", 30);
+    session.persist(s1);
+
+    Student s2 = new Student("Sunil", 30);
+    session.persist(s2);
+
+    //HQL - from Student
+//    List<Student> students  = session.createQuery("from Student", Student.class).list();
+//    System.out.println(students);
+
+   // System.out.println("Student record inserted successfully");
+
+    Student student = session.get(Student.class, 10L); // select
+    System.out.println(student);
+
+    student = session.get(Student.class, 10L); // no select - it will be served from session level cache
+    System.out.println(student);
+
+    txn.commit();
+    session.close();
+    HibernateUtil.shutdown();
+  }
+
+}
+
+/*
+
+Dialect -> Object -> SQL specific data types conversion
+
+10 -> int,
+10.5 -> float, double
+string -> varchar, string -> text, string -> char[]
+
+//Auto increment
+create table students(id int primary key auto_increment, name varchar(100), age int);
+
+//Sequence
+create sequence student_seq start with 1 increment by 1;
+create table stdents(id int primary key default nextval('student_seq'), name varchar(100), age int);
+
+ */
+
+ --------------------------------------------
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
