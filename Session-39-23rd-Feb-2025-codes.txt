@@ -1,0 +1,278 @@
+package main.java.com.example.advjava.threading;
+
+class CustomThread extends Thread {
+
+  @Override
+  public void run() {
+    for(int i = 1; i <= 50; i++) {
+      if(i % 2 == 0) {
+        System.out.println("Even number: " + i);
+      }
+    }
+  }
+}
+
+class MyThread implements  Runnable {
+  @Override
+  public void run() {
+    for(int i = 1; i <= 50; i++) {
+      if(i % 2 != 0) {
+        System.out.println("Odd number: " + i);
+      }
+    }
+  }
+}
+
+
+
+public class ThreadExample {
+
+  public static void main(String[] args) {
+
+    //extends java.lang.Thread
+    //implementing Runnable interface
+
+    // 1- 50 => Even number printer ( 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50)
+    // 1 - 5 => Odd number printer (1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 49)
+
+    //1. By extending Thread class
+    CustomThread t1 = new CustomThread();
+    t1.start(); // Asking thread to run his code ( internally calls the run() method )
+
+
+    //2. By implementing Runnable interface
+    MyThread myThread = new MyThread();
+    Thread t2  = new Thread(myThread);
+    t2.start();
+
+    //Thread Scheduler -> OS Concept - Round Robin ( Fixed time slot for each thread )
+    printEvenNumbers(); // Separate
+    printOddNumbers(); // Separate
+
+  }
+
+
+  public static void printEvenNumbers() {
+    for(int i = 1; i <= 50; i++) {
+      if(i % 2 == 0) {
+        System.out.println("Even number: " + i);
+      }
+    }
+  }
+
+  public static void printOddNumbers() {
+    for(int i = 1; i <= 50; i++) {
+      if(i % 2 != 0) {
+        System.out.println("Odd number: " + i);
+      }
+    }
+  }
+
+}
+
+
+------------------------------------------
+
+
+
+    Runnable t = () -> {
+      for(int i = 1; i <= 50; i++) {
+        if(i % 2 != 0) {
+          System.out.println("Odd number: " + i);
+        }
+      }
+    };
+
+    Thread t2  = new Thread(t);
+    t2.start();
+
+
+    --------------------
+
+
+
+     Thread t2  = new Thread(() -> {
+      for(int i = 1; i <= 50; i++) {
+        if(i % 2 != 0) {
+          System.out.println("Odd number: " + i);
+        }
+      }
+    });
+    t2.start();
+
+    -------------------------
+
+
+  //File downloading with multiple threads
+  
+
+
+  package main.java.com.example.advjava.threading.mt;
+
+public class FileDownloaderClient {
+
+  public static void main(String[] args) {
+
+    long startTime = System.currentTimeMillis();
+
+    //50 files to download - How many threads will be required ?
+    Thread t1  = new Thread(new FileDownloader("https://www.example.com/file1.mp4"));
+    Thread t2 = new Thread(new FileDownloader("https://www.example.com/file2.mp4"));
+    Thread t3 = new Thread(new FileDownloader("https://www.example.com/file3.mp4"));
+
+    t1.start();
+    t2.start();
+    t3.start();
+
+    try {
+      t1.join();
+      t2.join();
+      t3.join();
+    }catch(Exception e) {
+      e.printStackTrace();
+    }
+
+    long endTime = System.currentTimeMillis();
+
+    System.out.println("Total time taken: " + (endTime - startTime)  + " milliseconds"); // 15 seconds
+
+  }
+
+  //Total time taken: 5005 milliseconds - multithreaded
+  //Total time taken: 15005 milliseconds - single threaded
+
+  /*
+    - Execution of your code become faster
+    - Utilize the CPU to the fullest
+    - Better resource utilization
+    - Better performance
+   */
+}
+
+---------------
+
+
+package main.java.com.example.advjava.threading.seq;
+
+public class FileDownloader {
+
+  private String filePath;
+
+  public FileDownloader(String filePath) {
+    this.filePath = filePath;
+  }
+
+  public void download() {
+    System.out.println("Downloading file from: " + filePath);
+    try {
+      //Actual logic to download the file from given file location
+      Thread.sleep(5000); // each file took 5 second => 15 seconds in total
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    System.out.println("Download complete for file: " + filePath);
+  }
+
+}
+
+-----------------
+
+
+package main.java.com.example.advjava.threading.mt;
+
+public class FileDownloader implements  Runnable {
+
+  private String filePath;
+
+  public FileDownloader(String filePath) {
+    this.filePath = filePath;
+  }
+
+  @Override
+  public void run() {
+    System.out.println("Downloading file from: " + filePath);
+    try {
+      //Actual logic to download the file from given file location
+      Thread.sleep(5000); // each file took 5 second
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    System.out.println("Download complete for file: " + filePath);
+  }
+
+}
+
+------------------------
+
+
+
+
+// Thread Pool Executor Frameworks
+
+
+package main.java.com.example.advjava.threading.pool;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class Task implements Runnable {
+
+  private String taskName;
+
+  public Task(String taskName) {
+    this.taskName = taskName;
+  }
+
+  @Override
+  public void run() {
+    System.out.println("Task: " + taskName + " is running on thread: " + Thread.currentThread().getName());
+  }
+}
+
+
+public class ThreadPoolExample {
+
+  public static void main(String[] args) {
+
+    Thread currentThread = Thread.currentThread();
+    System.out.println(currentThread.getName());
+
+    //Bydefault every java application has main thread
+
+    ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+    for(int i = 1; i < 50; i++) {
+      executorService.submit(new Task("Task"+i));
+    }
+
+    executorService.shutdown();
+
+  }
+}
+
+
+-----------------------------
+
+
+
+// Using thread pool with file downloader
+
+
+ int cores = Runtime.getRuntime().availableProcessors(); // 15
+    List<String> filePaths = new ArrayList<>();
+    for (int i = 1; i < 100; i++) {
+      filePaths.add("https://www.example.com/file"+i+".mp4");
+    }
+
+    ExecutorService executorService = Executors.newFixedThreadPool(cores); // 15 threads are ready to serve your request.
+    for(String filePath: filePaths) {
+      executorService.submit(new FileDownloader(filePath));
+    }
+    executorService.shutdown();
+
+
+-------------------------------------
+
+
+
+
