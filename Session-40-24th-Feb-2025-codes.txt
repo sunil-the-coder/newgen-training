@@ -1,0 +1,168 @@
+package main.java.com.example.advjava.threading;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class VirtualThreadExample {
+
+  public static void main(String[] args) {
+
+//    for(int i = 0; i < 1000; i++) {
+//      Thread t1 = Thread.ofVirtual()
+//          .start(() -> System.out.println("I am virtual thread:" + Thread.currentThread()));
+//      try {
+//        t1.join();
+//      } catch (InterruptedException e) {
+//        throw new RuntimeException(e);
+//      }
+//    }
+
+
+    // Creating the pool of virtual thread - Anti pattern - Try to avoid - But create as many as virtual threads - Millions
+    try(ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor()) {
+
+      for(int i = 0; i < 10000; i++) {
+        executorService.submit(
+            () -> System.out.println("I am virtual thread from pool:" + Thread.currentThread()));
+      }
+    }
+
+
+    Thread t2 = Thread.ofPlatform().start(() -> System.out.println("I am platform thread:"+ Thread.currentThread()));
+    try {
+      t2.join();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+
+  }
+}
+
+
+------------------------------------------
+
+
+Spring Boot with virtual threads - 
+
+
+#server.tomcat.threads.max=5
+spring.threads.virtual.enabled=true
+
+
+------------------------------
+
+Pool size = No of cores - 1
+
+ 
+---------------------------------
+
+
+--- Thread synchronization
+
+package main.java.com.example.advjava.threading.parallel;
+
+public class JoinAccount {
+
+  private double balance;
+
+  public JoinAccount(double balance) {
+    this.balance = balance;
+  }
+
+  public double getBalance() {
+    return balance;
+  }
+
+  public synchronized void deposit(double amount) {
+    double total = 0;
+    total = balance + amount;
+    balance = total;
+  }
+
+  public void withdraw(double amount) {
+
+    //logic
+
+   //critical section
+    synchronized (this) {
+      double total = 0;
+      total = balance - amount;
+      balance = total;
+    }
+
+    //logic
+  }
+
+}
+
+-------------------------------------------------
+
+
+
+package main.java.com.example.advjava.threading.parallel;
+
+class DepositThread implements  Runnable {
+
+  private JoinAccount account;
+
+  public DepositThread(JoinAccount account) {
+    this.account = account;
+  }
+
+  @Override
+  public void run() {
+    for(int i = 1; i <= 1000; i++)
+        account.deposit(100);
+  }
+}
+
+
+class WithdrawThread implements  Runnable {
+
+  private JoinAccount account;
+
+  public WithdrawThread(JoinAccount account) {
+    this.account = account;
+  }
+
+  @Override
+  public void run() {
+    for(int i = 1; i <= 1000; i++)
+      account.withdraw(100);
+  }
+}
+
+public class JoinAccountExample {
+
+  public static void main(String[] args) {
+
+    //LinkedBlockingQueue, Vector, ConcurrentHashMap
+    JoinAccount account = new JoinAccount(1000);
+
+    Thread t1 = new Thread(new DepositThread(account));
+    Thread t2 = new Thread(new WithdrawThread(account));
+
+    t1.start();
+    t2.start();
+
+    try {
+
+      t2.join();
+      t1.join();
+
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    System.out.println("Final balance: " + account.getBalance());
+
+  }
+}
+
+
+-------------------------------------
+
+
+
+
