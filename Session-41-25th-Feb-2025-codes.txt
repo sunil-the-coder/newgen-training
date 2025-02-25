@@ -1,0 +1,183 @@
+---------------- Spring --------
+
+Rod Johnson - 2002
+
+	First release - 2004 = Lighweight Java EE framework
+
+	Current version - 6.x
+
+
+Spring is lightweight and modular based.
+	
+	- Good Community Support and Very good documentation.
+	- 
+
+Features - 
+
+	1. Inversion of controls(IoC) - Design Principle
+	2. Dependency Injecton. (DI) - It's design pattern
+	2. Data Access - Hibernate, Data JPA - more efficient approach
+	3. Web MVC framwork - ( model, view and controller )
+	4. Transaction management - Unified way of 
+	5. AOP - Aspect Oriented programming
+	6. AuthN & AuthZ 
+	7. Better Testing Framework - JUnit, Mockito, webFramwork
+	8. i18n and l10n
+
+
+
+
+IoC - Broader term : 
+	a. Controls the flow of an application
+	b. Uses a framework to manage resources
+	c. Promotes clean code and loose coupling
+
+	IMPORTANT => "don't call us, we'll call you"
+
+
+	Rrather than having the application call the implementations provided by a library, the library and/or framework calls the implementations provided by the application.
+
+	Ex. controller classes, service classes, 
+
+
+	Inversion of Control (IoC) means that objects do not create other objects on which they rely to do their work. Instead, they get the objects that they need from an outside source (for example, an xml configuration file).
+
+	Dependency Injection (DI) means that this is done without the object intervention, usually by a framework component that passes constructor parameters and set properties
+
+
+
+
+
+Dependency Injection: 
+	a. Manages dependencies between objects
+	b. Uses an IoC framework to inject dependencies
+	c. Reduces coupling between classes
+
+
+IoC Container - 
+	Spring will store the all object into this container.
+
+	1. Bean Factory
+	2. Application Context.
+
+
+# Dependence Injection
+
+		- More modular design, loosly coupled design.
+		- 
+
+
+	Managing the lifecycle of beans - 
+
+		The responsibility of object creation dependencies were doing by themself but here spring will do it 
+		More flexible classes to inject different behaviours.
+
+
+		Bean = Object which are managed by Spring container.
+
+Spring beans defination ways:
+
+	1. XML based configuration
+	2. Java based config
+	3. Annotation based config
+
+
+
+
+
+
+Spring Boot - 
+
+	Opinioned framework based on dependencies - built on spring.
+
+
+
+-----------------------------------------------
+
+
+
+
+package com.devgen.msapi;
+
+import com.devgen.msapi.model.Car;
+import com.devgen.msapi.model.Engine;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MovieServiceApiApplication {
+
+	public static void main(String[] args) {
+		ApplicationContext context = SpringApplication.run(MovieServiceApiApplication.class, args);
+
+		Car car1 = context.getBean(Car.class);
+		car1.drive();
+
+//		Car car2 = context.getBean(Car.class);
+//		car2.drive();
+
+//		Engine engine = context.getBean(Engine.class);
+//		engine.startEngine();
+//		engine.stopEngine();
+	}
+
+}
+
+
+
+
+--------
+
+
+package com.devgen.msapi.model;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Car {
+
+  private Engine engine;
+
+  @Autowired
+  public Car(Engine engine) {
+    this.engine = engine;
+    System.out.println("Car constructor is called");
+  }
+
+  public void drive() {
+    engine.startEngine();
+    System.out.println("Driving a car");
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+    engine.stopEngine();
+  }
+}
+
+
+--------
+
+package com.devgen.msapi.model;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Engine {
+
+  public Engine() {
+    System.out.println("Engine constructor is called");
+  }
+
+  public void startEngine() {
+    System.out.println("Engine is started");
+  }
+
+  public void stopEngine() {
+    System.out.println("Engine is stopped");
+  }
+}
+
