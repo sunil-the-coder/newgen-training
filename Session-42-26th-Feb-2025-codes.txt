@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="car" class="com.devgen.spring.model.Car" scope="prototype"></bean>
+
+</beans>
+
+
+------------
+
+package com.devgen.spring;
+
+import com.devgen.spring.model.Car;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SpringExample {
+    public static void main(String[] args) {
+
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+        Car car1 = (Car) context.getBean("car");
+        car1.drive();
+
+        Car car2 = (Car) context.getBean("car");
+        car2.drive();
+
+        Car car3 = (Car) context.getBean("car");
+        car3.drive();
+
+    }
+
+}
+
+
+// Base type & child type
+
+/*
+    Object obj = new Car();  // Upcasting
+
+    Car car = (Car) obj; // Downcasting
+    car.drive();
+
+
+    Scopes -. By default is singleton.
+
+        Core => singleton, prototype,  WEB => request, session, application
+
+    DBConnection -> singleton
+
+ */
+
+
+ --------
+
+
+ package com.devgen.spring.model;
+
+public class Car {
+
+  public Car() {
+    System.out.println("Car constructor is called");
+  }
+
+  public void drive() {
+    System.out.println("Car is being driven");
+  }
+}
+
+
+---------------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.devgen</groupId>
+  <artifactId>spring</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.2.3</version>
+    </dependency>
+
+  </dependencies>
+
+</project>
+
+-----------------------
+
+
+// setter /constructor injection
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="car" class="com.devgen.spring.model.Car">
+    <property name="brand" value="BMW"/>
+    <constructor-arg value="Snova"/>
+<!--    <property name="model" value="Snova"/>-->
+  </bean>
+
+</beans>
+
+---------
+
+
+package com.devgen.spring.model;
+
+public class Car {
+
+  private String brand;
+  private String model;
+
+  //constructor injection
+  public Car(String model) {
+    this.model  = model;
+    System.out.println("Car constructor is called");
+  }
+
+  public void drive() {
+    System.out.println("Car is being driven");
+  }
+
+  //Setter Injection ( DI )
+  public void setBrand(String brand) {
+    System.out.println("setBrand() is called...");
+    this.brand = brand;
+  }
+
+  public String getBrand() {
+    return brand;
+  }
+
+//  public void setModel(String model) {
+//    System.out.println("setModel() is called...");
+//    this.model = model;
+//  }
+
+  public String getModel() {
+    return model;
+  }
+}
+
+/*
+
+  DI -
+    a. setter injection
+    b. constructor injection
+    c. field injection
+ */
+
+ -------------
+
+
+  Car car1 = (Car) context.getBean("car");
+        System.out.println(car1.getBrand());
+        System.out.println(car1.getModel());
+        car1.drive();
+
+        ----------------
+
+
+ <bean id="car" class="com.devgen.spring.model.Car">
+<!--    <property name="brand" value="BMW"/>-->
+    <constructor-arg index="0" value="BMW"/>
+    <constructor-arg index="1" value="Snova"/>
+
+<!--    <property name="model" value="Snova"/>-->
+  </bean>
+
+
+----------------
+
+
+  <bean id="car" class="com.devgen.spring.model.Car">
+<!--    <property name="brand" value="BMW"/>-->
+    <constructor-arg name="brand" value="BMW"/>
+    <constructor-arg name="model" value="Snova"/>
+
+<!--    <property name="model" value="Snova"/>-->
+  </bean>
+
+----------------
+
+//By type lookup
+
+Car car1 = context.getBean(Car.class);
+        System.out.println(car1.getBrand());
+        System.out.println(car1.getModel());
+        car1.drive();
+
+
+  -----
+
+  Injecting the dep using reference variable.
+
+
+   <bean id="car" class="com.devgen.spring.model.Car">
+<!--    <property name="brand" value="BMW"/>-->
+    <constructor-arg name="brand" value="BMW"/>
+    <constructor-arg name="model" value="Snova"/>
+
+    <property name="engine" ref="engine"/>
+
+<!--    <property name="model" value="Snova"/>-->
+  </bean>
+
+
+  <bean id="engine" class="com.devgen.spring.model.Engine"> </bean>
+
+  ------------------------------
+
+
+
+  <bean id="car" class="com.devgen.spring.model.Car" autowire="byName">
+    <constructor-arg name="brand" value="BMW"/>
+    <constructor-arg name="model" value="Snova"/>
+    <!--    <property name="engine" ref="engine"/>-->
+  </bean>
+
+  <bean id="engine" class="com.devgen.spring.model.Engine"></bean>
+
+
+-------------------------
+
+
+
+  <bean id="car" class="com.devgen.spring.model.Car" autowire="byType">
+    <constructor-arg name="brand" value="BMW"/>
+    <constructor-arg name="model" value="Snova"/>
+<!--        <property name="engine" ref="engine"/>-->
+  </bean>
+
+  <bean id="engine" class="com.devgen.spring.model.Engine"></bean>
+
+--------------------------
+
+
+// Using one bean of type using autowiring byType & byName with multiple implementation
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="car" class="com.devgen.spring.model.Car" autowire="byType">
+    <constructor-arg name="brand" value="BMW"/>
+    <constructor-arg name="model" value="Snova"/>
+<!--        <property name="engine" ref="engine"/>-->
+  </bean>
+
+  <bean id="engine1" class="com.devgen.spring.model.VovloEngine"></bean>
+
+  <bean id="engine2" class="com.devgen.spring.model.TataEngine" primary="true"></bean>
+
+</beans>
+
+-----------------------
+
+package com.devgen.spring.model;
+
+public class VovloEngine implements Engine {
+
+//  public VovloEngine() {
+//    System.out.println("Vovlo Engine constructor is called...");
+//  }
+
+  @Override
+  public void startEngine() {
+    System.out.println("Vovlo Engine is started...");
+  }
+
+  @Override
+  public void stopEngine() {
+    System.out.println("Vovlo Engine is stopped...");
+  }
+
+}
+
+
+---------------
+
+package com.devgen.spring.model;
+
+public class TataEngine implements Engine {
+
+//  public TataEngine() {
+//    System.out.println("Tata Engine constructor is called...");
+//  }
+
+  @Override
+  public void startEngine() {
+    System.out.println("Tata Engine is started...");
+  }
+
+  @Override
+  public void stopEngine() {
+    System.out.println("Tata Engine is stopped...");
+  }
+
+}
+
+
+--------------
+
+package com.devgen.spring.model;
+
+public interface Engine {
+  void startEngine();
+  void stopEngine();
+}
+
+
+-----------------------
+
+
+package com.devgen.spring.model;
+
+public class Car {
+
+  private String brand;
+  private String model;
+
+  private Engine engine;
+
+  //constructor injection
+  public Car(String brand, String model) {
+    this.model  = model;
+    this.brand = brand;
+    System.out.println("Car constructor is called");
+  }
+
+  public void drive() {
+    engine.startEngine();
+    System.out.println("Car is being driven");
+    engine.stopEngine();
+  }
+
+  //Setter Injection ( DI )
+  public void setBrand(String brand) {
+    System.out.println("setBrand() is called...");
+    this.brand = brand;
+  }
+
+  public String getBrand() {
+    return brand;
+  }
+
+  public void setEngine(Engine engine) {
+    System.out.println("setEngine() is called...");
+    this.engine = engine;
+  }
+
+//  public void setModel(String model) {
+//    System.out.println("setModel() is called...");
+//    this.model = model;
+//  }
+
+  public String getModel() {
+    return model;
+  }
+}
+
+/*
+
+  DI -
+    a. setter injection
+    b. constructor injection
+    c. field injection
+ */
+
+
+ -----------------
+
+
+ // working with collection
+
+   <bean id="engine1" class="com.devgen.spring.model.VolvoEngine">
+    <constructor-arg name="engineParts">
+<!--      <map>-->
+<!--        <entry key="1" value="Engine Part 1"/>-->
+<!--        <entry key="2" value="Engine Part 2"/>-->
+<!--        <entry key="3" value="Engine Part 3"/>-->
+<!--      </map>-->
+<!--      <set>-->
+<!--      </set>-->
+      <list>
+        <!--        <ref bean="enginePart1"/>-->
+<!--        <ref bean="enginePart2"/>-->
+<!--        <ref bean="enginePart3"/>-->
+
+
+        <value>Engine Part 1</value>
+        <value>Engine Part 2</value>
+        <value>Engine Part 3</value>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  ----------------
+
+
+package com.devgen.spring.model;
+
+import java.util.List;
+
+public class VolvoEngine implements Engine {
+
+//  public VovloEngine() {
+//    System.out.println("Vovlo Engine constructor is called...");
+//  }
+
+  private List<String> engineParts;
+
+  public VolvoEngine(List<String> engineParts) {
+    this.engineParts = engineParts;
+  }
+  @Override
+  public void startEngine() {
+    System.out.println("Engine parts: " + engineParts);
+    System.out.println("Vovlo Engine is started...");
+  }
+
+  @Override
+  public void stopEngine() {
+    System.out.println("Vovlo Engine is stopped...");
+  }
+
+}
+
+---------
+
+
+
+
+
+
+
+
+
+
