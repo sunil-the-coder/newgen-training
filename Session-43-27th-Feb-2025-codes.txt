@@ -1,0 +1,223 @@
+package com.devgen.spring.config;
+
+import com.devgen.spring.model.Car;
+import com.devgen.spring.model.Engine;
+import com.devgen.spring.model.VolvoEngine;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class AppConfig {
+
+  @Bean
+  @Scope("prototype")
+  public Car car(Engine engine) {
+    Car car = new Car("Snova", "BMW");
+    car.setEngine(engine);
+    return car;
+  }
+
+  @Bean
+  public VolvoEngine engine() {
+    return new VolvoEngine();
+  }
+
+}
+
+
+-------------
+
+
+package com.devgen.spring;
+
+import com.devgen.spring.config.AppConfig;
+import com.devgen.spring.config.StudentConfig;
+import com.devgen.spring.model.Car;
+import com.devgen.spring.model.Engine;
+import com.devgen.spring.model.VolvoEngine;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class SpringExample {
+    public static void main(String[] args) {
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class, StudentConfig.class);
+
+        //Car car1 = (Car) context.getBean("car");
+
+      //  Engine engine =  context.getBean("engineCar", Engine.class);
+//
+         Car car1 = context.getBean(Car.class);
+        Car car2 = context.getBean(Car.class);
+        System.out.println(car1);
+        System.out.println(car2);
+
+//        System.out.println(car1.getBrand()+ " "+car1.getModel());
+//        car1.drive();
+
+//        Engine engine = context.getBean(Engine.class);
+//        engine.startEngine();
+//        engine.stopEngine();
+
+
+        //DON'T CALL US, WE WILL CALL YOU
+
+//        Engine engine = new Engine();
+//        Car car  = new Car("Snova", "BMW");
+//        car.setEngine(engine);
+
+
+
+    }
+
+}
+
+
+// Base type & child type
+
+/*
+    Object obj = new Car();  // Upcasting
+
+    Car car = (Car) obj; // Downcasting
+    car.drive();
+
+
+    Scopes -. By default is singleton.
+
+        Core => singleton, prototype,  WEB => request, session, application
+
+    DBConnection -> singleton
+
+ */
+
+ ------------
+
+
+
+ -- Using Primary annotation
+
+
+ package com.devgen.spring.config;
+
+import com.devgen.spring.model.Car;
+import com.devgen.spring.model.Engine;
+import com.devgen.spring.model.TataEngine;
+import com.devgen.spring.model.VolvoEngine;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class AppConfig {
+
+  @Bean
+  @Scope("prototype")
+  public Car car(Engine engine) {
+    Car car = new Car("Snova", "BMW");
+    car.setEngine(engine);
+    return car;
+  }
+
+  @Bean
+  @Primary
+  public VolvoEngine volvoEngine() {
+    return new VolvoEngine();
+  }
+
+  @Bean
+  public TataEngine tataEngine() {
+    return new TataEngine();
+  }
+
+
+}
+
+
+--------------------
+
+
+-- Using @Qualifier annotation
+
+
+package com.devgen.spring.config;
+
+import com.devgen.spring.model.Car;
+import com.devgen.spring.model.Engine;
+import com.devgen.spring.model.TataEngine;
+import com.devgen.spring.model.VolvoEngine;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
+
+@Configuration
+public class AppConfig {
+
+  @Bean
+  @Scope("prototype")
+  public Car car(@Qualifier("tataEngine") Engine engine) {
+    Car car = new Car("Snova", "BMW");
+    car.setEngine(engine);
+    return car;
+  }
+
+  @Bean
+  public VolvoEngine volvoEngine() {
+    return new VolvoEngine();
+  }
+
+  @Bean
+  public TataEngine tataEngine() {
+    return new TataEngine();
+  }
+
+
+}
+
+-------------------------------------
+
+
+// Spring configuration metadata using Spring annotations
+
+
+@Configuration
+@ComponentScan("com.devgen.spring")
+public class AppConfig {
+
+
+}
+_______________
+
+@Component
+public class TataEngine implements Engine {
+
+
+-------
+
+@Component
+public class VolvoEngine implements Engine {
+--------
+
+
+
+@Component
+public class Car {
+
+  @Value("Toyota")
+  private String brand;
+
+  @Value("${model}")
+  private String model;
+
+  @Autowired
+  @Qualifier("volvoEngine")
+  private Engine engine;
+
+---------------------------
+
+
+
