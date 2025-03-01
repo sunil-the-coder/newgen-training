@@ -1,0 +1,428 @@
+
+
+package com.devgen.spring;
+
+import com.devgen.spring.model.Product;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SpringBootDemoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringBootDemoApplication.class, args);
+
+		Product prod = new Product(1, "Laptop", "Electronics", 1000.00);
+
+		prod.setName("Test");
+
+		System.out.println(prod);
+
+		//Builder Design Pattern
+		Product prod2 = Product.builder().
+				id(2)
+				.name("Mobile")
+				.category("Electronics")
+				.price(500.00)
+				.build();
+
+	}
+
+}
+
+
+--------------
+
+
+package com.devgen.spring.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder
+public class Product {
+  private long id;
+  private String name;
+  private String category; // Electronics, Clothing, etc.
+  private double price; // 100.00, 200.00, 300.00
+}
+
+
+------------------------
+
+<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+----------------
+
+
+@Data   // -> @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor
+
+
+----------
+
+
+@RestController
+public class ProductController {
+  //java object to json object
+  //@ResponseBody - converts java object to json object - Internally uses jackson/gson library to convert
+}
+
+---------------------------------
+
+
+// Desiging the Product service with REST API endpoints - CRUD
+
+package com.devgen.spring.controller;
+
+import com.devgen.spring.model.Product;
+import com.devgen.spring.service.ProductService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class ProductController {
+  //java object to json object
+  //@ResponseBody - converts java object to json object - Internally uses jackson/gson library to convert ( java to json and json to java )
+
+  private ProductService productService;
+
+  @Autowired
+  public ProductController(ProductService productService) {
+    this.productService = productService;
+  }
+
+  @GetMapping("/api/v1/products")
+  public @ResponseBody List<Product> getAllProducts() {
+    System.out.println("ProductController getAllProduct() method is called.");
+    return productService.getAll();
+  }
+
+  @GetMapping("/api/v1/products/{id}")
+  public @ResponseBody  Product getProductById(@PathVariable(name="id") Long productId) {
+    System.out.println("ProductController getProductById() method is called."+productId);
+    return productService.getById(productId);
+  }
+
+  @PostMapping("/api/v1/products")
+  public @ResponseBody String addProduct(@RequestBody Product product) {
+    System.out.println("ProductController addProduct() method is called..");
+    productService.add(product);
+    return "Product added successfully";
+  }
+
+
+  @PutMapping("/api/v1/products")
+  public @ResponseBody String updateProduct(@RequestBody Product product) {
+    System.out.println("ProductController updateProduct() method is called..");
+    boolean status = productService.updateProduct(product);
+    if(status) {
+      return "Product updated successfully";
+    }else {
+      return "Product not found or update failed.";
+    }
+  }
+
+  @DeleteMapping("/api/v1/products/{id}")
+  public @ResponseBody String deleteProduct(@PathVariable(name="id") Long productId) {
+    System.out.println("ProductController deleteProduct() method is called."+productId);
+
+    boolean status = productService.delete(productId);
+    if(status) {
+      return "Product deleted successfully";
+    }else {
+      return "Product not found or deletion failed.";
+    }
+  }
+
+
+
+}
+
+//Client - API consumer
+
+// URL -> http://localhost:8080/api/v1/products -> GET
+
+/*
+
+
+GET /api/v1/products -> get all products
+GET /api/v1/products/{id} -> get product by id
+POST /api/v1/products -> create a new product
+DELETE /api/v1/products/{id} -> delete product by id
+PUT
+
+Key: Value
+
+"GET /api/v1/products" -> "ProductController.getAllProducts()"
+
+=> "Don't call us, we will call you"  => Containers ( IoC containers ) => Spring Container
+
+
+ */
+
+
+package com.devgen.spring.service;
+
+import com.devgen.spring.model.Category;
+import com.devgen.spring.model.Product;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductService {
+
+  private final Map<Long, Product> products;
+  private Long id;
+
+  public ProductService() {
+    this.products = new HashMap<>();
+    this.id = 1L;
+
+    initializeProducts();
+  }
+
+  private void initializeProducts() {
+    add( new Product( "Laptop", Category.ELECTRONICS, 1000.00));
+    add( new Product( "T-Shirt", Category.CLOTHING, 20.00));
+    add( new Product( "Book", Category.BOOKS, 10.00));
+    add( new Product( "Table", Category.FURNITURE, 200.00));
+  }
+
+  public void add(Product product) {
+    product.setId(id);
+    products.put(id, product);
+    id++;
+  }
+
+  public Product getById(Long id) {
+    return products.get(id);
+  }
+
+  public List<Product> getAll() {
+    System.out.println("ProductService getAll() method is called.");
+    return new ArrayList<>(products.values());
+  }
+
+  public boolean delete(Long id) {
+    return products.remove(id) != null;
+  }
+
+  public List<Product> searchByCategory(Category category) {
+    List<Product> matchingProducts = new ArrayList<>();
+    for(Product product : products.values()) {
+      if(product.getCategory().equals(category)) {
+        matchingProducts.add(product);
+      }
+    }
+    return matchingProducts;
+  }
+
+  /*
+    newProduct -
+    {
+        "name": "Apple Laptop",
+        "category": "ELECTRONICS",
+        "price": 2000.0,
+        "id": 1
+}
+
+existing Product:
+{
+        "name": "Laptop",
+        "category": "ELECTRONICS",
+        "price": 1000.0,
+        "id": 1
+}
+
+   */
+  public boolean updateProduct(Product newProduct) {
+    Product existingProduct = products.get(newProduct.getId());
+    if(existingProduct != null) {
+      existingProduct.setName(newProduct.getName());
+      existingProduct.setPrice(newProduct.getPrice());
+      return true;
+    }
+    return false;
+  }
+}
+
+------------------
+
+package com.devgen.spring.model;
+
+public enum Category {
+  ELECTRONICS,
+  CLOTHING,
+  BOOKS,
+  FURNITURE
+}
+
+
+-------------
+
+
+package com.devgen.spring.model;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+
+@Getter
+@Setter
+@ToString
+public class Product {
+  private long id;
+  private String name;
+  private Category category; // Electronics, Clothing, etc.
+  private double price; // 100.00, 200.00, 300.00
+
+  public Product(String name, Category category, double price) {
+    this.name = name;
+    this.category = category;
+    this.price = price;
+  }
+
+}
+
+
+----------------------
+
+// Put updated structure
+
+
+
+
+  @PutMapping("/api/v1/products/{id}")
+  public @ResponseBody String updateProduct(@RequestBody Product product, @PathVariable(name="id") Long productId) {
+    System.out.println("ProductController updateProduct() method is called..");
+    product.setId(productId);
+    boolean status = productService.updateProduct(product);
+    if(status) {
+      return "Product updated successfully";
+    }else {
+      return "Product not found or update failed.";
+    }
+  }
+
+  -----------
+
+
+
+GET /api/v1/products -> get all products
+GET /api/v1/products/{id} -> get product by id
+POST /api/v1/products -> create a new product
+DELETE /api/v1/products/{id} -> delete product by id
+PUT /api/v1/products -> update product
+
+
+----------------------
+
+
+
+// Searching the products -
+
+
+  @GetMapping("/api/v1/products/search/{category}")
+  public @ResponseBody List<Product> searchProductsByCategory(@PathVariable Category category) {
+    System.out.println("ProductController searchProductsByCategory() method is called.");
+    return productService.searchByCategory(category);
+  }
+
+  ----------------------------
+
+
+
+
+  /*
+    newProduct -
+    {
+        "name": "Apple Laptop",
+        "category": "ELECTRONICS",
+        "price": 2000.0,
+        "id": 1
+}
+
+existing Product:
+{
+        "name": "Laptop",
+        "category": "ELECTRONICS",
+        "price": 1000.0,
+        "id": 1
+}
+
+   */
+  public boolean updateProduct(Product newProduct) {
+    Product existingProduct = products.get(newProduct.getId());
+    if(existingProduct != null) {
+      existingProduct.setName(newProduct.getName());
+      existingProduct.setPrice(newProduct.getPrice());
+      return true;
+    }
+    return false;
+  }
+
+  ----------------------------
+
+
+  // NOTES - 
+
+
+
+  
+GET /api/v1/products -> get all products
+GET /api/v1/products/{id} -> get product by id
+POST /api/v1/products -> create a new product
+DELETE /api/v1/products/{id} -> delete product by id
+PUT /api/v1/products/{id} -> update product by id
+
+--- Search products by category
+GET /api/v1/products/{category} -> get products by category  =>
+      List<Product>->
+GET /api/v1/products -> get products by category
+
+Key: Value
+
+//RequestHandlerMap
+
+"GET /api/v1/products" -> "ProductController.getAllProducts()"
+"GET /api/v1/products/search/ELECTRONICS" -> "ProductController.searchProductsByCategory()"
+"GET /api/v1/products/1" -> "ProductController.getProductById()"
+"DELETE /api/v1/products/{id}" -> "ProductController.deleteProduct()"
+"POST /api/v1/products" -> "ProductController.addProduct()"
+"PUT /api/v1/products/{id}" -> "ProductController.updateProduct()"
+
+
+
+
+
+
+
+
+
+
