@@ -1,0 +1,71 @@
+
+  @GetMapping("/api/v1/products")
+  public @ResponseBody List<Product> getAllProducts(@RequestParam(required = false) String category) {
+    System.out.println("ProductController getAllProduct() method is called -> "+category);
+    if(category != null) {
+      Category cat = Category.valueOf(category);
+      return productService.searchByCategory(cat);
+    }
+    return productService.getAll();
+  }
+
+
+  --------------
+
+
+
+
+  @GetMapping("/api/v1/products")
+  public @ResponseBody List<Product> getAllProducts(@RequestParam(required = false) String category,
+      @RequestParam(required = false) String name,
+      @RequestParam(name="lower-price", required = false) Double lowerPrice,
+      @RequestParam(name="higher-price", required = false) Double higherPrice) {
+
+    System.out.println("ProductController getAllProduct() method is called -> "+category);
+    System.out.println(lowerPrice +" "+higherPrice);
+
+    if(category != null) {
+      Category cat = Category.valueOf(category);
+      return productService.searchByCategory(cat);
+    }
+
+    if(name != null) {
+      return productService.searchByProductName(name);
+    }
+
+    if(lowerPrice != null && higherPrice != null) {
+      return productService.searchByProductPriceRange(lowerPrice, higherPrice);
+    }
+
+    return productService.getAll();
+  }
+
+
+  -----------------------
+
+
+  public List<Product> searchByProductPriceRange(Double lowerPrice, Double higherPrice) {
+    return products.values().stream()
+        .filter(product -> isPriceRangeValid(lowerPrice, higherPrice, product))
+        .sorted(Comparator.comparingDouble(Product::getPrice))
+        .collect(Collectors.toList());
+  }
+
+  private boolean isPriceRangeValid(Double lowerPrice, Double higherPrice, Product product) {
+    return product.getPrice() >= lowerPrice && product.getPrice() <= higherPrice;
+  }
+
+  --------------
+
+
+  public List<Product> searchByProductName(String name) {
+    return products.values().stream()
+        .filter(product -> isNameMatching(name, product)) //partial matching
+        .toList();
+  }
+
+  private static boolean isNameMatching(String name, Product product) {
+    return product.getName().toLowerCase().contains(name.toLowerCase());
+  }
+
+
