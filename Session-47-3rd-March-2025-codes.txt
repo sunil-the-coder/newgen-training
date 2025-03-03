@@ -1,0 +1,286 @@
+------ Clean code with Exception handling for different errors -------
+
+
+package com.devgen.spring.controller;
+
+import com.devgen.spring.exception.InvalidProductCategoryException;
+import com.devgen.spring.exception.ProductNotFoundException;
+import com.devgen.spring.model.Category;
+import com.devgen.spring.model.Product;
+import com.devgen.spring.service.ProductService;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/products")
+public class ProductController {
+
+  private ProductService productService;
+
+  @Autowired
+  public ProductController(ProductService productService) {
+    this.productService = productService;
+  }
+
+  @GetMapping
+  public List<Product> getAllProducts(@RequestParam(required = false) String category,
+      @RequestParam(required = false) String name,
+      @RequestParam(name = "lower-price", required = false) Double lowerPrice,
+      @RequestParam(name = "higher-price", required = false) Double higherPrice) {
+
+    System.out.println("ProductController getAllProduct() method is called -> " + category);
+    System.out.println(lowerPrice + " " + higherPrice);
+
+    if (category != null) {
+      Category cat = Category.valueOf(category);
+      return productService.searchByCategory(cat);
+    }
+
+    if (name != null) {
+      return productService.searchByProductName(name);
+    }
+
+    if (lowerPrice != null && higherPrice != null) {
+      return productService.searchByProductPriceRange(lowerPrice, higherPrice);
+    }
+
+    return productService.getAll();
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<?> getProductById(@PathVariable(name = "id") Long productId) {
+    System.out.println("ProductController getProductById() method is called." + productId);
+    try {
+      Product product = productService.getById(productId);
+      return new ResponseEntity<>(product, HttpStatus.OK);
+    } catch (ProductNotFoundException e) {
+      e.printStackTrace(); // log the error
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+  }
+
+  @PostMapping
+  public ResponseEntity<String> addProduct(@RequestBody Product product) {
+    System.out.println("ProductController addProduct() method is called..");
+
+    try {
+      productService.add(product);
+    } catch (InvalidProductCategoryException e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
+  }
+
+
+  @PutMapping("/{id}")
+  public ResponseEntity<String> updateProduct(@RequestBody Product product,
+      @PathVariable(name = "id") Long productId) {
+
+    System.out.println("ProductController updateProduct() method is called..");
+    product.setId(productId);
+
+    try {
+      productService.updateProduct(product);
+      return new ResponseEntity<>("Product updated successfully", HttpStatus.OK);
+    } catch (ProductNotFoundException e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long productId) {
+    System.out.println("ProductController deleteProduct() method is called." + productId);
+    try {
+      productService.delete(productId);
+      return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+    } catch (ProductNotFoundException e) {
+      e.printStackTrace(); // log the error
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+  }
+}
+
+
+------------
+
+
+package com.devgen.spring.exception;
+
+//
+public class InvalidProductCategoryException extends Exception {
+    public InvalidProductCategoryException(String message) {
+        super(message);
+    }
+}
+
+--------
+
+package com.devgen.spring.exception;
+
+public class ProductNotFoundException extends  Exception {
+    public ProductNotFoundException(String message) {
+        super(message);
+    }
+}
+
+---------------
+
+
+package com.devgen.spring.service;
+
+import com.devgen.spring.exception.InvalidProductCategoryException;
+import com.devgen.spring.exception.ProductNotFoundException;
+import com.devgen.spring.model.Category;
+import com.devgen.spring.model.Product;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductService {
+
+  private final Map<Long, Product> products;
+  private Long id;
+  final String INVALID_PRODUCT_IDENTIFIER_ERROR_MSG = "Invalid product identifier is provided. Product not found.";
+
+  public ProductService() {
+    this.products = new HashMap<>();
+    this.id = 1L;
+
+    initializeProducts();
+  }
+
+  private void initializeProducts() {
+    try {
+      add(new Product("Laptop", Category.ELECTRONICS, 1000.00));
+      add(new Product("T-Shirt", Category.CLOTHING, 20.00));
+      add(new Product("Book", Category.BOOKS, 10.00));
+      add(new Product("Table", Category.FURNITURE, 200.00));
+      add(new Product("Chair", Category.FURNITURE, 100.00));
+      add(new Product("Mobile", Category.ELECTRONICS, 500.00));
+      add(new Product("Jeans", Category.CLOTHING, 50.00));
+      add(new Product("Shirt", Category.CLOTHING, 30.00));
+      add(new Product("Pen", Category.BOOKS, 2.00));
+      add(new Product("Pencil", Category.BOOKS, 1.00));
+      add(new Product("Sofa", Category.FURNITURE, 300.00));
+      add(new Product("Bed", Category.FURNITURE, 400.00));
+      add(new Product("Mouse", Category.ELECTRONICS, 10.00));
+      add(new Product("Keyboard", Category.ELECTRONICS, 20.00));
+      add(new Product("Earphones", Category.ELECTRONICS, 30.00));
+      add(new Product("Headphones", Category.ELECTRONICS, 40.00));
+      add(new Product("Sunglasses", Category.CLOTHING, 100.00));
+      add(new Product("Watch", Category.CLOTHING, 200.00));
+      add(new Product("Belt", Category.CLOTHING, 50.00));
+      add(new Product("Glasses", Category.CLOTHING, 150.00));
+      add(new Product("Novel", Category.BOOKS, 15.00));
+      add(new Product("Dictionary", Category.BOOKS, 20.00));
+      add(new Product("Encyclopedia", Category.BOOKS, 50.00));
+    }catch (InvalidProductCategoryException e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
+  public void add(Product product) throws InvalidProductCategoryException {
+
+    final String INVALID_PRODUCT_CATEGORY_ERROR_MSG = "Invalid product category.";
+
+      if(product.getCategory() == null) {
+        throw new InvalidProductCategoryException(INVALID_PRODUCT_CATEGORY_ERROR_MSG);
+      }
+
+      product.setId(id);
+      products.put(id, product);
+      id++;
+  }
+
+  public Product getById(Long id) throws ProductNotFoundException{
+    Product prod =  products.get(id);
+    if(prod == null) {
+      throw new ProductNotFoundException(INVALID_PRODUCT_IDENTIFIER_ERROR_MSG);
+    }
+
+    return prod;
+  }
+
+  public List<Product> getAll() {
+    System.out.println("ProductService getAll() method is called.");
+    return new ArrayList<>(products.values());
+  }
+
+  public void delete(Long id) throws ProductNotFoundException {
+    Product prod = products.remove(id);
+    if(prod == null) {
+      throw new ProductNotFoundException(INVALID_PRODUCT_IDENTIFIER_ERROR_MSG);
+    }
+  }
+
+  public List<Product> searchByCategory(Category category) {
+
+    List<Product> matchingProducts = new ArrayList<>();
+    for(Product product : products.values()) {
+      if(product.getCategory().equals(category)) {
+        matchingProducts.add(product);
+      }
+    }
+    return matchingProducts;
+  }
+
+  public List<Product> searchByProductName(String name) {
+    return products.values().stream()
+        .filter(product -> isNameMatching(name, product)) //partial matching
+        .toList();
+  }
+
+  private static boolean isNameMatching(String name, Product product) {
+    return product.getName().toLowerCase().contains(name.toLowerCase());
+  }
+
+  public void updateProduct(Product newProduct) throws ProductNotFoundException {
+    Product existingProduct = products.get(newProduct.getId());
+    if(existingProduct == null) {
+      throw new ProductNotFoundException(INVALID_PRODUCT_IDENTIFIER_ERROR_MSG);
+    }
+
+    if(existingProduct != null) {
+      existingProduct.setName(newProduct.getName());
+      existingProduct.setPrice(newProduct.getPrice());
+    }
+
+  }
+
+  public List<Product> searchByProductPriceRange(Double lowerPrice, Double higherPrice) {
+    return products.values().stream()
+        .filter(product -> isPriceRangeValid(lowerPrice, higherPrice, product))
+        .sorted(Comparator.comparingDouble(Product::getPrice))
+        .collect(Collectors.toList());
+  }
+
+  private boolean isPriceRangeValid(Double lowerPrice, Double higherPrice, Product product) {
+    return product.getPrice() >= lowerPrice && product.getPrice() <= higherPrice;
+  }
+}
+
+
+----------------
+
+
