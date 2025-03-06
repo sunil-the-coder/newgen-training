@@ -1,0 +1,108 @@
+package com.devgen.spring.repository;
+
+import com.devgen.spring.model.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+}
+
+
+-------------------
+
+package com.devgen.spring.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@Entity
+@Table(name="products")
+public class Product {
+
+  @Id
+  @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+  private Long id;
+  private String name;
+  private Category category; // Electronics, Clothing, etc.
+  private double price; // 100.00, 200.00, 300.00
+
+  public Product(String name, Category category, double price) {
+    this.name = name;
+    this.category = category;
+    this.price = price;
+  }
+
+}
+
+
+----------
+
+//app.properties file
+
+spring.application.name=spring-boot-demo
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=true
+
+#Profile -> Actual Environment on which your application is running
+--------
+
+//app-local.properties
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/devgen
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+
+#Profile -> Actual Environment on which your application is running
+
+-----------------
+
+//app-uat.properties
+
+spring.datasource.url=jdbc:postgresql://database-1.ci3uee64ig3w.us-east-1.rds.amazonaws.com:5432/devgen
+spring.datasource.username=postgres
+spring.datasource.password=postgres123
+spring.jpa.show-sql=false
+
+#Profile -> Actual Environment on which your application is running
+
+
+
+------------------------
+
+
+package com.devgen.spring;
+
+import com.devgen.spring.model.Category;
+import com.devgen.spring.model.Product;
+import com.devgen.spring.repository.ProductRepository;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class SpringBootDemoApplication {
+
+	public static void main(String[] args) {
+		ApplicationContext context = SpringApplication.run(SpringBootDemoApplication.class, args);
+
+		ProductRepository repository = context.getBean(ProductRepository.class);
+
+		repository.save(new Product("Laptop", Category.ELECTRONICS, 1000.00));
+		System.out.println("Product saved successfully");
+	}
+
+}
