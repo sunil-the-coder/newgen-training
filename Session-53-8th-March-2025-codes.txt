@@ -1,0 +1,146 @@
+//  @Query("SELECT p FROM Product p WHERE p.price > ?1")  // HQL
+  @Query(value = "SELECT * FROM products WHERE product_price > ?1", nativeQuery = true) // SQL
+  List<Product> findAllProductByPriceGreaterThan(double price);
+
+
+  -----------------
+
+
+
+
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.8.5</version>
+    </dependency>
+
+---------------
+
+
+
+  @GetMapping
+  @ApiResponses(
+      value = {
+          @ApiResponse(
+              content = {
+                  @Content(
+                      mediaType = "application/json",
+                      array = @ArraySchema(schema = @Schema(implementation = Product.class)))
+              })
+      })
+  public List<Product> getAllProducts(@RequestParam(required = false) String category,
+      @RequestParam(required = true) String name,
+      @RequestParam(name = "lower-price", required = false) Double lowerPrice,
+      @RequestParam(name = "higher-price", required = false) Double higherPrice) {
+
+    log.debug("ProductController getAllProduct() method is called ->  {} and name {}", category, name);
+
+    if (category != null) {
+      Category cat = Category.valueOf(category);
+      return productService.searchByCategory(cat);
+    }
+
+    if (name != null) {
+      return productService.searchByProductName(name);
+    }
+
+    if (lowerPrice != null && higherPrice != null) {
+      return productService.searchByProductPriceRange(lowerPrice, higherPrice);
+    }
+
+    return productService.getAll();
+  }
+
+  @ApiResponses(
+      value = {
+          @ApiResponse(
+              responseCode = "200",
+              description = "Get product by by given product identifier",
+              content = {
+                  @Content(
+                      mediaType = "application/json",
+                      schema = @Schema(implementation = Product.class))
+              }),
+          @ApiResponse(
+              responseCode = "404",
+              description = "Product not found",
+              content = {
+                  @Content(
+                      schema = @Schema(implementation = ErrorDetail.class))
+              }),
+          @ApiResponse(
+              responseCode = "500",
+              description = "Internal Server Error",
+              content = {
+                  @Content(
+                      schema = @Schema(implementation = ErrorDetail.class))
+              })
+      }
+  )
+  @GetMapping("/{id}")
+  @Operation(
+      summary = "Retrieve a Product by Id",
+      description = "Get a product object by specifying its product identifier.",
+      tags = { "products" })
+  public ResponseEntity<?> getProductById(@PathVariable(name = "id") Long productId) {
+    //System.out.println("ProductController getProductById() method is called." + productId);
+
+    Product product = productService.getById(productId);
+    return new ResponseEntity<>(product, HttpStatus.OK);
+  }
+
+  ----------
+
+
+  @Schema(description = "Product ID", example = "1", requiredMode = RequiredMode.NOT_REQUIRED)
+  private Long id;
+
+  @Schema(maxLength = 20)
+  private String name;
+
+
+  ------------------------
+
+
+Uisng validation framework - 
+
+
+@NotNull
+  @Size(min = 3, max = 10)
+  private String name;
+
+  private Category category; // Electronics, Clothing, etc.
+
+  @Email
+  private String email; // sajgljsagljasljg@gmail.com
+
+  @Size(min = 10)
+  private String mobile;
+
+
+  -------------
+
+
+
+  @PostMapping
+  public ResponseEntity<String> addProduct(@RequestBody @Valid Product product) {
+    System.out.println("ProductController addProduct() method is called..");
+
+    productService.add(product);
+    return new ResponseEntity<>("Product added successfully", HttpStatus.CREATED);
+  }
+
+
+<dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+
+-------------------------------------
+
+
+
+
+
+
