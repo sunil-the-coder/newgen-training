@@ -1,0 +1,130 @@
+
+
+
+spring.application.name=spring-boot-demo
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=false
+
+#Profile -> Actual Environment on which your application is running
+
+logging.level.com.devgen.spring=INFO
+#logging.level.org.springframework.web=TRACE
+
+logging.level.com.zaxxer.hikari=TRACE
+logging.level.com.zaxxer.hikari.HikariConfig=DEBUG
+
+#spring.datasource.hikari.minimum-idle=5
+#spring.datasource.hikari.maximum-pool-size=10
+
+logging.file.name=app.log
+logging.file.path=logs/
+
+management.endpoints.web.exposure.include=*
+
+
+
+------- API Communication --------
+
+
+package com.devgen.spring.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
+@Configuration
+public class AppConfig {
+
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
+}
+
+
+
+package com.devgen.spring.controller;
+
+import com.devgen.spring.model.Post;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+@RestController
+@Slf4j
+public class SampleController {
+
+  @Autowired
+  private RestTemplate restTemplate;
+
+  @GetMapping("/hello")
+  public String sayHello() {
+    return "Hello World";
+  }
+
+  @GetMapping("/posts")
+  public List<Post> getPosts() {
+
+    String response = restTemplate.getForObject(
+        "https://jsonplaceholder.typicode.com/posts?pageNumber=5&size=24", String.class);
+    log.info("API Response:" + response);
+
+
+   // restTemplate.postForObject("https://jsonplaceholder.typicode.com/posts", new Post(), Post.class);
+    //deleniti -> search into title ?
+
+    // Option 1: use string contains
+    // Option 2: String list, then split with comma, map the object with hashmap, get entry with title, then search on title.
+    // Option 3: Use ObjectMapper parser
+
+    //String  -> List<Post>
+
+    //To map object from string to Object or Object to string
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    try {
+
+      List<Post> posts = objectMapper.readValue(response, new TypeReference<>() {
+      });
+
+      return posts.stream().filter(p -> p.getTitle().contains("explicabo"))
+          .collect(Collectors.toList());
+
+      //return posts;
+
+    } catch (Exception e) {
+      log.error("Exception occured while parsing response", e);
+    }
+
+    return null;
+  }
+}
+
+
+--------------------
+
+
+package com.devgen.spring.model;
+
+import lombok.Data;
+
+@Data
+public class Post {
+  private int userId;
+  private int id;
+  private String title;
+  private String body;
+}
+
+
+--------------------------
+
+
