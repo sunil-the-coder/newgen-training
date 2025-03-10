@@ -1,0 +1,489 @@
+-------------- Review and Rating Service implementation ----------
+
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.devgen'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+
+------------------
+
+
+
+spring.application.name=review-service
+
+server.port=8081
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/reviewsdb
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+
+---------------
+
+package com.devgen.reviewservice.dto;
+
+import java.time.LocalDateTime;
+import lombok.Data;
+
+@Data
+public class ReviewDTO {
+  private Long reviewId;
+  private Long productId;
+  private int userId;
+  private short ratings;
+  private String title;
+  private String description;
+  private LocalDateTime createdAt;
+}
+
+--------------------
+
+
+package com.devgen.reviewservice.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import lombok.Data;
+
+@Entity
+@Table(name="reviews")
+@Data
+public class Review {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long reviewId;
+  private Long productId;
+  private int userId;
+
+  private short ratings;
+  private String title;
+  private String description;
+
+  //Auditing
+  private String createdBy;
+  private String updatedBy;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
+
+}
+
+----------------
+
+
+
+package com.devgen.reviewservice.model;
+
+import com.devgen.reviewservice.dto.ReviewDTO;
+import java.util.List;
+import lombok.Data;
+
+@Data
+public class ReviewDetails {
+  private int totalOneStarRatings;
+  private int totalTwoStarRatings;
+  private int totalThreeStarRatings;
+  private int totalFourStarRatings;
+  private int totalFiveStarRatings;
+  private int totalRatings;
+  private double averageRating;
+  private List<ReviewDTO> reviews;
+}
+
+
+--------------------
+
+package com.devgen.reviewservice.repository;
+
+import com.devgen.reviewservice.model.Review;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+
+  List<Review> findAllByProductId(Long productId);
+
+  void deleteByProductIdAndReviewId(Long productId, Long reviewId);
+
+}
+
+
+-------------------
+
+
+
+package com.devgen.reviewservice.service;
+
+import com.devgen.reviewservice.dto.ReviewDTO;
+import com.devgen.reviewservice.model.ReviewDetails;
+
+public interface IReviewService {
+  ReviewDetails getReviewsByProductId(Long productId);
+  void addReview(ReviewDTO review);
+  void deleteReview(Long productId, Long reviewId);
+}
+
+------------------
+
+
+package com.devgen.reviewservice.service;
+
+import com.devgen.reviewservice.dto.ReviewDTO;
+import com.devgen.reviewservice.mapper.ReviewMapper;
+import com.devgen.reviewservice.model.Review;
+import com.devgen.reviewservice.model.ReviewDetails;
+import com.devgen.reviewservice.repository.ReviewRepository;
+import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ReviewService implements IReviewService {
+
+  private final ReviewRepository reviewRepository;
+  private final ReviewMapper reviewMapper;
+
+  @Autowired
+  public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
+    this.reviewRepository = reviewRepository;
+    this.reviewMapper = reviewMapper;
+  }
+
+  @Override
+  public ReviewDetails getReviewsByProductId(Long productId) {
+     List<ReviewDTO> reviews = reviewRepository.findAllByProductId(productId).stream()
+        .map(reviewMapper::toDto)
+        .toList();
+
+     ReviewDetails reviewDetails = new ReviewDetails();
+     reviewDetails.setReviews(reviews);
+
+     return reviewDetails;
+  }
+
+//  private ReviewDTO mapToReviewDto(Review review) {
+//    ReviewDTO reviewDTO = new ReviewDTO();
+//    reviewDTO.setReviewId(review.getReviewId());
+//    reviewDTO.setProductId(review.getProductId());
+//    reviewDTO.setUserId(review.getUserId());
+//    reviewDTO.setRatings(review.getRatings());
+//    reviewDTO.setTitle(review.getTitle());
+//    reviewDTO.setDescription(review.getDescription());
+//    reviewDTO.setCreatedAt(review.getCreatedAt());
+//    return reviewDTO;
+//  }
+
+  @Override
+  public void addReview(ReviewDTO reviewDTO) {
+
+    //Populate all auditable attributes
+    Review review = reviewMapper.toEntity(reviewDTO);
+    review.setCreatedBy("System");
+    review.setUpdatedBy("System");
+    review.setCreatedAt(LocalDateTime.now());
+    review.setUpdatedAt(LocalDateTime.now());
+
+    reviewRepository.save(review);
+  }
+
+//  private Review mapToReview(ReviewDTO reviewDTO) {
+//    Review review = new Review();
+//    review.setProductId(reviewDTO.getProductId());
+//    review.setUserId(reviewDTO.getUserId());
+//    review.setRatings(reviewDTO.getRatings());
+//    review.setTitle(reviewDTO.getTitle());
+//    review.setDescription(reviewDTO.getDescription());
+//    return review;
+//  }
+
+  @Override
+  @Transactional
+  public void deleteReview(Long productId, Long reviewId) {
+    reviewRepository.deleteByProductIdAndReviewId(productId, reviewId);
+  }
+}
+
+
+------------------
+
+package com.devgen.reviewservice.mapper;
+
+import com.devgen.reviewservice.dto.ReviewDTO;
+import com.devgen.reviewservice.model.Review;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ReviewMapper {
+
+    public ReviewDTO toDto(Review review) {
+      ReviewDTO reviewDTO = new ReviewDTO();
+      reviewDTO.setReviewId(review.getReviewId());
+      reviewDTO.setProductId(review.getProductId());
+      reviewDTO.setUserId(review.getUserId());
+      reviewDTO.setRatings(review.getRatings());
+      reviewDTO.setTitle(review.getTitle());
+      reviewDTO.setDescription(review.getDescription());
+      reviewDTO.setCreatedAt(review.getCreatedAt());
+      return reviewDTO;
+    }
+
+    public Review toEntity(ReviewDTO reviewDTO) {
+      Review review = new Review();
+      review.setProductId(reviewDTO.getProductId());
+      review.setUserId(reviewDTO.getUserId());
+      review.setRatings(reviewDTO.getRatings());
+      review.setTitle(reviewDTO.getTitle());
+      review.setDescription(reviewDTO.getDescription());
+      return review;
+    }
+}
+
+
+--------------
+
+
+package com.devgen.reviewservice.controller;
+
+import com.devgen.reviewservice.dto.ReviewDTO;
+import com.devgen.reviewservice.model.ReviewDetails;
+import com.devgen.reviewservice.service.IReviewService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/products")
+public class ReviewController {
+
+  private final IReviewService reviewService;
+
+  @Autowired
+  public ReviewController(IReviewService reviewService) {
+    this.reviewService = reviewService;
+  }
+
+  @GetMapping("/{productId}/reviews")
+  public ResponseEntity<ReviewDetails> getReviewsByProductId(@PathVariable Long productId) {
+    return ResponseEntity.status(HttpStatus.OK).body(reviewService.getReviewsByProductId(productId));
+  }
+
+  @PostMapping("/{productId}/reviews")
+  public ResponseEntity<Void> addReview(@PathVariable Long productId, @RequestBody ReviewDTO review) {
+    review.setProductId(productId);
+    reviewService.addReview(review);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @DeleteMapping("/{productId}/reviews/{reviewId}")
+  public ResponseEntity<Void> deleteReview(@PathVariable Long productId, @PathVariable Long reviewId) {
+    reviewService.deleteReview(productId, reviewId);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+
+}
+
+
+----------------------------
+
+
+package com.devgen.reviewservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ReviewServiceApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(ReviewServiceApplication.class, args);
+  }
+
+}
+
+
+-----------------------
+
+---- Text Notes ------
+
+
+
+To be returned to the client:
+
+{
+        "reviewId": 1,
+        "userId": 1,
+        "ratings": 4,
+        "title": "Good Laptop",
+        "description": "This is must have for every engineers to work efficiently",
+        "createdAt": "2025-03-10T09:19:04.130409"
+
+}
+
+
+
+Actual db presentation:
+
+{
+        "reviewId": 1,
+        "productId": 1,
+        "userId": 1,
+        "ratings": 4,
+        "title": "Good Laptop",
+        "description": "This is must have for every engineers to work efficiently",
+        "createdBy": "System",
+        "updatedBy": "System",
+        "createdAt": "2025-03-10T09:19:04.130409",
+        "updatedAt": "2025-03-10T09:19:04.130523"
+}
+
+
+
+
+DTO => Pattern used for exposing only relevant from controller to the client applications.
+
+        Data Transfer Object
+
+
+        ( Entities -> DTO ) = Mapping - Which layer is responsible for this ?
+
+
+         Entity -> DTO => Returning the information
+
+         DTO  -> Entity => Accepting the information
+
+
+
+        -- Service Layer
+
+
+
+
+{
+        
+        int totalOneStarRatings;
+        int totalTwoStarRatings;
+        int totalThreeStarRatings;
+        int totalFourStarRatings;
+        int totalFiveStarRatings;
+
+        int totalRatings = <addition of all ratings>
+        double averageRating = sum / totalRatings;
+
+
+        reviews:                
+                [
+                    {
+                        "reviewId": 1,
+                        "productId": 1,
+                        "userId": 1,
+                        "ratings": 4,
+                        "title": "Good Laptop 2",
+                        "description": "This is must have for every engineers to work efficiently 2",
+                        "createdAt": "2025-03-10T09:45:05.303837"
+                    },
+                    {
+                        "reviewId": 2,
+                        "productId": 1,
+                        "userId": 1,
+                        "ratings": 4,
+                        "title": "Good Laptop",
+                        "description": "This is must have for every engineers to work efficiently",
+                        "createdAt": "2025-03-10T09:45:35.720147"
+                    },
+                    {
+                        "reviewId": 3,
+                        "productId": 1,
+                        "userId": 1,
+                        "ratings": 4,
+                        "title": "Good Laptop 3",
+                        "description": "This is must have for every engineers to work efficiently 3",
+                        "createdAt": "2025-03-10T09:51:09.629847"
+                    }
+                ]
+
+}
+
+
+
+
+
+totalOneStarRatings  = <count>
+totalOneStarRatings  = <count>
+totalOneStarRatings  = <count>
+totalOneStarRatings  = <count>
+totalOneStarRatings  = <count>
+
+Total Ratings - 1,2,3,4,5
+
+Average ratings based on total ratings - ?
+
+
+
+int totalOneStarRatings;
+int totalTwoStarRatings;
+int totalThreeStarRatings;
+int totalFourStarRatings;
+int totalFiveStarRatings;
+
+int totalRatings = <addition of all ratings>
+double averageRating = sum / totalRatings;
+
+
+
+
+
+
+
+
+
