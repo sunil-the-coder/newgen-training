@@ -1,0 +1,444 @@
+----- Microservices Communication ------------
+
+
+
+package com.devgen.reviewservice.listener;
+
+import com.devgen.reviewservice.dto.ReviewDto;
+import com.devgen.reviewservice.service.IReviewService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+
+@Component
+@Slf4j
+public class ApplicationEventListener {
+
+  private final IReviewService reviewService;
+
+  @Autowired
+  public ApplicationEventListener(final IReviewService reviewService) {
+    this.reviewService = reviewService;
+  }
+
+  @EventListener(ApplicationReadyEvent.class)
+  public void handleEvent(ApplicationEvent event) {
+    log.info("Application ready event received. Initializing products...");
+    initializeReviews();
+  }
+
+  private void initializeReviews() {
+
+    reviewService.addReview(
+        new ReviewDto(1L, 1L, (short) 4, "Good product", "It is expensive though"));
+    reviewService.addReview(
+        new ReviewDto(1L, 2L, (short) 5, "Excellent!", "Loved it, highly recommended"));
+    reviewService.addReview(
+        new ReviewDto(1L, 3L, (short) 3, "Average", "Not bad, but expected more"));
+    reviewService.addReview(
+        new ReviewDto(1L, 4L, (short) 2, "Disappointing", "Not worth the price"));
+    reviewService.addReview(
+        new ReviewDto(1L, 5L, (short) 5, "Awesome", "Best product I have used"));
+
+    reviewService.addReview(
+        new ReviewDto(2L, 6L, (short) 1, "Terrible", "Broke after a week"));
+    reviewService.addReview(
+        new ReviewDto(2L, 7L, (short) 3, "Okay product", "Works fine but quality is average"));
+    reviewService.addReview(
+        new ReviewDto(2L, 4L, (short) 4, "Pretty good", "Good quality, but could be better"));
+    reviewService.addReview(
+        new ReviewDto(3L, 4L, (short) 5, "Perfect!", "Exceeded expectations"));
+    reviewService.addReview(
+        new ReviewDto(4L, 2L, (short) 2, "Not great", "Stopped working after a month"));
+  }
+
+}
+
+
+-----------------------
+
+
+---- Calculate ratings -----
+
+private void calculateRatingDetails(List<ReviewDto> reviews, ReviewDetails reviewDetails) {
+
+    //select ratings, count(*) from reviews group by ratings;
+    final Map<Short, Long> ratingsMap = reviews.stream()
+        .collect(Collectors.groupingBy(ReviewDto::getRatings, Collectors.counting()));
+
+    int oneStarRatings = ratingsMap.getOrDefault((short) 1, 0L).intValue();
+    int twoStarRatings = ratingsMap.getOrDefault((short) 2, 0L).intValue();
+    int threeStarRatings = ratingsMap.getOrDefault((short) 3, 0L).intValue();
+    int fourStarRatings = ratingsMap.getOrDefault((short) 4, 0L).intValue();
+    int fiveStarRatings = ratingsMap.getOrDefault((short) 5, 0L).intValue();
+
+    int totalRatings = (1 * oneStarRatings + 2 * twoStarRatings + 3 * threeStarRatings
+        + 4 * fourStarRatings + 5 * fiveStarRatings);
+    double averageRating = (double) totalRatings / reviews.size();
+
+    //1 -> 2
+    //2 -> 3
+    //3 -> 1
+    //4 -> 0
+    //5 -> 1
+
+//    int oneStarRatings = 0;
+//    int twoStarRatings = 0;
+//    int threeStarRatings = 0;
+//    int fourStarRatings = 0;
+//    int fiveStarRatings = 0;
+//
+//    int totalRatings = 0;
+//
+//    for(ReviewDto reviewDto : reviews) {
+//      int ratings = reviewDto.getRatings();
+//      totalRatings += ratings;
+//
+//      switch (ratings) {
+//        case 1:
+//          oneStarRatings++;
+//          break;
+//        case 2:
+//          twoStarRatings++;
+//          break;
+//        case 3:
+//          threeStarRatings++;
+//          break;
+//        case 4:
+//          fourStarRatings++;
+//          break;
+//        case 5:
+//          fiveStarRatings++;
+//          break;
+//      }
+//    }
+
+    reviewDetails.setOneStarRatings(oneStarRatings);
+    reviewDetails.setTwoStarRatings(twoStarRatings);
+    reviewDetails.setThreeStarRatings(threeStarRatings);
+    reviewDetails.setFourStarRatings(fourStarRatings);
+    reviewDetails.setFiveStarRatings(fiveStarRatings);
+    reviewDetails.setTotalRatings(totalRatings);
+    reviewDetails.setAverageRating(averageRating);
+  }
+
+  -------------------
+
+
+product-service
+
+  
+  @Override
+  public ProductReviewDto getProductReviewByProductId(Long productId) {
+
+    //1. Retrieve product details
+    Product product = getById(productId);
+
+    //2. Map product entity to product dto
+    ProductDto productDto = mapToDto(product);
+
+    //3. Retrieve reviews for the product
+    //Call to review service to get the reviews for the given products & send it to the client
+    ResponseEntity<ReviewDetails> reviewDetailsResponseEntity = restTemplate.getForEntity(
+        baseUrl + "/api/v1/products/{productId}/reviews", ReviewDetails.class,productId);
+    ReviewDetails reviewDetails = reviewDetailsResponseEntity.getBody();
+
+    //4. Map reviews to product review dto
+    return new ProductReviewDto(productDto, reviewDetails);
+  }
+
+
+  private ProductDto mapToDto(Product product) {
+    return new ProductDto(product.getId(), product.getName(), product.getCategory(), product.getPrice());
+  }
+
+
+
+
+
+@Service("database")
+@Primary
+public class DatabaseProductService implements IProductService {
+
+  private ProductRepository productRepository;
+  private RestTemplate restTemplate;
+
+  @Value("${review.service.url}")
+  private String baseUrl;
+
+  @Autowired
+  public DatabaseProductService(ProductRepository productRepository, RestTemplate restTemplate) {
+    System.out.println("DatabaseProductService constructor is called.");
+    this.productRepository = productRepository;
+    this.restTemplate = restTemplate;
+  }
+
+
+
+
+---------------
+
+
+review.service.url=http://localhost:8082
+
+------------
+
+package com.devgen.spring.dto;
+
+import com.devgen.spring.model.Category;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class ProductDto {
+  private Long id;
+  private String name;
+  private Category category;
+  private double price;
+}
+
+
+-----------
+
+
+package com.devgen.spring.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class ProductReviewDto {
+  private ProductDto productDetails;
+  private ReviewDetails reviewDetails;
+}
+
+-------------
+
+
+package com.devgen.spring.dto;
+
+
+import java.util.List;
+import lombok.Data;
+
+@Data
+public class ReviewDetails {
+  private int oneStarRatings;
+  private int twoStarRatings;
+  private int threeStarRatings;
+  private int fourStarRatings;
+  private int fiveStarRatings;
+  private int totalRatings;
+  private double averageRating;
+  private List<ReviewDto> reviews;
+}
+
+-------------
+
+
+package com.devgen.spring.dto;
+
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class ReviewDto {
+  private Long reviewId;
+  private Long productId;
+  private Long userId;
+  private short ratings;
+  private String title;
+  private String description;
+  private LocalDateTime createdAt;
+
+  public ReviewDto(Long productId, Long userId, short ratings, String title, String description) {
+    this.productId = productId;
+    this.userId = userId;
+    this.ratings = ratings;
+    this.title = title;
+    this.description = description;
+  }
+}
+
+
+----------------
+
+
+
+
+
+
+
+
+
+
+
+--------------------
+
+
+
+API 1 => Get product details - http://localhost:8080/api/v1/products/1  = product service ( microservice 1 )
+
+
+API 2 => Get Reviews of the product - http://localhost:8081/api/v1/products/2/reviews	= review service ( microservice 2 )
+
+
+
+
+Get all product and their review in only single API call ? - 
+
+	Single Response:
+
+
+
+Microservice Communication:
+	RestTemplate client -> REST API call in Java.
+
+
+{
+    "productDetails": {
+        "id": 1,
+        "name": "Laptop",
+        "category": "ELECTRONICS",
+        "price": 1000.0
+    },
+    "reviewDetails": {
+        "oneStarRatings": 0,
+        "twoStarRatings": 1,
+        "threeStarRatings": 1,
+        "fourStarRatings": 1,
+        "fiveStarRatings": 2,
+        "totalRatings": 19,
+        "averageRating": 3.8,
+        "reviews": [
+            {
+                "reviewId": 1,
+                "productId": 1,
+                "userId": 1,
+                "ratings": 4,
+                "title": "Good product",
+                "description": "It is expensive though",
+                "createdAt": "2025-03-11T09:40:45.816136"
+            },
+            {
+                "reviewId": 2,
+                "productId": 1,
+                "userId": 2,
+                "ratings": 5,
+                "title": "Excellent!",
+                "description": "Loved it, highly recommended",
+                "createdAt": "2025-03-11T09:40:45.846174"
+            },
+            {
+                "reviewId": 3,
+                "productId": 1,
+                "userId": 3,
+                "ratings": 3,
+                "title": "Average",
+                "description": "Not bad, but expected more",
+                "createdAt": "2025-03-11T09:40:45.847565"
+            },
+            {
+                "reviewId": 4,
+                "productId": 1,
+                "userId": 4,
+                "ratings": 2,
+                "title": "Disappointing",
+                "description": "Not worth the price",
+                "createdAt": "2025-03-11T09:40:45.848753"
+            },
+            {
+                "reviewId": 5,
+                "productId": 1,
+                "userId": 5,
+                "ratings": 5,
+                "title": "Awesome",
+                "description": "Best product I have used",
+                "createdAt": "2025-03-11T09:40:45.849753"
+            }
+        ]
+    }
+}
+
+
+Final combined response:
+
+{
+	
+	productDetails: {
+
+		Product
+	}
+
+	reviewDetails: {
+		ReviewDetals
+
+	}
+}
+
+ProductService Response:
+
+{
+    "id": 1,
+    "name": "Laptop",
+    "category": "ELECTRONICS",
+    "price": 1000.0
+}
+
+
+ReviewService Response:
+
+
+{
+    "oneStarRatings": 1,
+    "twoStarRatings": 0,
+    "threeStarRatings": 1,
+    "fourStarRatings": 1,
+    "fiveStarRatings": 0,
+    "totalRatings": 8,
+    "averageRating": 2.6666666666666665,
+    "reviews": [
+        {
+            "reviewId": 6,
+            "productId": 2,
+            "userId": 6,
+            "ratings": 1,
+            "title": "Terrible",
+            "description": "Broke after a week",
+            "createdAt": "2025-03-11T09:03:56.308701"
+        },
+        {
+            "reviewId": 7,
+            "productId": 2,
+            "userId": 7,
+            "ratings": 3,
+            "title": "Okay product",
+            "description": "Works fine but quality is average",
+            "createdAt": "2025-03-11T09:03:56.309549"
+        },
+        {
+            "reviewId": 8,
+            "productId": 2,
+            "userId": 4,
+            "ratings": 4,
+            "title": "Pretty good",
+            "description": "Good quality, but could be better",
+            "createdAt": "2025-03-11T09:03:56.310433"
+        }
+    ]
+}
+
+
+
+
+
+
+
+
