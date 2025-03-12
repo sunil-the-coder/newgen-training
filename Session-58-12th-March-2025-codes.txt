@@ -1,0 +1,108 @@
+
+
+---------  Microservices  -----------------
+
+
+Amazon.com / flipkart.com  - eCommerse 
+
+- product catlogs with searching
+- payment
+- orders
+- shipping
+- seller
+- users
+- card management
+- adminstrator services
+- rating & review service
+
+
+.WAR - Web Archieve - Combine multiple jars & deploy together as an single bundle.
+
+
+Disadv:
+
+	1. Team dependencies
+	
+	2. Scalibility - 
+
+		1000 users - 2 VM launch ( 2 instances of each monolith running in hardware ) - 2CPU, 8GB ram
+
+		10000 users -> Vertical scaling  (scale up) -> 7 core CPU, 32gb
+
+		100000 users -> Vertical scaling  (scale up) -> 18 core CPU, 128gb
+
+		1M users - 
+
+			Sell happening in amazon.com - Big Billion Day - ( 100000 -> 10000 ) - IPhone - 10k
+
+			High Traffice with due sudden spikes - 10000k users  => 1M users
+
+
+		Vertical scaling - ( scale up = increase power, scale down = decrease power )
+
+		Horizontal Scaling - (scale out = increase machine count, scale-in = decrease machine count)
+
+
+			Which services to scale ? - product, payments(1 container - 10 containers) , orders
+
+			Horizontal:
+
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+			[2cpu-4gb]
+
+
+			Vertical: 
+
+			[2cpu-4gb]
+			[4cpu-8gb]
+			[6cpu-16gb]
+			[16cpu-128gb]
+
+
+	3. Technolgoy choice - 
+			YOu are limited with lang framework across all services.
+
+			Micro - YOu can choose diff technology/lang/framework to build & deploy them.
+
+	4. Each service is self contained. - lifecycle management( building, versioning, deploying, etc.., scale-out/scale-in)
+
+	5. Impact of failure in one place, create the issues in another space. - Monolith
+
+
+			
+Challenges of Microservices -
+
+	1. Service communication without infra tolling support.
+
+		192.168.3.4:8080,192.168.3.4:8080,192.168.3.4:8080,192.168.3.4:8080,192.168.3.4:8080,192.168.3.4:8080,192.168.3.4:8080,
+
+		s1  -> s2 ( might fail )
+
+	2. Fault tolerance - Resilence system to support failure in future with some alternative response or default responses.
+
+	3. Security - ( complex topic ) - ( 5 different session )
+
+		- managing sessions
+		- secured way of communications 
+
+
+Physical Machines vs Cloud Native Machines - 
+	- On prem physical servers - 
+
+Cloud native services - 
+	1. Development - We build for cloud ready - We can easily deploy to cloud without having lot of configuration.
+
+
+---------  Two Factors App - ( Heroku company )	 ---------------
+
+
+https://developer.ibm.com/articles/creating-a-12-factor-application-with-open-liberty/
+
+https://12factor.net/
+
