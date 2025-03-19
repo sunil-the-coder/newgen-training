@@ -1,0 +1,78 @@
+------ 19th March -----
+
+OAuth -> Open Authorization ( Login with Google / Github ) - Access without password.
+
+	Open standard for authorization which allows any third party applications to go authorization provider on your behalf and get your data from there server.
+
+
+
+Coding oAuth with Spring:
+
+
+Dependencies:
+
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+
+-- Create simple hello controller
+
+
+
+@RestController
+public class PhotosController {
+
+  @GetMapping("/photos")
+  public String getPhotos(HttpServletRequest request) {
+   SecurityContext context = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+    System.out.println(context.getAuthentication().getPrincipal());
+
+    return "List of photos";
+  }
+}
+
+
+--- enable oauth2 based login
+	
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(authorizeRequests -> authorizeRequests.anyRequest().authenticated())
+        .oauth2Login(Customizer.withDefaults());
+
+    return http.build();
+  }
+}
+
+
+
+-- Create the google cloud console account setup ( developer account )
+
+https://console.cloud.google.com/welcome?project=learning-340019
+
+- Create new project 
+	- Create client credentials using web based application
+	- Configure http://localhost:8000/login/oauth2/code/google ( redirect URI )
+	- Copy client_id and client_secret at safer place to be used for configuration
+	- 
+- Configure these credentials as an client application:
+
+#Google
+spring.security.oauth2.client.registration.google.client-id=<client-id>
+spring.security.oauth2.client.registration.google.client-secret=<client-secret>
+
+
+#Github
+spring.security.oauth2.client.registration.github.client-id=<client-id>
+spring.security.oauth2.client.registration.github.client-secret=<client-secret>
+
+
+-- To see internal on oauth2 framework token observation - enable logs.
+
+logging.level.org.springframework.security.oauth2=TRACE
+logging.level.org.springframework.security=TRACE
+
+
+
